@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from fastapi import FastAPI
 
-__all__ = ['Routes']
+__all__ = ["Routes"]
 
 
 @dataclass(frozen=True)
