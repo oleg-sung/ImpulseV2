@@ -165,7 +165,7 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-!/src/pkg/firebase_tools/keys/
-!/src/pkg/firebase_tools/keys/develop.json
-!/src/pkg/firebase_tools/keys/production.json
-!/src/pkg/firebase_tools/keys/test.json
+/src/pkg/firebase_tools/keys/
+/src/pkg/firebase_tools/keys/develop.json
+/src/pkg/firebase_tools/keys/production.json
+/src/pkg/firebase_tools/keys/test.json
