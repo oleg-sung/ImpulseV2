@@ -1,9 +1,11 @@
+from datetime import datetime, time
+
 from fastapi import HTTPException, UploadFile
 from firebase_admin.auth import UserRecord
 from starlette import status
 
 from pkg.celery_tools.tools import send_email_task, upload_file_task, delete_file_task
-from .schema.club import CreateClub, ChangeClubImage
+from .schema.club import CreateClub, ClubImage
 from .schema.profile import UserProfile, UpdateUserProfileSchema
 from .schema.user import UserCreate
 from ..database import db, auth as fb_auth, storage
@@ -23,6 +25,7 @@ class UserProfileService:
         :param user_id: ...
         :return: user's profile document type Document Snapshot
         """
+        data["club_id"] = user_id
         validate_data = UserProfile(**data).model_dump(
             exclude_none=True,
             exclude={
@@ -30,7 +33,10 @@ class UserProfileService:
             },
             by_alias=True,
         )
-        self.db.create_doc(self.user_profile_model_name, validate_data, user_id)
+        # validate_data["birthdate"] = datetime.combine(
+        #     validate_data["birthdate"], time()
+        # )
+        await self.db.create_doc(self.user_profile_model_name, validate_data, user_id)
 
     async def update_user_profile(
         self, data_: UpdateUserProfileSchema, user_id: str
@@ -38,9 +44,12 @@ class UserProfileService:
         """ """
 
         data = data_.dict(exclude_none=True, by_alias=True)
+        birthdate = data.get("birthdate", None)
+        if birthdate:
+            data["birthdate"] = datetime.combine(data["birthdate"], time())
         if not data:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
-        self.db.update_doc(self.user_profile_model_name, user_id, data)
+        await self.db.update_doc(self.user_profile_model_name, user_id, data)
         return {"status": True, "message": "User profile updated", "id": user_id}
 
     #
@@ -60,35 +69,40 @@ class ClubServices:
         self.bucket = storage
 
     async def create_club(self, data: dict, user_id: str) -> None:
-        """ """
-        # self.db.create_doc(self.club_model_name, validated_data, user_id)
-        # # validated_data['test'] = 'test'
+        duplicate = await self.__cheak_club_name(data["club_name"])
+        if duplicate:
+            raise HTTPException(400, "Club already exists")
         validate_data = CreateClub(**data).model_dump(by_alias=True)
-        self.db.create_doc(self.club_model_name, validate_data, user_id)
+        await self.db.create_doc(self.club_model_name, validate_data, user_id)
+
+    async def __cheak_club_name(self, club_name: str) -> bool:
+        clubs = await self.db.get_collection(self.club_model_name)
+        result = await clubs.where("name", "==", club_name).get()
+        return len(result) != 0
 
     async def get_club_dict(self, user_id) -> dict:
-        """ """
-        club_dict = self.db.get_doc(self.club_model_name, user_id).to_dict()
+        club = await self.db.get_doc(self.club_model_name, user_id)
+        club_dict = club.to_dict()
         image_id = club_dict.get("image", None)
         if image_id:
-            image = self.bucket.get_blob(f"club/{image_id}")
+            image = await self.bucket.get_blob(f"club/{image_id}")
             club_dict["image"] = image.public_url
         return club_dict
 
     async def change_club_image(self, file: UploadFile, user_id: str) -> dict:
-        image = ChangeClubImage(
+        image = ClubImage(
             file=await file.read(), content_type=file.content_type, size=file.size
         )
-        club_image = (
-            self.db.get_doc(self.club_model_name, user_id).to_dict().get("image", None)
-        )
+        club_ref = await self.db.get_doc(self.club_model_name, user_id)
+        club_image = club_ref.to_dict().get("image", None)
+
         blob_name = f"club/{image.id}"
         if club_image:
             delete_file_task.delay(f"club/{club_image}")
         task = upload_file_task.delay(
             image.file, blob_name, image.content_type, {"id": image.id}
         )
-        self.db.update_doc(self.club_model_name, user_id, {"image": image.id})
+        await self.db.update_doc(self.club_model_name, user_id, {"image": image.id})
         return {"task_id": task.id}
 
 
@@ -116,7 +130,8 @@ class UserServices:
         data = data.model_dump(exclude_none=True)
         await ClubServices().create_club(data, user.uid)
         token_dict = await TokenService().create_token(user.uid)
-        data["token"] = token_dict["token_doc"].get().reference
+        token_ref = await token_dict["token_doc"].get()
+        data["token"] = token_ref.reference
         await UserProfileService().create_user_profile(data, user.uid)
         link = self.auth.email_verification_link(user.email)
         task = send_email_task.delay(user.email, "Email Confirmation", link)

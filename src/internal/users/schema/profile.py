@@ -1,11 +1,10 @@
 import datetime
 from typing import Optional
 
-from fastapi import HTTPException
-from google.cloud.firestore_v1 import DocumentReference
-from pydantic import EmailStr, BaseModel, model_validator, Field, field_validator
-from starlette import status
+from google.cloud.firestore_v1 import AsyncDocumentReference
+from pydantic import EmailStr, BaseModel, Field, field_validator
 
+from internal.schema.responce import BaseResponse
 from internal.users.schema.user import UserType
 
 
@@ -21,16 +20,11 @@ class UserProfile(BaseModel):
         default=None, max_length=12, min_length=2, alias="middleName"
     )
     last_name: str = Field(max_length=20, min_length=2, alias="lastName")
-    birth_date: datetime.date = Field(alias="birthdate")
+    birthdate: datetime.datetime = Field(alias="birthdate")
     phone: str
     info: Optional[str] = None
-    token: DocumentReference
+    token: AsyncDocumentReference
     club_id: str = Field(alias="clubID")
-
-    @model_validator(mode="after")
-    def validate_birthdate(self):
-        self.birthdate = self.birthdate.strftime("%d-%m-%Y")
-        return self
 
     class Config:
         use_enum_values = True
@@ -60,30 +54,20 @@ class UpdateUserProfileSchema(BaseModel):
     first_name: Optional[str | None] = Field(None, alias="firstName")
     last_name: Optional[str | None] = Field(None, alias="lastName")
     middle_name: Optional[str | None] = Field(None, alias="middleName")
-    birth_date: Optional[str | None] = Field(None, alias="birthdate")
+    birthdate: Optional[datetime.date | None] = Field(None, alias="birthdate")
     phone: Optional[str | None] = None
     info: Optional[str | None] = None
 
+    @field_validator("first_name", "last_name", "middle_name")
     @classmethod
-    @field_validator("birth_date")
-    def validate_birthday(cls, v):
-        if v:
-            try:
-                datetime.datetime.strptime(v, "%Y-%m-%d").date()
-            except ValueError:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail="birth day must be in format YYYY-MM-DD",
-                )
-        return v
+    def validate_name(cls, v: str):
+        return v.capitalize()
 
     class Config:
         populate_by_name = True
 
 
-class UpdateResponse(BaseModel):
-    status: bool
-    message: str
+class UpdateResponse(BaseResponse):
     id: str = Field(alias="userID")
 
     class Config:

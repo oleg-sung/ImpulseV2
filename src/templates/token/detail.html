@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <body>
+
+    <div class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4">
+        <div>
+            <div class="text-xl font-medium text-black">Информация о токене</div>
+
+            <div class="flex-1">
+                <button id="changeStatus" class="text-gray-500" onclick="">Изменить стутус</button>
+                {% if token.isActive %}
+                    <p class="text-gray-500">Статус - Активен</p>
+                {% else %}
+                    <p class="text-gray-500">Статус - Не активен</p>
+                {% endif %}
+                <p class="text-gray-500">Колличетво авторизаци по токену: {{ token.authCount }}</p>
+                <p class="text-gray-500" type="date">Дата
+                    создания: {{ token.createdAt.strftime('%Y.%m.%d в %H:%M') }}</p>
+
+                <button id="copyBtn">Скопировать токен</button>
+                <p class="text-gray-500" type="text" id="tokenInput">{{ token.code }}</p>
+
+
+            </div>
+
+
+            <button id="deleteToken">Удалить токен</button>
+
+        </div>
+
+    </div>
+    <script>
+        document.getElementById('copyBtn').addEventListener('click', function () {
+            const tokenInput = document.getElementById('tokenInput').textContent;
+            navigator.clipboard.writeText(tokenInput).then(function () {
+                console.log('Текст скопирован');
+                alert('Токен скопирован!');
+            }, function (err) {
+                console.error('Ошибка копирования текста: ', err);
+            });
+
+        });
+    </script>
+    <script>
+        document.getElementById('changeStatus').addEventListener('click', function () {
+            this.disabled = true;
+            fetch('http://127.0.0.1:8000/token/disable/{{ token.id }}/', {
+                method: 'PATCH',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Обработка полученных данных
+                    console.log(data);
+
+                    // Скрыть индикатор загрузки
+                    this.disabled = false;
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('Ошибка загрузки данных:', error);
+                    // Скрыть индикатор загрузки в случае ошибки
+                    this.disabled = false;
+                });
+        });
+
+    </script>
+    <script>
+        document.getElementById('deleteToken').addEventListener('click', function () {
+            fetch('http://127.0.0.1:8000/token/delete/{{ token.id }}/', {
+                method: 'DELETE',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+
+                },
+            })
+                .then(response => {
+                    const status = response.status
+                    if (status === 204) {
+                        location.href = "http://127.0.0.1:8000/pages/token/";
+                    }
+
+
+                })
+                .catch(error => {
+                    console.error('Ошибка загрузки данных:', error);
+                    // Скрыть индикатор загрузки в случае ошибки
+                });
+        });
+    </script>
+    </body>
+{% endblock %}

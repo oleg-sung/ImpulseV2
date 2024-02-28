@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="text-xl font-medium text-black">Список коллекций</div>
+    <div class="flex flex-wrap">
+
+        {% for collection in collections %}
+
+
+            <div class="m-2 p-6 max-w-sm mx-2 bg-white rounded-xl shadow-md flex-wrap items-center space-x-4">
+                <a class="text-gray-500"
+                   href="{{ url_for('collection_detail', id_collection=collection.id) }}">Название: {{ collection.name }}</a>
+
+                <p class="text-gray-500">Статус: {% if collection.isActive %}Активная{% else %}Не
+                    активная{% endif %} </p>
+
+
+                <p class="text-gray-500">Размер: {% if collection.size=='fortyCards' %}40
+                    карточек{% elif collection.size=='sixtyCards' %}60 карточек{% else %}80 карточек{% endif %}</p>
+                <p class="text-gray-500" type="date">Дата
+                    создания: {{ collection.createdAt.strftime('%Y-%m-%d в %H:%M') }}</p>
+
+            </div>
+
+        {% endfor %}
+    </div>
+{% endblock %}

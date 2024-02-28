@@ -1,0 +1,23 @@
+.error-message {
+    color: red;
+}
+
+.birthdate-label {
+    position: absolute;
+    /*left: 0;*/
+    /*top: 0;*/
+    pointer-events: none;
+    transition: 0.2s ease all;
+}
+
+input[type="date"]:focus + .birthdate-label,
+input[type="date"]:not(:placeholder-shown) + .birthdate-label,
+input[type="date"]:valid + .birthdate-label {
+    transform: translateY(-1.5em);
+    font-size: 0.8em;
+    color: #5a9;
+}
+
+div {
+    margin: 10px;
+}

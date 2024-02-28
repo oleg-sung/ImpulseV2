@@ -1,24 +1,24 @@
-from fastapi import APIRouter, Response, status, Depends, UploadFile
+from fastapi import APIRouter, status, Depends, UploadFile, Body
+from starlette.responses import Response
 
 from internal.task.schema import CreateTask
-from internal.users.dependens import get_current_user
+from internal.users.dependens import get_current_user, delete_cookie
 from internal.users.schema.club import ClubInfo
 from internal.users.schema.profile import (
     GetUserProfile,
     UpdateUserProfileSchema,
     UpdateResponse,
 )
-from internal.users.schema.user import UserCreate, UserLogin, User, UserCreateTast
+from internal.users.schema.user import UserCreate, UserLogin, User
 from internal.users.services import UserServices, UserProfileService, ClubServices
 
-router = APIRouter(
-    prefix="/user",
-    tags=["Users"],
-)
+router = APIRouter(prefix="/user", tags=["user"])
 
 
 @router.post(
-    "/register/", response_model=UserCreateTast, status_code=status.HTTP_201_CREATED
+    "/register/",
+    response_model=CreateTask,
+    status_code=status.HTTP_201_CREATED,
 )
 async def user_register(user_data: UserCreate):
     """
@@ -46,8 +46,13 @@ async def get_user_profile(user: User = Depends(get_current_user)):
     return data
 
 
+@router.post("/logout/", status_code=status.HTTP_201_CREATED)
+async def logout(data: dict = Depends(delete_cookie)):
+    return data
+
+
 @router.post("/login/", status_code=status.HTTP_200_OK)
-async def login(user: UserLogin, response: Response):
+async def login(response: Response, user: UserLogin = Body()):
     """
 
     :param user:
@@ -70,7 +75,7 @@ async def change_password(user: User = Depends(get_current_user)):
     return data
 
 
-@router.put(
+@router.patch(
     "/profile/change/",
     response_model=UpdateResponse,
     status_code=status.HTTP_201_CREATED,
@@ -102,16 +107,9 @@ async def change_club_info(file: UploadFile, user: User = Depends(get_current_us
     return data
 
 
-# @user_api.route('/club/coach/set/', methods=['POST'])
-# @authorization
-# def set_coach():
-#     data = ClubServices().set_coach_to_club(request.json, request.user['user_id'])
-#     return jsonify(data), 201
-#
-#
-# @user_api.route('/club/coaches/', methods=['GET'])
-# @authorization
-# def list_coach():
-#     ...
-#
-#
+# @router.post("/club/coach/set/")
+# def set_coach(
+#     coach_id: str = Depends(cheak_coach), user: User = Depends(get_current_user)
+# ):
+#     data = ClubServices().set_coach_to_club()
+#     return data

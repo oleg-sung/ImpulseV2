@@ -10,8 +10,6 @@ from fastapi import HTTPException
 from firebase_admin import credentials, firestore, auth, storage, firestore_async
 from firebase_admin.auth import UserRecord, UserNotFoundError
 from google.cloud.firestore_v1 import (
-    CollectionReference,
-    DocumentReference,
     DocumentSnapshot,
     Client,
     ArrayUnion,
@@ -20,7 +18,7 @@ from google.cloud.firestore_v1 import (
     AsyncDocumentReference,
     AsyncQuery,
 )
-from google.cloud.firestore_v1.base_query import QueryType, FieldFilter
+from google.cloud.firestore_v1.base_query import FieldFilter
 from google.cloud.firestore_v1.types import WriteResult
 from google.cloud.storage import Bucket, Blob
 
@@ -129,67 +127,6 @@ class FirebaseAuthTools:
         return auth.generate_password_reset_link(email)
 
 
-class FirestoreTools:
-    def __init__(self):
-        self.db = firestore.client()
-
-    def get_collection(self, model_name: str) -> CollectionReference:
-        """
-
-        :param model_name:
-        :return:
-        """
-        return self.db.collection(model_name)
-
-    def get_doc(self, model_name: str, doc_id: str) -> DocumentSnapshot:
-        """
-
-        :param model_name:
-        :param doc_id:
-        :return:
-        """
-        doc = self.db.collection(model_name).document(doc_id).get()
-        if not doc.exists:
-            raise HTTPException(status_code=404, detail="Document not found")
-        return doc
-
-    def create_doc(self, model_name, data: dict, _id: str = None) -> DocumentReference:
-        """
-
-        :param model_name:
-        :param data:
-        :param _id:
-        :return:
-        """
-        doc = self.db.collection(model_name).document(_id)
-        doc.set(data)
-        return doc
-
-    def update_doc(self, model_name: str, _id: str, data: dict) -> None:
-        doc = self.db.collection(model_name).document(_id)
-        doc.update(data)
-
-    def delete_doc(self, model_name: str, _id: str) -> None:
-        doc = self.db.collection(model_name).document(_id)
-        doc.delete()
-
-    def search_doc(
-        self, model_name: str, fields: str, op: str, value: str | int | bool | list
-    ) -> QueryType:
-        query = self.db.collection(model_name).where(
-            filter=FieldFilter(field_path=fields, op_string=op, value=value)
-        )
-        return query
-
-    def add_doc_to_array(
-        self, model_name: str, key: str, value: Any, _id: str = None
-    ) -> WriteResult:
-        doc = self.db.collection(model_name).document(_id)
-        add_dict = {key: ArrayUnion([value])}
-        result = doc.update(add_dict)
-        return result
-
-
 class FirebaseStorage:
     def __init__(self):
         self.bucket = storage.bucket()
@@ -252,7 +189,7 @@ class FirebaseAsunc:
 
     async def delete_doc(self, model_name: str, _id: str) -> None:
         doc = self.db.collection(model_name).document(_id)
-        doc.delete()
+        await doc.delete()
 
     async def search_doc(
         self, model_name: str, fields: str, op: str, value: str | int | bool | list
