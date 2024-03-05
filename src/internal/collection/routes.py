@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, UploadFile, Form
+from fastapi import APIRouter, Depends, UploadFile, Form, Body
 from starlette import status
 
 from .dependencies import cheak_collection_id, cheak_club_name
@@ -10,6 +10,7 @@ from .schema.collection import (
     ResponseCreateCollection,
     GetAllCollection,
     GetCollection,
+    CollectionStatus,
 )
 from .services import CollectionService, CardService
 from ..task.schema import CreateTask
@@ -62,17 +63,25 @@ async def create_collection(
 
 
 @router.patch(
-    "/{id_collection}/disable/",
+    "/{id_collection}/change/status/",
     response_model=ResponseCreateCollection,
     status_code=status.HTTP_200_OK,
 )
-async def disable_collection(
-    id_collection: str, user: User = Depends(get_current_user)
+async def change_status(
+    id_collection: str,
+    status: CollectionStatus = Body(..., embed=True),
+    user: User = Depends(get_current_user),
 ):
     """
-    Disable the collection by collections id
+
+    :param id_collection:
+    :param status:
+    :param user:
+    :return:
     """
-    data = await CollectionService(user.uid).change_status_collection(id_collection)
+    data = await CollectionService(user.uid).change_status_collection(
+        id_collection, status
+    )
     return data
 
 
@@ -121,4 +130,13 @@ async def get_cards(
     user: User = Depends(get_current_user),
 ):
     data = await CardService(id_collection, user.uid).get_cards_info(q)
+    return data
+
+
+@router.get("/{id_collection}/limit/")
+async def get_limit_cards_in_collection(
+    id_collection: str = Depends(cheak_collection_id),
+    user: User = Depends(get_current_user),
+):
+    data = await CardService(id_collection, user.uid).get_limit()
     return data

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+    <div class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4">
+        <div>
+            <div class="text-xl font-medium text-black">Информация о команде</div>
+
+            <div class="flex-1">
+                <p class="text-gray-500">Название: {{ team.title }}</p>
+                <p class="text-gray-500">Трененр: {{ team.coach.firstName }} {{ team.coach.lastName }}</p>
+                <a href="#" id="openModal">Изменить тренера</a>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

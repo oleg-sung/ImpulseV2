@@ -21,3 +21,64 @@ input[type="date"]:valid + .birthdate-label {
 div {
     margin: 10px;
 }
+
+.b1 {
+    background: #6f3d19; /* Синий цвет фона */
+    color: white; /* Белые буквы */
+    font-size: 9pt; /* Размер шрифта в пунктах */
+}
+
+.b2 {
+    background: #000000; /* Синий цвет фона */
+    color: white; /* Белые буквы */
+    font-size: 9pt; /* Размер шрифта в пунктах */
+}
+
+.b3 {
+    background: #5110a0; /* Синий цвет фона */
+    color: white; /* Белые буквы */
+    font-size: 9pt; /* Размер шрифта в пунктах */
+}
+
+.b4 {
+    background: #ff8a00; /* Синий цвет фона */
+    color: white; /* Белые буквы */
+    font-size: 9pt; /* Размер шрифта в пунктах */
+}
+
+/* Стили модального окна */
+.modal {
+    display: none; /* По умолчанию окно скрыто */
+    position: fixed; /* Фиксированное позиционирование */
+    z-index: 1; /* Отображать поверх других элементов */
+    left: 0;
+    top: 0;
+    width: 100%; /* Полная ширина */
+    height: 100%; /* Полная высота */
+    overflow: auto; /* Добавить прокрутку, если нужно */
+    background-color: rgba(0, 0, 0, 0.4); /* Семянпрозрачный фон */
+}
+
+/* Стили для содержимого модального окна */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% от верхней части экрана */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Ширина окна */
+}
+
+/* Кнопка закрытия */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}

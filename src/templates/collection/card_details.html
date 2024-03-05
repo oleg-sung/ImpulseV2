@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <div class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4"
+         style="background-color: {% if card.type=='rare' %}#14276f;{% elif card.type=='legendary' %}#b39930;{% elif card.type=='common' %}#867661;{% elif card.type=='uncommon' %}#156514;{% endif %}">
+        <div>
+            <img src="{{ card.url }}" alt="footballer">
+            <p class="text-white mt-2">{{ card.name }}</p>
+            <p class="text-white mt-2">Тип: {{ card.type }}</p>
+            <p class="text-white mt-2">Информация: <br> {{ card.info }}</p>
+        </div>
+
+    </div>
+{% endblock %}

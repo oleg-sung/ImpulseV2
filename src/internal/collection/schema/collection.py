@@ -2,7 +2,13 @@ import datetime
 from enum import Enum
 
 from firebase_admin import firestore
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field
+
+
+class CollectionStatus(str, Enum):
+    CREATED = "created"
+    ACTIVE = "active"
+    CLOSED = "closed"
 
 
 class CollectionSize(str, Enum):
@@ -19,10 +25,18 @@ class CollectionSize(str, Enum):
         size_dict = {"fortyCards": 40, "sixtyCards": 60, "eightyCards": 80}
         return size_dict.get(size, None)
 
+    @staticmethod
+    def limit_cards() -> dict:
+        return {
+            "fortyCards": (25, 10, 4, 1),
+            "sixtyCards": (38, 15, 6, 1),
+            "eightyCards": (50, 20, 8, 2),
+        }
+
 
 class Collection(BaseModel):
     size: CollectionSize
-    is_active: bool = Field(alias="isActive")
+    status: CollectionStatus
     name: str
 
     class Config:
@@ -35,10 +49,10 @@ class GeneralCollection(Collection):
 
 
 class CreateCollection(Collection):
-    size: CollectionSize = CollectionSize.forty_cards
+    size: CollectionSize = Field(default=CollectionSize.forty_cards)
     cards: list = []
-    is_active: bool = Field(default=True, alias="isActive")
-    name: str = Field(min_length=2, max_length=40)
+    status: CollectionStatus = Field(default=CollectionStatus.CREATED)
+    name: str = Field(min_length=2, max_length=60)
     crated_at: datetime.datetime = Field(
         default=firestore.SERVER_TIMESTAMP, alias="createdAt"
     )
@@ -59,13 +73,8 @@ class GetCollection(Collection):
     cards: list[str]
 
 
-class DisableCollection(Collection):
-    is_active: bool = Field(alias="isActive")
-
-    @model_validator(mode="after")
-    def disable(self):
-        self.is_active = False if self.is_active else True
-        return self
+class ChangeStatusCollection(Collection):
+    status: CollectionStatus
 
     class Config:
         exclude = {"cards", "size", "name"}

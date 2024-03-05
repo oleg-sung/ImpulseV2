@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <div>
+        <div class="m-2 p-6 max-w-sm mx-2 bg-white rounded-xl shadow-md flex-wrap space-x-4">
+            <h1>Создание коллекции</h1>
+            <form id='createCollection' class="flex-wrap mt-8 space-y-6 ">
+                <div class="rounded-md shadow-sm -space-y-px">
+
+                    <p>Выберете размер коллекции:</p>
+                    <input type="radio" id="fortyCards" name="size" value="fortyCards">
+                    <label for="fortyCards">40 карт</label><br>
+                    <input type="radio" id="sixtyCards" name="size" value="sixtyCards">
+                    <label for="sixtyCards">60 карт</label><br>
+                    <input type="radio" id="eightyCards" name="size" value="eightyCards">
+                    <label for="eightyCards">80 карт</label><br>
+
+
+                    <p>Название коллекции:</p>
+                    <label for="name" class="sr-only">Название коллекции</label>
+                    <input id="name" name="name" type="text"
+                           class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                           placeholder="Название">
+                    <div class="flex items-center justify-between">
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                type="submit">
+                            Создать коллекцию
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.getElementById('createCollection').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formData = new FormData(document.querySelector("form[id='createCollection']"));
+            const object = {};
+            formData.forEach(function (value, key) {
+                object[key] = value;
+            });
+
+            fetch('http://127.0.0.1:8000/collection/create/', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(object)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Обработка полученных данных
+                    console.log(data);
+
+                    location.href = 'http://127.0.0.1:8000/pages/collections/';
+                })
+                .catch(error => {
+                    console.error('Ошибка загрузки данных:', error)
+                });
+        });
+
+
+    </script>
+
+{% endblock %}

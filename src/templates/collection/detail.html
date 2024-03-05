@@ -1,2 +1,27 @@
 {% extends 'base.html' %}
 
+{% block content %}
+    <div class="flex flex-wrap space-x-4" xmlns="http://www.w3.org/1999/html">
+        <button class="bg-gray-500 hover:bru text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                style=background-color:#867661;"
+                onclick="location.href='{{ url_for('get_cards_by_type', id_collection=collection).include_query_params(q="common") }}'">
+            Обычные
+        </button>
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                style=background-color:#156514;"
+                onclick="location.href='{{ url_for('get_cards_by_type', id_collection=collection).include_query_params(q="uncommon") }}'">
+            Необычные
+        </button>
+        <button class="bg-purple-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                style=background-color:#14276f;"
+                onclick="location.href='{{ url_for('get_cards_by_type', id_collection=collection).include_query_params(q="rare") }}'">
+            Редкие
+        </button>
+        <button class="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                style=background-color:#b39930;"
+                onclick="location.href='{{ url_for('get_cards_by_type', id_collection=collection).include_query_params(q="legendary") }}'">
+            Легендарные
+        </button>
+    </div>
+
+{% endblock %}

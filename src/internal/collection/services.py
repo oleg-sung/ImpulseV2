@@ -2,9 +2,15 @@ from typing import Iterator
 
 from fastapi import HTTPException, UploadFile
 from firebase_admin import firestore
+from google.cloud.firestore_v1 import FieldFilter
 from google.cloud.storage import Blob
 
-from internal.collection.schema.collection import CreateCollection, DisableCollection
+from internal.collection.schema.collection import (
+    CreateCollection,
+    ChangeStatusCollection,
+    CollectionSize,
+    CollectionStatus,
+)
 from pkg.celery_tools.tools import upload_file_task
 from .schema.card import ImageCard, CardType
 from ..database import db, storage
@@ -73,6 +79,27 @@ class CardService:
         cards_list = [i.metadata | {"url": i.public_url} for i in data]
         return cards_list
 
+    async def get_limit(self) -> dict:
+        collection_data = await self.db.get_doc(
+            self.collection_model_name, self.id_collection
+        )
+        collection_dict = collection_data.to_dict()
+        common_limit, uncommon_limit, rare_limit, legendary_limit = (
+            CollectionSize.limit_cards()[collection_dict["size"]]
+        )
+        prefix = f"thumbnail/{self.id_collection}/"
+        data = await self.bucket.get_blobs(prefix=prefix)
+        limit_dict = {
+            "common": common_limit,
+            "uncommon": uncommon_limit,
+            "rare": rare_limit,
+            "legendary": legendary_limit,
+        }
+        for blob in data:
+            cards_type = blob.metadata["type"]
+            limit_dict[cards_type] -= 1
+        return limit_dict
+
 
 class CollectionService:
     collection_model_name = "collection"
@@ -99,6 +126,8 @@ class CollectionService:
         collection_dict = collection_doc.to_dict()
         return collection_dict | {"id": collection_doc.id}
 
+    async def get_closed_collection(self): ...
+
     #
     async def get_all_collections_data(self) -> dict:
         """
@@ -107,26 +136,42 @@ class CollectionService:
         """
         data = []
         collections = await self.db.get_collection(self.collection_model_name)
-        query_set = collections.order_by(
-            "isActive", direction=firestore.Query.DESCENDING
-        ).order_by("createdAt", direction=firestore.Query.DESCENDING)
+        query_set = (
+            collections.where(filter=FieldFilter("status", "!=", "closed"))
+            .order_by("status")
+            .order_by("createdAt", direction=firestore.Query.DESCENDING)
+        )
         async for collection in query_set.stream():
             collection_dict = collection.to_dict()
             data.append(collection_dict | {"id": collection.id})
         return {"num": len(data), "collections": data}
 
-    async def change_status_collection(self, _id: str) -> dict:
+    async def change_status_collection(
+        self, _id: str, status: CollectionStatus
+    ) -> dict:
         """
-        Change status of collection's active to False
-        :param _id: collection's id in firebase
-        :return: dict with info about updated status
+
+        :param _id:
+        :param status:
+        :return:
         """
+        if status == CollectionStatus.ACTIVE:
+            collections = await self.db.get_collection(self.collection_model_name)
+            query = collections.where(
+                filter=FieldFilter("userCreatedID", "==", self.user_id)
+            ).where(filter=FieldFilter("status", "==", status))
+            result = await query.get()
+            if result:
+                raise HTTPException(
+                    status_code=403, detail="Уже есть активная коллекция"
+                )
 
         collection_doc = await self.db.get_doc(self.collection_model_name, _id)
         collection_dict = collection_doc.to_dict()
+        collection_dict.update({"status": status})
         if collection_dict["userCreatedID"] != self.user_id:
-            raise HTTPException(400, "Permission denied")
-        validated_data = DisableCollection(**collection_dict).model_dump(
+            raise HTTPException(403, "Permission denied")
+        validated_data = ChangeStatusCollection(**collection_dict).model_dump(
             by_alias=True,
         )
         await self.db.update_doc(self.collection_model_name, _id, validated_data)

@@ -3,17 +3,22 @@
 {% block content %}
 
     <div class="text-xl font-medium text-black">Список коллекций</div>
+    <div class="flex flex-wrap space-x-4" xmlns="http://www.w3.org/1999/html">
+        <button class="bg-gray-500 hover:bru text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                onclick=location.href="{{ url_for('create_collection_to') }}">
+            Создать коллекцию
+        </button>
+    </div>
     <div class="flex flex-wrap">
 
         {% for collection in collections %}
-
 
             <div class="m-2 p-6 max-w-sm mx-2 bg-white rounded-xl shadow-md flex-wrap items-center space-x-4">
                 <a class="text-gray-500"
                    href="{{ url_for('collection_detail', id_collection=collection.id) }}">Название: {{ collection.name }}</a>
 
-                <p class="text-gray-500">Статус: {% if collection.isActive %}Активная{% else %}Не
-                    активная{% endif %} </p>
+                <p class="text-gray-500">Статус: {% if collection.status == 'active' %}
+                    Активная{% elif collection.status == 'created' %}Созданная{% endif %} </p>
 
 
                 <p class="text-gray-500">Размер: {% if collection.size=='fortyCards' %}40

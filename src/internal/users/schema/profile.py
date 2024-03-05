@@ -33,6 +33,7 @@ class UserProfile(BaseModel):
 
 
 class GetUserProfile(BaseModel):
+    id: str = Field(..., examples=["RsZnqWPUXYZnkNAEMT11"])
     user_type: UserType = Field(default=UserType.ADMIN, alias="userType")
     email: EmailStr
     first_name: str = Field(max_items=12, min_length=2, alias="firstName")
@@ -40,7 +41,7 @@ class GetUserProfile(BaseModel):
         default=None, max_length=12, min_length=2, alias="middleName"
     )
     last_name: str = Field(max_length=20, min_length=2, alias="lastName")
-    birth_date: str = Field(alias="birthdate")
+    birth_date: datetime.date = Field(alias="birthdate")
     phone: str
     info: Optional[str] = None
     club_id: str = Field(alias="clubID")
