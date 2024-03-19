@@ -19,14 +19,16 @@ templates = Jinja2Templates(directory="src/templates")
 router = APIRouter(prefix="/pages", tags=["Pages"])
 
 
-@router.get("/index/", response_class=HTMLResponse)
+@router.get("/home/", response_class=HTMLResponse)
 async def home_page(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse("frontend/home/login.html", {"request": request})
 
 
 @router.get("/register/", response_class=HTMLResponse)
 async def register_page(request: Request):
-    return templates.TemplateResponse("register.html", {"request": request})
+    return templates.TemplateResponse(
+        "frontend/home/registration.html", {"request": request}
+    )
 
 
 @router.get("/login/", response_class=HTMLResponse)
@@ -184,4 +186,4 @@ def get_team_details(request: Request, team: dict = Depends(get_team)):
 
 @router.get("/cheack/", response_class=HTMLResponse)
 def cheack_html(request: Request):
-    return templates.TemplateResponse("enter.html", {"request": request})
+    return templates.TemplateResponse("login.html", {"request": request})

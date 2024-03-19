@@ -2,7 +2,7 @@ from fastapi import HTTPException
 
 
 class ClubNameAlreadyExists(HTTPException):
-    def __init__(self, detail="Club name726 already exists"):
+    def __init__(self, detail="Club name already exists"):
         super().__init__(status_code=400, detail=detail)
 
 

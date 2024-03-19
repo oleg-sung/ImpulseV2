@@ -1,6 +1,7 @@
 async function registerUser() {
     event.preventDefault();
     document.getElementById("enter").innerText = '';
+    document.getElementById('errors-reg').style.display = 'none';
     document.getElementById('loading-reg').style.display = 'block';
     const formData = new FormData(document.querySelector("form[id='registerForm']"));
 
@@ -10,7 +11,14 @@ async function registerUser() {
     });
     if (object['password'] !== object['password1']) {
         document.getElementById('loading-reg').style.display = 'none';
-        document.getElementById('errors').textContent = 'Пароли не совпадают'
+        document.getElementById('errors-reg').textContent = 'Пароли не совпадают'
+        document.getElementById("enter").innerText = 'Регистрация';
+        return document.getElementById('errors-reg').style.display = 'block';
+    }
+    const element = document.querySelector('input[type=checkbox]');
+    if (!element.checked) {
+        document.getElementById('loading-reg').style.display = 'none';
+        document.getElementById('errors-reg').textContent = 'Подтвердите обработку данных'
         document.getElementById("enter").innerText = 'Регистрация';
         return document.getElementById('errors-reg').style.display = 'block';
     }
@@ -47,7 +55,8 @@ async function registerUser() {
                     const msq = 'Пароль должен быть от 6 до 8 символов'
                     document.getElementById('loading-reg').style.display = 'none';
                     document.getElementById("enter").innerText = 'Регистрация';
-                    return document.getElementById('errors-reg').textContent = msq
+                    document.getElementById('errors-reg').textContent = msq
+                    return document.getElementById('errors-reg').style.display = 'block';
                 }
             })
             document.getElementById('loading-reg').style.display = 'none';

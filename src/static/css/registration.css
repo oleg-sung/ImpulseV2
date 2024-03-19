@@ -1,3 +1,4 @@
+@import url("loading.css");
 @import url("login.css");
 @import url("errors.css");
 
@@ -48,7 +49,7 @@ body, html {
 }
 
 .register-form {
-
+    flex-direction: column;
     width: 451px;
     height: 376px;
     gap: 8px;
@@ -56,7 +57,7 @@ body, html {
 
 .input-reg {
     margin-top: 7px;
-    display: block;
+    display: flex;
     width: 427px;
     height: 52px;
     border: none;
@@ -68,7 +69,7 @@ body, html {
 
 .info {
     position: relative;
-    top: -8px;
+    top: -40px;
     font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
     font-size: 13px;
@@ -84,14 +85,15 @@ body, html {
 }
 
 .cheak-accept {
-    display: inline-block;
+    display: block;
     width: 20px;
     height: 20px;
+    top: 520px;
 }
 
 .check-title {
     position: relative;
-    top: -12px;
+    top: -42px;
     left: 32px;
     display: inline-block;
     font-family: "Inter", sans-serif;
@@ -103,9 +105,14 @@ body, html {
     color: #FFFFFF;
 }
 
+#cumancen-reg-1 {
+    position: relative;
+    top: -40px;
+}
+
 .enter-reg {
     position: relative;
-    top: -20px;
+    top: -50px;
 }
 
 .politic-reg {
@@ -119,28 +126,43 @@ body, html {
 }
 
 #errors-reg {
+    display: none;
     position: relative;
-    top: -10px;
+    top: -43px;
 }
 
 #loading-reg {
     position: relative;
     display: none;
-    top: -97px;
+    top: -127px;
     left: 212px;
 }
 
-.pass-enter span {
-    position: absolute;
-    right: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 22px;
-    color: #0a2346;
-    cursor: pointer;
-    display: block;
+/*.pass-enter span {*/
+/*    position: absolute;*/
+/*    right: 14px;*/
+/*    top: 50%;*/
+/*    transform: translateY(-50%);*/
+/*    font-size: 22px;*/
+/*    color: #0a2346;*/
+/*    cursor: pointer;*/
+/*    display: block;*/
+/*}*/
+
+/*.showing_stealth span i.conceal-btn::before {*/
+/*    content: "\f070";*/
+/*}*/
+
+#password1 {
+    position: relative;
+    top: -17px;
 }
 
-.showing_stealth span i.conceal-btn::before {
-    content: "\f070";
+
+.cumancen1 {
+    position: relative;
+    width: 30px;
+    height: 30px;
+    top: -55px;
+    left: 410px;
 }
