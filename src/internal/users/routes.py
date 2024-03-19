@@ -2,14 +2,18 @@ from fastapi import APIRouter, status, Depends, UploadFile, Body
 from starlette.responses import Response
 
 from internal.task.schema import CreateTask
-from internal.users.dependens import get_current_user, delete_cookie
+from internal.users.dependens import (
+    get_current_user,
+    delete_cookie,
+    cheak_club_name_test,
+)
 from internal.users.schema.club import ClubInfo
 from internal.users.schema.profile import (
     GetUserProfile,
     UpdateUserProfileSchema,
     UpdateResponse,
 )
-from internal.users.schema.user import UserCreate, UserLogin, User
+from internal.users.schema.user import UserLogin, User, UserCreate
 from internal.users.services import UserServices, UserProfileService, ClubServices
 
 router = APIRouter(prefix="/user", tags=["user"])
@@ -20,7 +24,7 @@ router = APIRouter(prefix="/user", tags=["user"])
     response_model=CreateTask,
     status_code=status.HTTP_201_CREATED,
 )
-async def user_register(user_data: UserCreate):
+async def user_register(user_data: UserCreate = Depends(cheak_club_name_test)):
     """
 
     :param user_data:

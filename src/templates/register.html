@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/registration.css') }}">
+    <script src="/static/js/registration.js"></script>
+    <title>Registration</title>
+</head>
+<body>
+<div class="centered-div">
+    <div class="register-block">
+        <h1 class="title">Регистрация</h1>
+        <div class="register-block">
+            <div class="register-form">
+                <form action="." id="registerForm">
+                    <label for="email"></label>
+                    <input required id="email" class="input-reg" type="email" name="email" placeholder="Email">
+                    <label for="firstName"></label>
+                    <input required id="firstName" class="input-reg" type="text" name="firstName" placeholder="Имя">
+                    <label for="lastName"></label>
+                    <input required id="lastName" class="input-reg" type="text" name="lastName" placeholder="Фамилия">
+                    <label for="birthdate"></label>
+                    <input required id="birthdate" class="input-reg" name="birthdate" type="text"
+                           onfocus="this.type='date'"
+                           onblur="if(this.value==''){this.type='text'}" placeholder="Дата рождения">
+                    <label for="clubName"></label>
+                    <input required id="clubName" class="input-reg" name="name" type="text"
+                           placeholder="Название клуба">
+                    <label for="password"></label>
+                    <input required id="password" class="input-reg" type="password" name="password"
+                           placeholder="Пароль (от 6 до 8 символов)">
+
+                    <label for="password1"></label>
+                    <input required id="password1" class="input-reg" type="password" name="password1"
+                           placeholder="Подтверждение пароля">
+                    <p class="info">Все поля обязательны для заполнения</p>
+                    <div class="approval">
+                        <input id="cheak-accept" name="cheak-accept" class="cheak-accept"
+                               type="checkbox">
+                        <p class="check-title">Согласие на обработку персональных данных</p>
+                    </div>
+                    <button class="enter enter-reg" id="enter" type="submit">Регистрация</button>
+                    <div id="loading-reg" class="loading"></div>
+                    <div id="errors-reg" class="errors">Ошибка сервера</div>
+                </form>
+            </div>
+            <div class="end-link reg">
+                <div>
+                    <a class="politic politic-reg" href="https://firebase.google.com/support/privacy">Политика
+                        конфиденциальности данных</a>
+                </div>
+                <div>
+                    <a class="reqister" href="{{ url_for('cheack_html') }}">Вход</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById('registerForm').addEventListener('submit', function (event) {
+        if (this.checkValidity()) {
+            // Форма валидна, вызываем функцию
+            registerUser();
+        } else {
+            // Форма невалидна, предотвращаем отправку
+            event.preventDefault();
+        }
+    });
+</script>
+</body>
+</html>

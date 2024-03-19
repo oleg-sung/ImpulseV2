@@ -15,7 +15,7 @@ from internal.token.routes import get_all_user_token, get_token_by_id
 from internal.token.schema import Token
 from internal.users.routes import get_user_profile, club_info, change_password
 
-templates = Jinja2Templates(directory="/home/sungurov/fast/Impulse/src/templates")
+templates = Jinja2Templates(directory="src/templates")
 router = APIRouter(prefix="/pages", tags=["Pages"])
 
 
@@ -26,7 +26,7 @@ async def home_page(request: Request):
 
 @router.get("/register/", response_class=HTMLResponse)
 async def register_page(request: Request):
-    return templates.TemplateResponse("user/register.html", {"request": request})
+    return templates.TemplateResponse("register.html", {"request": request})
 
 
 @router.get("/login/", response_class=HTMLResponse)
@@ -180,3 +180,8 @@ def get_team_details(request: Request, team: dict = Depends(get_team)):
         "team/team_details.html",
         {"request": request, "team": team},
     )
+
+
+@router.get("/cheack/", response_class=HTMLResponse)
+def cheack_html(request: Request):
+    return templates.TemplateResponse("enter.html", {"request": request})

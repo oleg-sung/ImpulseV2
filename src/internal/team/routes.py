@@ -32,8 +32,8 @@ async def get_team(team_id: str, user: User = Depends(get_current_user)):
     response_model=list[GetUserProfile],
     status_code=status.HTTP_200_OK,
 )
-async def get_coachs(user: User = Depends(get_current_user)):
-    data = await TeamService().get_coaches(user.uid)
+async def get_coachs(team_id: str, user: User = Depends(get_current_user)):
+    data = await TeamService().get_coaches(user.uid, team_id)
     return data
 
 
