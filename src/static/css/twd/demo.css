@@ -1,0 +1,9 @@
+.effect {
+    transition: color 0.2s linear;
+}
+
+.effect:hover {
+
+    color: #E41730;
+
+}

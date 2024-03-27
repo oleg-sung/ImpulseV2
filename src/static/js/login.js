@@ -31,7 +31,7 @@ async function loginUser() {
         } else if (response.status === 200) {
             document.getElementById('loading-enter').style.display = 'none';
             document.getElementById("enter").innerText = 'Вход';
-            return window.location.href = "http://127.0.0.1:8000/pages/user/profile/";
+            return window.location.href = "http://127.0.0.1:8000/pages/home/";
         }
     });
 }

@@ -53,7 +53,7 @@ class CreateCollection(Collection):
     cards: list = []
     status: CollectionStatus = Field(default=CollectionStatus.CREATED)
     name: str = Field(min_length=2, max_length=60)
-    crated_at: datetime.datetime = Field(
+    date: datetime.datetime = Field(
         default=firestore.SERVER_TIMESTAMP, alias="createdAt"
     )
 

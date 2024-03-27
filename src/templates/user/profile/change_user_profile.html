@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/twd/demo.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4 justify-content-center"
+         style="background-color: rgba(37, 31, 43, 0.8);">
+
+        <form id='changeForm' class="mt-8 space-y-8">
+            <h1 class="text-white ml-2" style="font-size: 20px">Изменение информации профиля</h1>
+            <div class="rounded-md shadow-sm space-y-4">
+
+                <div>
+                    <label for="firstName" class="text-white">Имя</label>
+                    <input id="firstName" name="firstName" type="text"
+                           class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                           value="{{ profile.firstName }}">
+                </div>
+                <div>
+                    <label for="middleName" class="text-white">Отчество</label>
+                    <input id="middleName" name="middleName" type="text"
+                           class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                           value="{{ profile.middleName }}">
+                </div>
+                <div>
+                    <label for="lastName" class="text-white">Фамилия</label>
+                    <input id="lastName" name="lastName" type="text"
+                           class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                           value="{{ profile.lastName }}">
+                </div>
+                <div>
+                    <label for="birthdate" class="text-white">Дата рождения</label>
+                    <input id="birthdate" name="birthdate" type="date"
+                           class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                           value="{{ profile.birthdate.strftime('%Y-%m-%d') }}">
+                </div>
+                <div>
+                    <label for="phone" class="text-white">Телефон</label>
+                    <input id="phone" name="phone" type="tel"
+                           class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                           value="{{ profile.phone }}">
+                </div>
+                <div>
+                    <p class="text-white"> О себе
+                        <textarea
+                                class="text-black rounded-none relative block w-full px-3 py-2 border border-gray-300"
+                                id="info"
+                                rows="6"
+                                cols="45"
+                                name="info"
+                        >{{ profile.info }}
+
+                    </textarea>
+                    </p>
+                </div>
+
+            </div>
+            <div class="flex items-center justify-between ml-[110px]">
+                <button class=" text-white border border-gray-300 rounded-lg px-2 py-2 effect"
+                        type="submit">
+                    Применить
+                </button>
+
+            </div>
+        </form>
+    </div>
+    <script>
+        async function chnageInfo() {
+            event.preventDefault();
+            const formData = new FormData(document.querySelector("form[id='changeForm']"));
+            const infoData = document.getElementById('info').value;
+
+            const object = {};
+            formData.forEach(function (value, key) {
+                object[key] = value;
+            });
+            object['info'] = infoData
+
+
+            const json = JSON.stringify(object);
+
+
+            const response = await fetch('http://127.0.0.1:8000/user/profile/change/', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: json,
+            });
+            if (response.ok) {
+                return window.location.href = "http://127.0.0.1:8000/pages/user/profile/"
+            } else {
+                const errors = await response.json();
+                alert('Ошибка валидации: ' + JSON.stringify(errors));
+            }
+
+        }
+    </script>
+    <script>
+        document.getElementById('changeForm').addEventListener('submit', function (event) {
+            if (this.checkValidity()) {
+                chnageInfo();
+            } else {
+                event.preventDefault();
+            }
+        });
+    </script>
+
+
+{% endblock %}

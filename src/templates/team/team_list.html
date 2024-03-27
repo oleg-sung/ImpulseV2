@@ -6,8 +6,9 @@
 
         {% for team in teams %}
 
-            <div class="m-2 p-6 max-w-sm mx-2 bg-white rounded-xl shadow-md flex-wrap items-center space-x-4">
-                <a class="text-gray-500"
+            <div class="m-2 p-6 max-w-sm mx-2 bg-white rounded-xl shadow-md flex-wrap items-center justify-content-center space-x-4"
+                 style="background-color: rgba(37, 31, 43, 0.8);">
+                <a class="text-white"
                    href="{{ url_for('get_team_details', team_id=team.id) }}">Название команды:<br> {{ team.title }}</a>
 
                 {#                <p class="text-gray-500">Статус: {% if collection.status == 'active' %}#}

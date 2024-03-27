@@ -7,7 +7,7 @@ from internal.users.dependens import (
     delete_cookie,
     cheak_club_name_test,
 )
-from internal.users.schema.club import ClubInfo
+from internal.users.schema.club import ClubInfo, UpdateClubSchema
 from internal.users.schema.profile import (
     GetUserProfile,
     UpdateUserProfileSchema,
@@ -104,10 +104,18 @@ async def club_info(user: User = Depends(get_current_user)):
 
 
 @router.patch(
-    "/club/change/", response_model=CreateTask, status_code=status.HTTP_200_OK
+    "/club/change/image", response_model=CreateTask, status_code=status.HTTP_200_OK
 )
 async def change_club_info(file: UploadFile, user: User = Depends(get_current_user)):
     data = await ClubServices().change_club_image(file, user.uid)
+    return data
+
+
+@router.patch("/club/change/motto/")
+async def change_club_info(
+    data: UpdateClubSchema, user: User = Depends(get_current_user)
+):
+    data = await ClubServices().change_club_motto(data, user.uid)
     return data
 
 

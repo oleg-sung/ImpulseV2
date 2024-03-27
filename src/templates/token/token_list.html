@@ -2,38 +2,37 @@
 
 
 {% block content %}
-    <body>
     <div class="flex flex-col align-items-start pb-5">
-        <button id="createToken" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Создать новый Токен
+        <button id="createToken" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                style="background-color: #E41730">
+            Создать новый код
         </button>
 
 
     </div>
     {#    <div class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex-wrap items-center space-x-4">#}
-    <div class="text-xl font-medium text-black">Список токенов</div>
+    <div class="text-xl font-medium text-black">Список кодов</div>
     <div class="flex flex-wrap">
 
         {% for token in tokens %}
 
-
-            <div class="m-2 p-6 max-w-sm mx-2 bg-white rounded-xl shadow-md flex-wrap items-center space-x-4">
-                <a class="text-gray-500"
-                   href="{{ url_for('token_detail', token_id=token.id) }}">Инфо</a>
-                <p class="text-gray-500">{{ token.id }}</p>
-                <p class="text-gray-500">{{ token.isActive }}</p>
-                <p class="text-gray-500" type="date">Дата
+            <div class="m-2 p-6 max-w-sm mx-2 bg-white rounded-xl shadow-md flex-wrap items-center space-x-4"
+                 style="background-color: rgba(37, 31, 43, 0.8);">
+                <a class="text-gray-500 p-14 mb-[4px]" style="color: #FFFFFF"
+                   href="{{ url_for('token_detail', token_id=token.id) }}">Информация по коду</a>
+                <p class="text-gray-500 mt-6" style="color: #FFFFFF"> {{ token.id }}</p>
+                <p class="text-gray-500" style="color: #FFFFFF">Статус: {% if token.isActive %}Активный{% else %}
+                    Неактивный{% endif %}</p>
+                <p class="text-gray-500" type="date" style="color: #FFFFFF">Дата
                     создания: {{ token.createdAt.strftime('%Y-%m-%d в %H:%M') }}</p>
-
             </div>
-
         {% endfor %}
     </div>
 
     <script>
         document.getElementById('createToken').addEventListener('click', function () {
             this.disabled = true;
-            fetch('http://127.0.0.1:8000/token/create/', { // Замените на ваш URL-адрес FastAPI
+            fetch('http://127.0.0.1:8000/token/create/', {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
@@ -57,12 +56,4 @@
                 });
         });
     </script>
-    {#    <div class="flex flex-wrap">#}
-    {#        <div class="m-2">Элемент 1</div>#}
-    {#        <div class="m-2">Элемент 2</div>#}
-    {#        <div class="m-2">Элемент 3</div>#}
-    {#        <div class="m-2">Элемент 4</div>#}
-    {#        <div class="m-2">Элемент 5</div>#}
-    {#    </div>#}
-    </body>
 {% endblock %}
