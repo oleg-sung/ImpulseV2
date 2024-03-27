@@ -69,7 +69,7 @@ async def create_collection(
 )
 async def change_status(
     id_collection: str,
-    status: CollectionStatus = Body(...),
+    status: CollectionStatus = Body(..., embed=True),
     user: User = Depends(get_current_user),
 ):
     """

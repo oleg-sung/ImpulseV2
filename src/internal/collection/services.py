@@ -128,7 +128,6 @@ class CollectionService:
 
     async def get_closed_collection(self): ...
 
-    #
     async def get_all_collections_data(self) -> dict:
         """
         Getting the data for all collections
@@ -155,6 +154,8 @@ class CollectionService:
         :param status:
         :return:
         """
+        collection_doc = await self.db.get_doc(self.collection_model_name, _id)
+        collection_dict = collection_doc.to_dict()
         if status == CollectionStatus.ACTIVE:
             collections = await self.db.get_collection(self.collection_model_name)
             query = collections.where(
@@ -165,9 +166,10 @@ class CollectionService:
                 raise HTTPException(
                     status_code=403, detail="Уже есть активная коллекция"
                 )
+            size = CollectionSize.get_size_dict(collection_dict["size"])
+            if len(collection_dict["cards"]) < size:
+                raise HTTPException(403, detail="Collection is not full")
 
-        collection_doc = await self.db.get_doc(self.collection_model_name, _id)
-        collection_dict = collection_doc.to_dict()
         collection_dict.update({"status": status})
         if collection_dict["userCreatedID"] != self.user_id:
             raise HTTPException(403, "Permission denied")

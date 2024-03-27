@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/main/main.css') }}">
+    {% block head %}{% endblock %}
+    <title>Document</title>
+</head>
+<body>
+<div class="fullscreen-div">
+    <nav class="navbar">
+        <ul class="navbar-nav">
+            <li>
+                <div class="nav-div-club">
+                    <div class="round-image">
+                        <img src="/static/images/club/img.png" alt="Club image">
+
+                    </div>
+                    <div class="div-link-club">
+                        <a class="nav-a-club" href="#"><p class="club-title">Клуб Молния</p></a>
+                    </div>
+
+                </div>
+            </li>
+            <li>
+                <div class="nav-main">
+                    <div class="menu-main">
+                        <div class="main-image">
+                            <img src="/static/images/club/home.png" alt="Main image">
+                        </div>
+                        <div class="div-main-link">
+                            <a class="main-link" href=""><p>Главная</p></a>
+                        </div>
+                    </div>
+                    <div class="menu-main">
+                        <div class="main-image">
+                            <img src="/static/images/club/collection.png" alt="Collection image">
+                        </div>
+                        <div class="div-main-link">
+                            <a class="main-link" href="#"><p>Коллекции</p></a>
+                        </div>
+                    </div>
+                </div>
+            <li>
+                <div class="menu-admin">
+                    <div class="nav-div-admin">
+                        <div class="admin-image">
+                            <img src="/static/images/club/admin.png" alt="Admin image">
+                        </div>
+                        <div class="div-link-admin">
+                            <a class="nav-a-club" href="#"><p>Администратор</p></a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    <div class="base">
+        {% block content %}{% endblock %}
+    </div>
+
+</div>
+</body>
+</html>

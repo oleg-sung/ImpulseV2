@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/twd/demo.css') }}">
+{% endblock %}
+
 {% block content %}
-    <div class="flex flex-wrap space-x-4" xmlns="http://www.w3.org/1999/html">
+    <div class=" ml-[680px] p-6 max-w-sm mx-auto bg-white flex items-center space-x-4 justify-content-center"
+    >
         <button class="bg-gray-500 hover:bru text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 style=background-color:#867661;"
                 onclick="location.href='{{ url_for('get_cards_by_type', id_collection=collection).include_query_params(q="common") }}'">
@@ -23,5 +28,25 @@
             Легендарные
         </button>
     </div>
+    <div class="text-white p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex flex-wrap items-center space-x-4 justify-content-center"
+         style="background-color: rgba(37, 31, 43, 0.8);">
+        <h1 style="font-size: 16px">Осталось создать</h1>
+        <div>
+            <p>Обычные карты: {{ limit.common }}</p>
+            <p>Необычные карты: {{ limit.uncommon }}</p>
+            <p>Редкие карты: {{ limit.rare }}</p>
+            <p>Легендарные карты: {{ limit.legendary }}</p>
+        </div>
+        <div>
+            <button class="ml-[80px] mt-6 text-white border border-gray-300 rounded-lg px-2 py-2 effect"
+                    type="submit">Актевировать
+            </button>
+        </div>
+    </div>
+    <script>
+    </script>
+
+
+
 
 {% endblock %}

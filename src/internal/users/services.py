@@ -5,7 +5,7 @@ from firebase_admin.auth import UserRecord
 from starlette import status
 
 from pkg.celery_tools.tools import send_email_task, upload_file_task, delete_file_task
-from .schema.club import CreateClub, ClubImage
+from .schema.club import CreateClub, ClubImage, UpdateClubSchema
 from .schema.profile import UserProfile, UpdateUserProfileSchema
 from .schema.user import UserCreate
 from ..database import db, auth as fb_auth, storage
@@ -13,7 +13,7 @@ from ..token.services import TokenService
 
 
 class UserProfileService:
-    user_profile_model_name = "user_profile"
+    user_profile_model_name = "userProfile"
 
     def __init__(self):
         self.db = db
@@ -104,6 +104,11 @@ class ClubServices:
         )
         await self.db.update_doc(self.club_model_name, user_id, {"image": image.id})
         return {"task_id": task.id}
+
+    async def change_club_motto(self, data: UpdateClubSchema, user_id: str) -> dict:
+        validated_data = data.model_dump()
+        await self.db.update_doc(self.club_model_name, user_id, validated_data)
+        return {"status": "success"}
 
 
 #     def set_coach_to_club(self, data: dict, user_id: str) -> dict:

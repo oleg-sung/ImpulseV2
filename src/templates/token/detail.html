@@ -4,32 +4,26 @@
 {% block content %}
     <body>
 
-    <div class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4">
+    <div class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4"
+         style="background-color: rgba(37, 31, 43, 0.8);">
         <div>
-            <div class="text-xl font-medium text-black">Информация о токене</div>
-
-            <div class="flex-1">
-                <button id="changeStatus" class="text-gray-500" onclick="">Изменить стутус</button>
+            <div class="text-xl font-medium text-white ml-12">Информация по коду</div>
+            <div class="flex-1 mt-6">
+                <button id="changeStatus" class="text-white" onclick="">Изменить статус</button>
                 {% if token.isActive %}
-                    <p class="text-gray-500">Статус - Активен</p>
+                    <p class="text-white">Статус - Активен</p>
                 {% else %}
-                    <p class="text-gray-500">Статус - Не активен</p>
+                    <p class="text-white">Статус - Не активен</p>
                 {% endif %}
-                <p class="text-gray-500">Колличетво авторизаци по токену: {{ token.authCount }}</p>
-                <p class="text-gray-500" type="date">Дата
+                <p class="text-white">Колличетво авторизаци по токену: {{ token.authCount }}</p>
+                <p class="text-white" type="date">Дата
                     создания: {{ token.createdAt.strftime('%Y.%m.%d в %H:%M') }}</p>
 
-                <button id="copyBtn">Скопировать токен</button>
-                <p class="text-gray-500" type="text" id="tokenInput">{{ token.code }}</p>
-
-
+                <button class="p-2 text-white ml-14 mt-6" id="copyBtn">Скопировать токен</button>
+                <p class="text-white" type="text" id="tokenInput">{{ token.code }}</p>
+                <button class="text-white ml-20 mt-8" id="deleteToken">Удалить токен</button>
             </div>
-
-
-            <button id="deleteToken">Удалить токен</button>
-
         </div>
-
     </div>
     <script>
         document.getElementById('copyBtn').addEventListener('click', function () {

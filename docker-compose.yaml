@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: 'docker/api/Dockerfile'
+    volumes:
+      - .:/molniya
     ports:
       - 8000:8000
   celery:

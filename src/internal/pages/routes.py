@@ -21,6 +21,11 @@ router = APIRouter(prefix="/pages", tags=["Pages"])
 
 @router.get("/home/", response_class=HTMLResponse)
 async def home_page(request: Request):
+    return templates.TemplateResponse("frontend/main/home.html", {"request": request})
+
+
+@router.get("/login/", response_class=HTMLResponse)
+async def login_page(request: Request):
     return templates.TemplateResponse("frontend/home/login.html", {"request": request})
 
 
@@ -31,15 +36,24 @@ async def register_page(request: Request):
     )
 
 
-@router.get("/login/", response_class=HTMLResponse)
-async def login_page(request: Request):
-    return templates.TemplateResponse("user/login.html", {"request": request})
+#
+# @router.get("/login/", response_class=HTMLResponse)
+# async def login_page(request: Request):
+#     return templates.TemplateResponse("user/login.html", {"request": request})
 
 
 @router.get("/user/profile/", response_class=HTMLResponse)
 def user_profile(request: Request, profile: dict = Depends(get_user_profile)):
     return templates.TemplateResponse(
         "user/profile/user_profile.html", {"request": request, "profile": profile}
+    )
+
+
+@router.get("/user/profile/change/", response_class=HTMLResponse)
+def change_user_password(request: Request, profile: dict = Depends(get_user_profile)):
+    return templates.TemplateResponse(
+        "user/profile/change_user_profile.html",
+        {"request": request, "profile": profile},
     )
 
 
@@ -66,9 +80,20 @@ def token_detail(request: Request, token: Token = Depends(get_token_by_id)):
 
 
 @router.get("/club/", response_class=HTMLResponse)
-def club_detail(request: Request, club: dict = Depends(club_info)):
+def club_detail_info(
+    request: Request,
+    club: dict = Depends(club_info),
+):
     return templates.TemplateResponse(
         "club/detail.html",
+        {"request": request, "club": club},
+    )
+
+
+@router.get("/club/change/motto/", response_class=HTMLResponse)
+def change_club_info_page(request: Request, club: dict = Depends(club_info)):
+    return templates.TemplateResponse(
+        "club/change_info.html",
         {"request": request, "club": club},
     )
 
@@ -113,11 +138,15 @@ def create_collection_to(request: Request):
 def collection_detail(
     request: Request,
     id_collection: str,
-    data: list = Depends(get_cards),
+    limit: dict = Depends(get_limit_cards_in_collection),
 ):
     return templates.TemplateResponse(
         "collection/detail.html",
-        {"request": request, "cards": data, "collection": id_collection},
+        {
+            "request": request,
+            "collection": id_collection,
+            "limit": limit,
+        },
     )
 
 
@@ -186,4 +215,6 @@ def get_team_details(request: Request, team: dict = Depends(get_team)):
 
 @router.get("/cheack/", response_class=HTMLResponse)
 def cheack_html(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request})
+    return templates.TemplateResponse(
+        "frontend/main/base_main.html", {"request": request}
+    )

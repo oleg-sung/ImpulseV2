@@ -13,17 +13,18 @@
 
         {% for collection in collections %}
 
-            <div class="m-2 p-6 max-w-sm mx-2 bg-white rounded-xl shadow-md flex-wrap items-center space-x-4">
-                <a class="text-gray-500"
-                   href="{{ url_for('collection_detail', id_collection=collection.id) }}">Название: {{ collection.name }}</a>
+            <div class="m-2 p-6 max-w-sm mx-2 bg-white rounded-xl shadow-md flex-wrap items-center justify-content-center space-x-4"
+                 style="background-color: rgba(37, 31, 43, 0.8);">
+                <a class="text-white ml-16"
+                   href="{{ url_for('collection_detail', id_collection=collection.id) }}">{{ collection.name }}</a>
 
-                <p class="text-gray-500">Статус: {% if collection.status == 'active' %}
+                <p class="text-white mt-6">Статус: {% if collection.status == 'active' %}
                     Активная{% elif collection.status == 'created' %}Созданная{% endif %} </p>
 
 
-                <p class="text-gray-500">Размер: {% if collection.size=='fortyCards' %}40
+                <p class="text-white">Размер: {% if collection.size=='fortyCards' %}40
                     карточек{% elif collection.size=='sixtyCards' %}60 карточек{% else %}80 карточек{% endif %}</p>
-                <p class="text-gray-500" type="date">Дата
+                <p class="text-white" type="date">Дата
                     создания: {{ collection.createdAt.strftime('%Y-%m-%d в %H:%M') }}</p>
 
             </div>
