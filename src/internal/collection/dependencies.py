@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 
-from .schema.collection import CreateCollection
+from .schema.collection import CreateNewCollection
 from ..database import db
 
 
@@ -9,7 +9,7 @@ async def cheak_collection_id(id_collection: str) -> str:
     return collection.id
 
 
-async def cheak_club_name(data: CreateCollection) -> CreateCollection:
+async def cheak_club_name(data: CreateNewCollection) -> CreateNewCollection:
     result = await db.search_doc("collection", "name", "==", data.name)
     if len(await result.get()):
         raise HTTPException(status_code=400, detail="Collection already exists")

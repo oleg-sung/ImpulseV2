@@ -1,2 +1,97 @@
 {% extends 'frontend/main/base_main.html' %}
 
+
+{% block head %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/main/home.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="general-content">
+        <div class="general-collection">
+            <div class="title">
+                <h1 class="discription">Коллекции</h1>
+                <button class="create-collection" type="button">Создать новую коллекцию</button>
+            </div>
+            <div class="collections-list">
+                {% for collection in collections %}
+                    <div class="collection"
+                         style={% if collection.status == 'created' %}"background-color:#FFFFFF; border: solid black; "{% endif %}>
+                        <div style="margin-bottom: 30px; position: relative; top:10px;">
+                            <a class="title-collection" href="."
+                               style={% if collection.status == 'created' %}"color:black"{% endif %}>{{ collection.name }}</a>
+                        </div>
+                        <img class="collection-cars" src="/static/images/cards/common.png" alt="Common">
+                        <img class="collection-cars" src="/static/images/cards/uncommon.png" alt="Uncommon">
+                        <img class="collection-cars" src="/static/images/cards/rare.png" alt="Rare">
+                        <img class="collection-cars" src="/static/images/cards/legendary.png" alt="Legendary">
+                        <div class="status-and-amound">
+                            <p class="collection-status"
+                               style={% if collection.status == 'created' %}"color:black"{% endif %}>
+                                {% if collection.status == 'created' %}Созданная{% else %}Активная{% endif %}
+                            </p>
+                            <p class="amount-cards"
+                               style={% if collection.status == 'created' %}"color:black; border: 2px solid black;"{% endif %}>
+                                {% if collection.size == 'fortyCards' %}40{% elif collection.size == 'sixtyCards' %}
+                                    60{% else %}80{% endif %}
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="general-coach-tokens">
+            <div class="token-title">
+                <div class="token-discription">
+                    <h1>Регистрация тренеров</h1>
+                    <p class="token-discription-info">
+                        Здесь показаны коды для Регистрации тренеров, которые создавались Вами ранее.<br>
+                        Для активации неактивного кода нажмите на переключатель.
+                    </p>
+                </div>
+                <button class="create-collection" type="button">Сгенерировать новый код</button>
+            </div>
+            <div class="token-list">
+                <div class="display-token">
+                    <div class="code-and-toggle">
+                        <p class="token-code">12313123asdasdasdsaa1312</p>
+                        <div id="toggles" class="toggle">
+                            <input type="checkbox" name="checkbox1" class="ios-toggle" checked/>
+                            <label for="checkbox1" class="checkbox-label" data-off="off" data-on="on"></label>
+                        </div>
+                    </div>
+                    <div class="token-info">
+                        <p class="info-title">Количество регистрация</p>
+                        <p class="amoun-users">
+                            4
+                        </p>
+                    </div>
+                </div>
+                <div class="display-token">
+                    <div class="code-and-toggle">
+                        <p class="token-code">12313123asdasdasdsaa1312</p>
+                        <div id="toggles" class="toggle">
+                            <input type="checkbox" name="checkbox" class="ios-toggle" checked/>
+                            <label for="checkbox2" class="checkbox-label" data-off="off" data-on="on"></label>
+                        </div>
+                    </div>
+                    <div class="token-info">
+                        <p class="info-title">Количество регистрация</p>
+                        <p class="amoun-users">
+                            4
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="general-team"></div>
+    </div>
+    <script>
+        // Создаем контейнер для чекбоксов
+        document.querySelectorAll('.toggle input').forEach((input, index) => {
+            input.id = `checkbox${index + 1}`
+        });
+    </script>
+{% endblock %}

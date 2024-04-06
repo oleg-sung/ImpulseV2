@@ -20,8 +20,11 @@ router = APIRouter(prefix="/pages", tags=["Pages"])
 
 
 @router.get("/home/", response_class=HTMLResponse)
-async def home_page(request: Request):
-    return templates.TemplateResponse("frontend/main/home.html", {"request": request})
+async def home_page(request: Request, data: dict = Depends(get_all_collections)):
+    return templates.TemplateResponse(
+        "frontend/main/home.html",
+        {"request": request, "collections": data["collections"]},
+    )
 
 
 @router.get("/login/", response_class=HTMLResponse)

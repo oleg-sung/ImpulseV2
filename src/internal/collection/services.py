@@ -6,7 +6,8 @@ from google.cloud.firestore_v1 import FieldFilter
 from google.cloud.storage import Blob
 
 from internal.collection.schema.collection import (
-    CreateCollection,
+    DataToCreateCollection,
+    CreateNewCollection,
     ChangeStatusCollection,
     CollectionSize,
     CollectionStatus,
@@ -108,10 +109,10 @@ class CollectionService:
         self.user_id = user_id
         self.db = db
 
-    async def create_collection(self, data: CreateCollection) -> dict:
-        validate_data = data.model_dump(by_alias=True, exclude_none=True) | {
-            "userCreatedID": self.user_id
-        }
+    async def create_collection(self, data: CreateNewCollection) -> dict:
+        validate_data = DataToCreateCollection(**data.model_dump()).model_dump(
+            by_alias=True, exclude_none=True
+        ) | {"userCreatedID": self.user_id}
         collection_doc = await self.db.create_doc(
             self.collection_model_name, validate_data
         )
@@ -137,6 +138,7 @@ class CollectionService:
         collections = await self.db.get_collection(self.collection_model_name)
         query_set = (
             collections.where(filter=FieldFilter("status", "!=", "closed"))
+            .where(filter=FieldFilter("userCreatedID", "==", self.user_id))
             .order_by("status")
             .order_by("createdAt", direction=firestore.Query.DESCENDING)
         )

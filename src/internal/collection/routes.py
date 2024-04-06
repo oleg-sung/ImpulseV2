@@ -6,7 +6,7 @@ from starlette import status
 from .dependencies import cheak_collection_id, cheak_club_name
 from .schema.card import CardType, GetCard
 from .schema.collection import (
-    CreateCollection,
+    CreateNewCollection,
     ResponseCreateCollection,
     GetAllCollection,
     GetCollection,
@@ -50,7 +50,7 @@ async def get_collection(id_collection: str, user: User = Depends(get_current_us
     status_code=status.HTTP_201_CREATED,
 )
 async def create_collection(
-    data: CreateCollection = Depends(cheak_club_name),
+    data: CreateNewCollection = Depends(cheak_club_name),
     user: User = Depends(get_current_user),
 ):
     """
@@ -85,8 +85,6 @@ async def change_status(
     return data
 
 
-#
-#
 @router.post(
     "/{id_collection}/card/create/",
     response_model=CreateTask,

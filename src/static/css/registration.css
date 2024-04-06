@@ -142,20 +142,6 @@ body, html {
     left: 212px;
 }
 
-/*.pass-enter span {*/
-/*    position: absolute;*/
-/*    right: 14px;*/
-/*    top: 50%;*/
-/*    transform: translateY(-50%);*/
-/*    font-size: 22px;*/
-/*    color: #0a2346;*/
-/*    cursor: pointer;*/
-/*    display: block;*/
-/*}*/
-
-/*.showing_stealth span i.conceal-btn::before {*/
-/*    content: "\f070";*/
-/*}*/
 
 #password1 {
     position: relative;

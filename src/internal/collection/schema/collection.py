@@ -48,11 +48,18 @@ class GeneralCollection(Collection):
     id: str
 
 
-class CreateCollection(Collection):
+class CreateNewCollection(BaseModel):
     size: CollectionSize = Field(default=CollectionSize.forty_cards)
-    cards: list = []
-    status: CollectionStatus = Field(default=CollectionStatus.CREATED)
     name: str = Field(min_length=2, max_length=60)
+
+    class Config:
+        populate_by_name = True
+        use_enum_values = True
+
+
+class DataToCreateCollection(Collection):
+    status: CollectionStatus = Field(default=CollectionStatus.CREATED)
+    cards: list = []
     date: datetime.datetime = Field(
         default=firestore.SERVER_TIMESTAMP, alias="createdAt"
     )

@@ -1,0 +1,281 @@
+.general-content {
+
+    height: 100%;
+    margin-left: 60px;
+    margin-right: 60px;
+    padding: 40px 0;
+    gap: 65px;
+}
+
+.general-collection {
+    height: 369px;
+}
+
+.title {
+    display: flex;
+    height: 56px;
+}
+
+.title h1 {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+    color: black;
+}
+
+.create-collection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    width: 449px;
+    height: 100%;
+    margin-left: auto;
+    border-radius: 10px;
+    padding: 16px 147px;
+    gap: 10px;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 20px;
+    font-weight: 500;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+    color: #fff;
+    background-color: #E41730;
+    transition: color 0.2s linear;
+}
+
+.create-collection:hover {
+    color: black;
+}
+
+.collections-list {
+    position: relative;
+    top: 5%;
+    width: 100%;
+    height: 305px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.collection {
+    position: static;
+    display: inline-block;
+    margin-right: 100px;
+    width: 371px;
+    height: 223px;
+    border-radius: 13px;
+    padding: 18px 28px;
+    background-color: #4F4856;
+    vertical-align: top;
+}
+
+.collection-cars {
+    margin-right: 15px;
+    width: 78px;
+    height: 111px;
+    border-radius: 5px;
+}
+
+.collection a {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 22px;
+    font-variation-settings: "slnt" 0;
+    color: white;
+}
+
+.status-and-amound {
+    top: 20px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 29px;
+}
+
+.status-and-amound p {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 17px;
+    font-variation-settings: "slnt" 0;
+    color: white;
+}
+
+.amount-cards {
+    position: relative;
+    margin-left: auto;
+    width: 58px;
+    height: 29px;
+    border-radius: 14px;
+    padding: 4px 10px;
+    border: 1px solid #FFFFFF;
+    align-items: center;
+    text-align: center;
+    line-height: 29px;
+}
+
+.general-coach-tokens {
+    position: relative;
+    top: 20px;
+}
+
+.token-discription h1 {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+    color: black;
+}
+
+.token-discription-info {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-size: 17px;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+    color: black;
+}
+
+.token-title {
+    top: 10px;
+    position: relative;
+    display: flex;
+}
+
+.token-list {
+    top: 20px;
+    position: relative;
+    width: 100%;
+    height: 288px;
+    gap: 99px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.ios-toggle {
+    display: none;
+}
+
+.checkbox-label {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    background-color: #ccc;
+    border-radius: 34px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.checkbox-label:before {
+    content: "";
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+.ios-toggle:checked + .checkbox-label {
+    background-color: #4CAF50;
+}
+
+.ios-toggle:checked + .checkbox-label:before {
+    transform: translateX(26px);
+}
+
+
+.display-token {
+    display: inline-block;
+    border-left: 1px solid #4F4856B2;
+    padding: 12px;
+    height: 130px;
+    width: 323px;
+}
+
+.token-code {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    line-height: 27px;
+    text-align: center;
+    height: 27px;
+    width: 170px;
+    padding: 15px 30px;
+    gap: 10px;
+    background-color: #4F4856;
+    border-radius: 7px;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+    color: white;
+}
+
+.code-and-toggle {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 57px;
+}
+
+.toggle {
+    top: 25px;
+    position: relative;
+    margin-left: auto;
+}
+
+
+.token-info {
+    display: flex;
+    top: 20px;
+    position: relative;
+}
+
+.info-title {
+    margin-left: 6px;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: 17px;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+    color: black;
+}
+
+.amoun-users {
+    position: relative;
+    bottom: 5px;
+    margin-right: 9px;
+    margin-left: auto;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: 17px;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+    color: black;
+    width: 25px;
+    height: 20px;
+    border-radius: 11px;
+    gap: 10px;
+    text-align: center;
+    padding: 4px 10px;
+    border: 1px solid #4F4856B2;
+}
