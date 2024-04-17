@@ -20,10 +20,14 @@ router = APIRouter(prefix="/pages", tags=["Pages"])
 
 
 @router.get("/home/", response_class=HTMLResponse)
-async def home_page(request: Request, data: dict = Depends(get_all_collections)):
+async def home_page(
+    request: Request,
+    data: dict = Depends(get_all_collections),
+    tokens: list = Depends(get_all_user_token),
+):
     return templates.TemplateResponse(
         "frontend/main/home.html",
-        {"request": request, "collections": data["collections"]},
+        {"request": request, "collections": data["collections"], "tokens": tokens},
     )
 
 
@@ -36,6 +40,14 @@ async def login_page(request: Request):
 async def register_page(request: Request):
     return templates.TemplateResponse(
         "frontend/home/registration.html", {"request": request}
+    )
+
+
+@router.get("/collections/", response_class=HTMLResponse)
+def collections_list(request: Request):
+    return templates.TemplateResponse(
+        "frontend/main/collections/main_collection.html",
+        {"request": request},
     )
 
 
@@ -117,14 +129,6 @@ def logout_app(request: Request, response: Response):
     )
     response.delete_cookie("session")
     return response
-
-
-@router.get("/collections/", response_class=HTMLResponse)
-def collections_list(request: Request, data: dict = Depends(get_all_collections)):
-    return templates.TemplateResponse(
-        "collection/list.html",
-        {"request": request, "collections": data["collections"]},
-    )
 
 
 @router.get("/collections/creates/", response_class=HTMLResponse)

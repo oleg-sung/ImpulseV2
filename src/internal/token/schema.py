@@ -1,8 +1,9 @@
 import datetime
 import uuid
+from typing import Optional
 
 from firebase_admin import firestore
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, model_validator, HttpUrl
 
 from internal.users.schema.user import UserType
 
@@ -45,6 +46,9 @@ class Token(BaseToken):
 class GetTokens(BaseModel):
     id: str = Field(examples=["xqPi3BHItfQS8lfsUX0S"])
     is_active: bool = Field(alias="isActive")
+    code: str
+    auth_count: int = Field(alias="authCount")
+    created_at: datetime.datetime = Field(alias="createdAt")
 
     class Config:
         populate_by_name = True
@@ -57,6 +61,17 @@ class DisableToken(BaseModel):
     def validate_is_active(self):
         self.is_active = True if self.is_active is False else False
         return self
+
+    class Config:
+        populate_by_name = True
+
+
+class UserDataByToken(BaseModel):
+    id: str
+    first_name: str = Field(alias="firstName")
+    middle_name: Optional[str | None] = Field(default=None, alias="middleName")
+    last_name: str = Field(alias="lastName")
+    image: Optional[HttpUrl | None] = Field(default=None)
 
     class Config:
         populate_by_name = True

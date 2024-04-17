@@ -68,3 +68,23 @@ class TokenService:
             async for profile in query.stream()
         ]
         return coach_list
+
+    async def get_detail_info_for_token(self, token_id: str) -> list:
+        token_ref = await self.db.get_doc(self.token_model_name, token_id)
+        user_profile = await self.db.get_collection("userProfile")
+        user_profile_by_token = user_profile.where(
+            filter=FieldFilter("token", "==", token_ref.reference)
+        )
+        result = []
+        async for user in user_profile_by_token.stream():
+            user_profule = user.to_dict()
+            result.append(
+                {
+                    "id": user.id,
+                    "firstName": user_profule.get("firstName"),
+                    "middleName": user_profule.get("middleName", None),
+                    "lastName": user_profule.get("lastName"),
+                    "image": user_profule.get("image", None),
+                }
+            )
+        return result

@@ -9,59 +9,68 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/main/main.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
     {% block head %}{% endblock %}
     <title>Document</title>
 </head>
 <body>
-<div class="fullscreen-div">
-    <nav class="navbar">
-        <ul class="navbar-nav">
+<div class="fullscreen-div-ml">
+    <nav class="navbar-ml">
+        <ul class="navbar-nav-ml">
             <li>
-                <div class="nav-div-club">
-                    <div class="round-image">
+                <div class="nav-div-club-ml">
+                    <div class="round-image-ml">
                         <img src="/static/images/club/img.png" alt="Club image">
-
                     </div>
-                    <div class="div-link-club">
-                        <a class="nav-a-club" href="#"><p class="club-title">Клуб Молния</p></a>
+                    <div class="div-link-club-ml">
+                        <a class="nav-a-club-ml no-hover-effect" href="#"><p class="club-title-ml">Клуб Молния</p></a>
                     </div>
-
                 </div>
             </li>
             <li>
-                <div class="nav-main">
-                    <div class="menu-main">
-                        <div class="main-image">
+                <div class="nav-main-ml">
+                    <div class="menu-main-ml">
+                        <div class="main-image-ml">
                             <img src="/static/images/club/home.png" alt="Main image">
                         </div>
-                        <div class="div-main-link">
-                            <a class="main-link" href=""><p>Главная</p></a>
+                        <div class="div-main-link-ml">
+                            <a class="main-link-ml" href="{{ url_for('home_page') }}"><p>Главная</p></a>
                         </div>
                     </div>
-                    <div class="menu-main">
-                        <div class="main-image">
+                    <div class="menu-main-ml">
+                        <div class="main-image-ml">
                             <img src="/static/images/club/collection.png" alt="Collection image">
                         </div>
-                        <div class="div-main-link">
-                            <a class="main-link" href="#"><p>Коллекции</p></a>
+                        <div class="div-main-link-ml">
+                            <a class="main-link-ml" href="{{ url_for('collections_list') }}"><p>Коллекции</p></a>
                         </div>
                     </div>
                 </div>
             <li>
-                <div class="menu-admin">
-                    <div class="nav-div-admin">
-                        <div class="admin-image">
+                <div class="menu-admin-ml">
+                    <div class="nav-div-admin-ml">
+                        <div class="admin-image-ml">
                             <img src="/static/images/club/admin.png" alt="Admin image">
                         </div>
-                        <div class="div-link-admin">
-                            <a class="nav-a-club" href="#"><p>Администратор</p></a>
+                        <div class="div-link-admin-ml">
+                            <a class="nav-a-club-ml" href="#"><p>Администратор</p></a>
                         </div>
                     </div>
                 </div>
             </li>
         </ul>
     </nav>
-    <div class="base">
+    <div class="base-ml">
         {% block content %}{% endblock %}
     </div>
 
