@@ -25,7 +25,7 @@
 </head>
 <body>
 <div class="fullscreen-div-ml">
-    <nav class="navbar-ml">
+    <nav class="navbar-ml" id="navbar-ml">
         <ul class="navbar-nav-ml">
             <li>
                 <div class="nav-div-club-ml">
@@ -33,7 +33,8 @@
                         <img src="/static/images/club/img.png" alt="Club image">
                     </div>
                     <div class="div-link-club-ml">
-                        <a class="nav-a-club-ml no-hover-effect" href="#"><p class="club-title-ml">Клуб Молния</p></a>
+                        <a class="nav-a-club-ml no-hover-effect" href="{{ url_for('club_page') }}"><p
+                                class="club-title-ml">Клуб Молния</p></a>
                     </div>
                 </div>
             </li>
@@ -63,7 +64,7 @@
                             <img src="/static/images/club/admin.png" alt="Admin image">
                         </div>
                         <div class="div-link-admin-ml">
-                            <a class="nav-a-club-ml" href="#"><p>Администратор</p></a>
+                            <a class="nav-a-club-ml" href="{{ url_for('profile_page') }}"><p>Администратор</p></a>
                         </div>
                     </div>
                 </div>
@@ -73,7 +74,30 @@
     <div class="base-ml">
         {% block content %}{% endblock %}
     </div>
+    <script>
+        function findParentDiv(element) {
+            while (element.parentNode) {
+                element = element.parentNode;
+                if (element.tagName.toLowerCase() === 'div') {
+                    return element;
+                }
+            }
+            return null;
+        }
 
+        document.addEventListener('DOMContentLoaded', function () {
+            var navLinks = document.querySelectorAll('#navbar-ml a');
+            var currentUrl = window.location.href;
+
+            navLinks.forEach(function (link) {
+                var div1 = link.closest('div')
+                var div2 = findParentDiv(div1)
+                if (link.href === currentUrl) {
+                    div2.classList.add('active');
+                }
+            });
+        });
+    </script>
 </div>
 
 </body>

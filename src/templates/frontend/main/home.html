@@ -2,6 +2,7 @@
 
 
 {% block head %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
@@ -74,7 +75,6 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-
                                 <button type="button" class="btn btn-secondary token-create-btn-no"
                                         data-dismiss="modal" style="margin-right: auto">Нет
                                 </button>
@@ -158,7 +158,12 @@
                                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal"
+                                            <div class="delete-token-btn">
+                                                <button id="deleteToken" aria-label="Удалить" class="delete-token-icon">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                            <button type="button" class="close close-window-modal" data-dismiss="modal"
                                                     aria-label="Закрыть">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -198,7 +203,7 @@
             <div class="team-list">
                 <div class="team-display">
                     <div class="team-info">
-                        <div class="round-image">
+                        <div class="round-image-ml">
                             <img src="/static/images/club/img.png" alt="Team image">
                         </div>
                         <p class="team-description">Спартак</p>
@@ -219,10 +224,17 @@
     </div>
     <script>
         $('#staticBackdrop').on('show.bs.modal', function (event) {
+            var modal = $(this);
             var button = $(event.relatedTarget);
             var id = button.data('id');
             var code = button.data('code')
             var authCound = button.data('auth')
+            if (authCound === 0) {
+                modal.find('#deleteToken').first().attr('data-id', id);
+                modal.find('#deleteToken').toggle(true)
+            } else {
+                modal.find('#deleteToken').toggle(false)
+            }
             fetch(`http://127.0.0.1:8000/token/users/?token_id=${id}`, {
                 method: 'GET',
                 credentials: 'include',
@@ -232,7 +244,6 @@
             })
                 .then(response => response.json())
                 .then(users => {
-                    var modal = $(this);
                     modal.find('#tokenCode').text(code);
                     modal.find('#amoundAuth').text(authCound);
                     let parent = document.querySelector('#userList')
@@ -260,6 +271,30 @@
         $('#staticBackdrop').on('hidden.bs.modal', function (e) {
             $(this).removeData('bs.modal');
             $(this).find('#userList').empty();
+        });
+    </script>
+    <script>
+        document.getElementById('deleteToken').addEventListener('click', function () {
+            var token = document.getElementById('deleteToken')
+            var tokenId = token.dataset.id
+            fetch(`http://127.0.0.1:8000/token/delete/${tokenId}/`, {
+                method: 'DELETE',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+
+                },
+            })
+                .then(response => {
+                    const status = response.status
+                    if (status === 204) {
+                        location.reload();
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка загрузки данных:', error);
+                    // Скрыть индикатор загрузки в случае ошибки
+                });
         });
     </script>
 {% endblock %}

@@ -43,6 +43,20 @@ async def register_page(request: Request):
     )
 
 
+@router.get("/club/", response_class=HTMLResponse)
+async def club_page(request: Request):
+    return templates.TemplateResponse(
+        "frontend/main/club/club_page.html", {"request": request}
+    )
+
+
+@router.get("/profile/", response_class=HTMLResponse)
+async def profile_page(request: Request):
+    return templates.TemplateResponse(
+        "frontend/main/profile/profile_page.html", {"request": request}
+    )
+
+
 @router.get("/collections/", response_class=HTMLResponse)
 def collections_list(request: Request):
     return templates.TemplateResponse(
@@ -51,10 +65,12 @@ def collections_list(request: Request):
     )
 
 
-#
-# @router.get("/login/", response_class=HTMLResponse)
-# async def login_page(request: Request):
-#     return templates.TemplateResponse("user/login.html", {"request": request})
+@router.get("/collections/created/", response_class=HTMLResponse)
+def created_collection_page(request: Request):
+    return templates.TemplateResponse(
+        "frontend/main/collections/created_collection.html",
+        {"request": request},
+    )
 
 
 @router.get("/user/profile/", response_class=HTMLResponse)

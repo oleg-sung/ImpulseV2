@@ -312,7 +312,7 @@
 .team-display {
     margin-right: 80px;
     width: 328px;
-    height: 215px;
+    height: 235px;
     border-radius: 14px;
     padding: 18px 28px;
     gap: 12px;
@@ -533,7 +533,6 @@
 
 }
 
-
 .text-modal-body {
     text-align: center;
     font-family: "Inter", sans-serif;
@@ -563,4 +562,19 @@
 .token-create-btn-no:hover {
     background-color: #4F4856B2;
     color: black;
+}
+
+.delete-token-icon {
+    background-color: white;
+    color: black;
+}
+
+.delete-token-icon:active, .delete-token-icon:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.close-window-modal:active, .close-window-modal:focus {
+    outline: none !important;
+    box-shadow: none !important;
 }
