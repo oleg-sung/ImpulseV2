@@ -24,7 +24,7 @@ def upload_file_task(
     content: str, path: str, content_type: str = None, metadata: dict = None
 ):
     storage.upload_file_to_storage(content, path, content_type, metadata)
-    return {"status": "success"}
+    return {"storage": storage.bucket.name}
 
 
 @celery_app.task(name="delete_file")

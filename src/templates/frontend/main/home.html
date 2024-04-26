@@ -149,7 +149,7 @@
                         </div>
                         <div class="token-info-ml">
                             <p class="info-title-ml">Количество регистрация</p>
-                            <a class="amoun-users-ml" data-toggle="modal" data-target="#staticBackdrop" href="#"
+                            <a class="amoun-users-ml" data-bs-toggle="modal" data-bs-target="#staticBackdrop" href="#"
                                data-id="{{ token.id }}" data-code="{{ token.code }}" data-auth="{{ token.authCount }}">
                                 {{ token.authCount }}
                             </a>
@@ -187,8 +187,8 @@
                         </div>
                     </div>
                     <script>
-                        var checkbox = document.getElementById('checkbox-{{ token.id }}');
-                        var stes = {{token.isActive | int}};
+                        let checkbox = document.getElementById('checkbox-{{ token.id }}');
+                        let stes = {{token.isActive | int}};
                         if (stes) {
                             checkbox.checked = true
                         } else {
@@ -224,11 +224,11 @@
     </div>
     <script>
         $('#staticBackdrop').on('show.bs.modal', function (event) {
-            var modal = $(this);
-            var button = $(event.relatedTarget);
-            var id = button.data('id');
-            var code = button.data('code')
-            var authCound = button.data('auth')
+            let modal = $(this);
+            let button = $(event.relatedTarget);
+            let id = button.data('id');
+            let code = button.data('code')
+            let authCound = button.data('auth')
             if (authCound === 0) {
                 modal.find('#deleteToken').first().attr('data-id', id);
                 modal.find('#deleteToken').toggle(true)
@@ -275,8 +275,8 @@
     </script>
     <script>
         document.getElementById('deleteToken').addEventListener('click', function () {
-            var token = document.getElementById('deleteToken')
-            var tokenId = token.dataset.id
+            let token = document.getElementById('deleteToken')
+            let tokenId = token.dataset.id
             fetch(`http://127.0.0.1:8000/token/delete/${tokenId}/`, {
                 method: 'DELETE',
                 credentials: 'include',
@@ -293,7 +293,6 @@
                 })
                 .catch(error => {
                     console.error('Ошибка загрузки данных:', error);
-                    // Скрыть индикатор загрузки в случае ошибки
                 });
         });
     </script>

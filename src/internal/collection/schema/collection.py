@@ -1,5 +1,6 @@
 import datetime
 from enum import Enum
+from typing import Optional
 
 from firebase_admin import firestore
 from pydantic import BaseModel, Field
@@ -78,6 +79,8 @@ class GetAllCollection(BaseModel):
 class GetCollection(Collection):
     id: str
     cards: list[str]
+    created_at: datetime.datetime = Field(alias="createdAt")
+    motto: Optional[str] = Field(default=None)
 
 
 class ChangeStatusCollection(Collection):

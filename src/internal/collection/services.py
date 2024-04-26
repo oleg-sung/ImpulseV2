@@ -58,27 +58,34 @@ class CardService:
             raise HTTPException(404, "Document not found")
         return blob.metadata | {"url": blob.public_url}
 
-    async def get_cards_info(self, q: CardType = None) -> list:
+    async def get_cards_info(self, q: CardType = None) -> dict:
         prefix = f"thumbnail/{self.id_collection}/"
         data = await self.bucket.get_blobs(prefix=prefix)
-        cards_list = (
+        result_cards_data = (
             await self.__get_cards_by_type(data, q)
             if q
             else await self.__get_cards(data)
         )
-        return cards_list
+        return result_cards_data
 
     @staticmethod
-    async def __get_cards_by_type(data: Iterator[Blob], q: str) -> list:
-        cards_list = [
-            i.metadata | {"url": i.public_url} for i in data if i.metadata["type"] == q
-        ]
-        return cards_list
+    async def __get_cards_by_type(data: Iterator[Blob], q: str) -> dict:
+        cards_dict = {}
+        for card in data:
+            if card.metadata["type"] == q:
+                cards_dict[int(card.metadata["position"])] = card.metadata | {
+                    "url": card.public_url
+                }
+        return cards_dict
 
     @staticmethod
-    async def __get_cards(data: Iterator[Blob]) -> list:
-        cards_list = [i.metadata | {"url": i.public_url} for i in data]
-        return cards_list
+    async def __get_cards(data: Iterator[Blob]) -> dict:
+        cards_dict = {}
+        for card in data:
+            cards_dict[int(card.metadata["position"])] = card.metadata | {
+                "url": card.public_url
+            }
+        return cards_dict
 
     async def get_limit(self) -> dict:
         collection_data = await self.db.get_doc(
@@ -127,7 +134,20 @@ class CollectionService:
         collection_dict = collection_doc.to_dict()
         return collection_dict | {"id": collection_doc.id}
 
-    async def get_closed_collection(self): ...
+    async def collection_by_status(self, status: str) -> list:
+        collections_ref = await self.db.get_collection(self.collection_model_name)
+        query = (
+            collections_ref.where(
+                filter=FieldFilter("userCreatedID", "==", self.user_id)
+            )
+            .where(filter=FieldFilter("status", "==", status))
+            .order_by("createdAt", direction=firestore.Query.DESCENDING)
+        )
+        result = []
+        async for collection in query.stream():
+            collection_dict = collection.to_dict()
+            result.append(collection_dict | {"id": collection.id})
+        return result
 
     async def get_all_collections_data(self) -> dict:
         """

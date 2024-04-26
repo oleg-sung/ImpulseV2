@@ -23,6 +23,7 @@ class Metadata(BaseModel):
     id: str = Field(default_factory=lambda: uuid.uuid4().hex, exclude=True)
     collection: str
     type: CardType
+    position: int
     name: str
     info: str
 
