@@ -1,0 +1,24 @@
+.title-empty {
+    display: grid;
+    margin-top: 40px;
+    justify-content: center;
+    align-content: center;
+}
+
+.button-positon {
+    display: grid;
+    margin-top: 40px;
+    justify-content: center;
+    align-content: center;
+}
+
+.description-empty {
+    font-size: 17px;
+    font-weight: 400;
+}
+
+.creating-collection-space {
+    height: 600px;
+    width: 100%;
+    background-color: #4F4856;
+}
