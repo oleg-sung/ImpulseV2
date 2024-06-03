@@ -1,0 +1,204 @@
+{% extends 'frontend/main/collections/main_collection.html' %}
+
+{% block body %}
+	{% if collection %}
+		<div class="created-collection-display-list align-items-center">
+			<div id="collectionDisplay" data-id="{{ collection.id }}" class="created-collection-display">
+				<div class="collection-title-display">
+					<p class="collection-title inner-font">{{ collection.name }}</p>
+					<button class="active-collection-spase">
+						<span>Активировать коллекцию</span>
+					</button>
+				</div>
+				<div class="collection-info">
+					<p class="amoun-cards inner-font">Всего карточек: {{ collection.size }}</p>
+					<p class="collection-status-display inner-font">Статус: {{ collection.status }} </p>
+				</div>
+				<div class="collection-items-display">
+					<div class="collection-cover-display">
+						{% if collection.cover %}
+							<img src="https://s-cdn.sportbox.ru/images/styles/upload/fp_fotos/6b/b7/f23826911f9e07882ab082534677d9075d6ea6d55e740138464440.jpg"
+								 alt="Collection cover">
+						{% else %}
+							Обложка коллекции отуствует
+						{% endif %}
+					</div>
+					<div class="collection-description-display">
+						{% if collection.motto %}
+							<p class="inner-font">{{ collection.motto }}</p>
+						{% else %}
+							Описание коллекции отсутствует
+						{% endif %}
+					</div>
+				</div>
+				<div class="create-cards-display">
+					<div class="cards-display">
+						<img src="/static/images/cards/common.png" alt="Common cards" class="image-card">
+						<div class="card-type-info">
+							<h1 class="card-type-name inner-font">Обычные карточки</h1>
+							<p class="amount-cards-by-type inner-font">
+								Колличество: {{ collection.amoundCards.common }}</p>
+						</div>
+						<button id="cardsBatton" onclick="TestFunc(this)" data-id='{{ collection.id }}'
+								data-type="common" data-amount="{{ collection.amoundCards.common }}"
+								class="btn btn-primary" type="button" data-bs-toggle="collapse"
+								data-bs-target="#collapseExample-{{ collection.id }}" aria-expanded="false"
+								aria-controls="collapseExample-{{ collection.id }}">
+						</button>
+					</div>
+					<div class="cards-display">
+						<img src="/static/images/cards/uncommon.png" alt="Uncommon cards" class="image-card">
+						<div class="card-type-info">
+							<h1 class="card-type-name inner-font">Необычные карточки</h1>
+							<p class="amount-cards-by-type inner-font">
+								Колличество: {{ collection.amoundCards.uncommon }}</p>
+						</div>
+						<button id="cardsBatton" onclick="TestFunc(this)" data-id='{{ collection.id }}'
+								data-type="uncommon" data-amount="{{ collection.amoundCards.uncommon }}"
+								class="btn btn-primary" type="button" data-bs-toggle="collapse"
+								data-bs-target="#collapseExample-{{ collection.id }}" aria-expanded="false"
+								aria-controls="collapseExample-{{ collection.id }}">
+						</button>
+					</div>
+					<div class="cards-display">
+						<img src="/static/images/cards/rare.png" alt="Common cards" class="image-card">
+						<div class="card-type-info">
+							<h1 class="card-type-name inner-font">Редкие<br>карточки</h1>
+							<p class="amount-cards-by-type inner-font">
+								Колличество: {{ collection.amoundCards.rare }}</p>
+						</div>
+						<button id="cardsBatton" onclick="TestFunc(this)" data-id='{{ collection.id }}'
+								data-type="rare" data-amount="{{ collection.amoundCards.rare }}"
+								class="btn btn-primary" type="button" data-bs-toggle="collapse"
+								data-bs-target="#collapseExample-{{ collection.id }}" aria-expanded="false"
+								aria-controls="collapseExample-{{ collection.id }}">
+						</button>
+					</div>
+					<div class="cards-display">
+						<img src="/static/images/cards/legendary.png" alt="Uncommon cards" class="image-card">
+						<div class="card-type-info">
+							<h1 class="card-type-name inner-font">Легендарные карточки</h1>
+							<p class="amount-cards-by-type inner-font">
+								Колличество: {{ collection.amoundCards.legendary }}</p>
+						</div>
+						<button id="cardsBatton" onclick="TestFunc(this)" data-id='{{ collection.id }}'
+								data-type="legendary" data-amount="{{ collection.amoundCards.legendary }}"
+								class="btn btn-primary" type="button" data-bs-toggle="collapse"
+								data-bs-target="#collapseExample-{{ collection.id }}" aria-expanded="false"
+								aria-controls="collapseExample-{{ collection.id }}">
+						</button>
+					</div>
+				</div>
+				<div class="dp-col-cards collapse" id="collapseExample-{{ collection.id }}">
+					<div id='cardsListDisplay' class="collection-cards-display card card-body">
+					</div>
+				</div>
+			</div>
+			<script>
+                function TestFunc(button) {
+                    let id = $(button).data('id');
+                    let type = $(button).data('type');
+                    let targetDiv = $(`div[data-id="${id}"]`);
+                    let amound = $(button).data('amount');
+                    let cardsListDiv = targetDiv.find('#cardsListDisplay')
+                    $(`#collapseExample-${id}`).off('shown.bs.collapse').on('shown.bs.collapse', function () {
+                        console.log('Видимое поле')
+                        let divSize = '637px'
+                        let divCollorCss = ''
+                        if (type === 'common') {
+                            divCollorCss = '#867661'
+                            divSize = "2900px"
+                        } else if (type === 'uncommon') {
+                            divCollorCss = 'green'
+                            divSize = '2000px'
+                        } else if (type === 'rare') {
+                            divCollorCss = 'blue'
+                            divSize = '1500px'
+                        } else {
+                            divCollorCss = 'yellow'
+                            divSize = '1000px'
+                        }
+                        if (targetDiv.height() < 600) {
+                            targetDiv.animate({height: divSize}, 500);
+                        }
+                        console.log('Видимое поле')
+                        $.ajax({
+                            url: `http://127.0.0.1:8000/collection/${id}/cards/?q=${type}`,
+                            type: 'GET',
+                            success: function (response) {
+                                let data = response
+                                for (let i = 1; i < amound + 1; i++) {
+                                    if (i in data) {
+                                        let CardsCreatedDiv = $('<div class="create-card-form"></div>')
+                                        CardsCreatedDiv.css('background-color', divCollorCss)
+                                        let SomeDiv = $('<div class="create-image-form"></div>');
+                                        let Ptag = $('<p class="inner-font"></p>').text(data[i]['name'])
+                                        let url = data[i]['url']
+                                        let newImg = $('<img>', {
+                                            src: url,
+                                            alt: 'test',
+                                        });
+                                        SomeDiv.append(newImg);
+                                        CardsCreatedDiv.append(SomeDiv)
+                                        CardsCreatedDiv.append(Ptag)
+                                        cardsListDiv.append(CardsCreatedDiv)
+                                    } else {
+                                        let somediv = $('<div class="create-card-form"></div>')
+                                        somediv.css('background-color', divCollorCss)
+                                        let SomeoneDiv = $('<div class="create-image-form"></div>')
+                                        let CreateLink = $('<a href="#" class="create-cards-link-form inner-font dynamic-element" data-bs-toggle="modal" data-bs-target="#createCardModal" id="createCardLink">Добавить<br>картинку</a>');
+                                        CreateLink.attr('data-pos', i)
+                                        CreateLink.attr('data-type', type)
+                                        CreateLink.on('click', function () {
+                                            let collectionId = id
+                                            let dataType = $(this).attr('data-type');
+                                            let dataPos = $(this).attr('data-pos');
+                                            $('#submitBtn').attr('data-type', dataType).attr('data-pos', dataPos).attr('data-col-id', collectionId)
+                                        });
+                                        let Ptag = $('<p class="inner-font">Название карточки</p>')
+                                        SomeoneDiv.append(CreateLink)
+                                        somediv.append(SomeoneDiv)
+                                        somediv.append(Ptag)
+                                        cardsListDiv.append(somediv);
+                                    }
+                                }
+                            },
+                            error: function (jqXHR, testStatus, errorThrow) {
+                                console.log(testStatus, errorThrow)
+                            }
+                        })
+                    }).off('hidden.bs.collapse').on('hidden.bs.collapse', function () {
+                        targetDiv.animate({height: '637px'}, 500);
+                        let someDiv = $(this).find('#cardsListDisplay')
+                        someDiv.empty()
+                    })
+                }
+			</script>
+		</div>
+	{% else %}
+		<div class="title-empty">
+			<p class="inner-font description-empty" style="color: black">Сейчас у вас нет созданных коллекций.</p>
+		</div>
+		<div class="button-positon">
+			<button class="create-collection-ml" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Создать новую коллекцию</button>
+		</div>
+		<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered modal-xl creating-collection-btn">
+				<div class="modal-content">
+				  <div class="modal-header">
+					<h5 class="modal-title" style="color: black; font-size: 24px" id="exampleModalLabel">Создание новой коллекции</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+				  </div>
+				  <div class="modal-body">
+					<div class="creating-collection-space">
+					</div>
+				  </div>
+				  <div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+					<button type="button" class="btn btn-primary">Сохранить изменения</button>
+				  </div>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+{% endblock %}

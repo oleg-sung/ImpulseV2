@@ -1,147 +1,161 @@
 {% extends 'frontend/main/collections/main_collection.html' %}
 
 
-
 {% block body %}
-    <div class="created-collection-display-list align-items-center">
-        {% for collection in collections %}
-            <div id="collectionDisplay" data-id="{{ collection.id }}" class="created-collection-display">
-                <div class="collection-title-display">
-                    <p class="collection-title inner-font">{{ collection.name }}</p>
-                    <button class="active-collection-spase">
-                        <span>Активировать&nbsp;коллекцию</span>
-                    </button>
-                </div>
-                <div class="collection-info">
-                    <p class="amoun-cards inner-font">Всего карточек: {{ collection.size }}</p>
-                    <p class="collection-status-display inner-font">Статус: {{ collection.status }} </p>
-                </div>
-                <div class="collection-items-display">
-                    <div class="collection-cover-display">
-                        {% if collection.cover %}
-                            <img src="https://s-cdn.sportbox.ru/images/styles/upload/fp_fotos/6b/b7/f23826911f9e07882ab082534677d9075d6ea6d55e740138464440.jpg"
-                                 alt="Collection cover">
-                        {% else %}
-                            Обложка коллекции отуствует
-                        {% endif %}
-                    </div>
-                    <div class="collection-description-display">
-                        {% if collection.motto %}
-                            <p class="inner-font">{{ collection.motto }}</p>
-                        {% else %}
-                            Описание коллекции отсутствует
-                        {% endif %}
-                    </div>
-                </div>
-                <div class="create-cards-display">
-                    <div class="cards-display">
-                        <img src="/static/images/cards/common.png" alt="Common cards" class="image-card">
-                        <div class="card-type-info">
-                            <h1 class="card-type-name inner-font">Обычные карточки</h1>
-                            <p class="amount-cards-by-type inner-font">Колличество: 44</p>
-                        </div>
-                        <button id="cardsBatton" onclick="TestFunc(this)" data-id='{{ collection.id }}'
-                                data-type="common"
-                                class="btn btn-primary" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseExample-{{ collection.id }}" aria-expanded="false"
-                                aria-controls="collapseExample-{{ collection.id }}">
-                        </button>
-                    </div>
-                    <div class="cards-display">
-                        <img src="/static/images/cards/uncommon.png" alt="Uncommon cards" class="image-card">
-                        <div class="card-type-info">
-                            <h1 class="card-type-name inner-font">Необычные карточки</h1>
-                            <p class="amount-cards-by-type inner-font">Колличество: 22</p>
-                        </div>
-                        <button id="cardsBatton" onclick="TestFunc(this)" data-id='{{ collection.id }}'
-                                data-type="uncommon"
-                                class="btn btn-primary" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseExample-{{ collection.id }}" aria-expanded="false"
-                                aria-controls="collapseExample-{{ collection.id }}">
-                        </button>
-                    </div>
-                    <div class="cards-display">
-                        <img src="/static/images/cards/rare.png" alt="Common cards" class="image-card">
-                        <div class="card-type-info">
-                            <h1 class="card-type-name inner-font">Редкие<br>карточки</h1>
-                            <p class="amount-cards-by-type inner-font">Колличество: 10</p>
-                        </div>
-                       <button id="cardsBatton" onclick="TestFunc(this)" data-id='{{ collection.id }}'
-                                data-type="rare"
-                                class="btn btn-primary" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseExample-{{ collection.id }}" aria-expanded="false"
-                                aria-controls="collapseExample-{{ collection.id }}">
-                        </button>
-                    </div>
-                    <div class="cards-display">
-                        <img src="/static/images/cards/legendary.png" alt="Uncommon cards" class="image-card">
-                        <div class="card-type-info">
-                            <h1 class="card-type-name inner-font">Легендарные карточки</h1>
-                            <p class="amount-cards-by-type inner-font">Колличество: 44</p>
-                        </div>
-                        <button id="cardsBatton" onclick="TestFunc(this)" data-id='{{ collection.id }}'
-                                data-type="legendary"
-                                class="btn btn-primary" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseExample-{{ collection.id }}" aria-expanded="false"
-                                aria-controls="collapseExample-{{ collection.id }}">
-                        </button>
-                    </div>
-                </div>
-                <div class="dp-col-cards collapse" id="collapseExample-{{ collection.id }}">
-                    <div id='cardsListDisplay' class="collection-cards-display card card-body">
-
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-        <script>
-            function TestFunc(button) {
-                let id = $(button).data('id');
-                let type = $(button).data('type');
-                let targetDiv = $(`div[data-id="${id}"]`);
-                let innerDivId = 'createNewCard'
-                let cardsDiv = targetDiv.find(`#${innerDivId}`);
-                let cardsListDiv = targetDiv.find('#cardsListDisplay')
-                cardsListDiv.empty()
+	<div class="created-collection-display-list align-items-center">
+	{% for collection in collections %}
+		<div id="collectionDisplay" data-id="{{ collection.id }}" class="created-collection-display">
+			<div class="collection-title-display">
+				<p class="collection-title inner-font">{{ collection.name }}</p>
+				<button class="active-collection-spase" data-col-id="{{ collection.id }}"
+						onclick="ActivateCollection(this)">
+					<span>Активировать&nbsp;коллекцию</span>
+				</button>
+			</div>
+			<div class="collection-info">
+				<p class="amoun-cards inner-font">Всего карточек: {{ collection.size }}</p>
+				<p class="collection-status-display inner-font">Статус: {{ collection.status }} </p>
+			</div>
+			<div class="collection-items-display">
+				<div class="collection-cover-display">
+					{% if collection.cover %}
+						<img src="https://s-cdn.sportbox.ru/images/styles/upload/fp_fotos/6b/b7/f23826911f9e07882ab082534677d9075d6ea6d55e740138464440.jpg"
+							 alt="Collection cover">
+					{% else %}
+						Обложка коллекции отуствует
+					{% endif %}
+				</div>
+				<div class="collection-description-display">
+					{% if collection.motto %}
+						<p class="inner-font">{{ collection.motto }}</p>
+					{% else %}
+						Описание коллекции отсутствует
+					{% endif %}
+				</div>
+			</div>
+			<div class="create-cards-display">
+				<div class="cards-display">
+					<img src="/static/images/cards/common.png" alt="Common cards" class="image-card">
+					<div class="card-type-info">
+						<h1 class="card-type-name inner-font">Обычные карточки</h1>
+						<p class="amount-cards-by-type inner-font">Колличество: {{ collection.amoundCards.common }}</p>
+					</div>
+					<button id="cardsBatton" onclick="TestFunc(this)" data-id='{{ collection.id }}'
+							data-type="common" data-amount="{{ collection.amoundCards.common }}"
+							class="btn btn-primary" type="button" data-bs-toggle="collapse"
+							data-bs-target="#collapseExample-{{ collection.id }}" aria-expanded="false"
+							aria-controls="collapseExample-{{ collection.id }}">
+					</button>
+				</div>
+				<div class="cards-display">
+					<img src="/static/images/cards/uncommon.png" alt="Uncommon cards" class="image-card">
+					<div class="card-type-info">
+						<h1 class="card-type-name inner-font">Необычные карточки</h1>
+						<p class="amount-cards-by-type inner-font">
+							Колличество: {{ collection.amoundCards.uncommon }}</p>
+					</div>
+					<button id="cardsBatton" onclick="TestFunc(this)" data-id='{{ collection.id }}'
+							data-type="uncommon" data-amount="{{ collection.amoundCards.uncommon }}"
+							class="btn btn-primary" type="button" data-bs-toggle="collapse"
+							data-bs-target="#collapseExample-{{ collection.id }}" aria-expanded="false"
+							aria-controls="collapseExample-{{ collection.id }}">
+					</button>
+				</div>
+				<div class="cards-display">
+					<img src="/static/images/cards/rare.png" alt="Common cards" class="image-card">
+					<div class="card-type-info">
+						<h1 class="card-type-name inner-font">Редкие<br>карточки</h1>
+						<p class="amount-cards-by-type inner-font">Колличество: {{ collection.amoundCards.rare }}</p>
+					</div>
+					<button id="cardsBatton" onclick="TestFunc(this)" data-id='{{ collection.id }}'
+							data-type="rare" data-amount="{{ collection.amoundCards.rare }}"
+							class="btn btn-primary" type="button" data-bs-toggle="collapse"
+							data-bs-target="#collapseExample-{{ collection.id }}" aria-expanded="false"
+							aria-controls="collapseExample-{{ collection.id }}">
+					</button>
+				</div>
+				<div class="cards-display">
+					<img src="/static/images/cards/legendary.png" alt="Uncommon cards" class="image-card">
+					<div class="card-type-info">
+						<h1 class="card-type-name inner-font">Легендарные карточки</h1>
+						<p class="amount-cards-by-type inner-font">
+							Колличество: {{ collection.amoundCards.legendary }}</p>
+					</div>
+					<button id="cardsBatton" onclick="TestFunc(this)" data-id='{{ collection.id }}'
+							data-type="legendary" data-amount="{{ collection.amoundCards.legendary }}"
+							class="btn btn-primary" type="button" data-bs-toggle="collapse"
+							data-bs-target="#collapseExample-{{ collection.id }}" aria-expanded="false"
+							aria-controls="collapseExample-{{ collection.id }}">
+					</button>
+				</div>
+			</div>
+			<div class="dp-col-cards collapse" id="collapseExample-{{ collection.id }}">
+				<div id='cardsListDisplay' class="collection-cards-display card card-body">
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+	<script>
+        function TestFunc(button) {
+            let id = $(button).data('id');
+            let type = $(button).data('type');
+            let targetDiv = $(`div[data-id="${id}"]`);
+            let amound = $(button).data('amount');
+            let cardsListDiv = targetDiv.find('#cardsListDisplay')
+            $(`#collapseExample-${id}`).off('shown.bs.collapse').on('shown.bs.collapse', function () {
+                console.log('Видимое поле')
+                let divSize = '637px'
+                let divCollorCss = ''
                 if (type === 'common') {
-                    cardsDiv.css('background-color', '#867661');
+                    divCollorCss = '#867661'
+                    divSize = "2900px"
                 } else if (type === 'uncommon') {
-                     cardsDiv.css('background-color', 'green');
+                    divCollorCss = 'green'
+                    divSize = '2000px'
                 } else if (type === 'rare') {
-                    cardsDiv.css('background-color', 'blue');
+                    divCollorCss = 'blue'
+                    divSize = '1500px'
                 } else {
-                    cardsDiv.css('background-color', 'yellow');
+                    divCollorCss = 'yellow'
+                    divSize = '1000px'
                 }
-                let x = targetDiv.height()
                 if (targetDiv.height() < 600) {
-                    targetDiv.animate({height: "2900px"}, 500);
-                } else {
-                    targetDiv.animate({height: '637px'}, 500);
+                    targetDiv.animate({height: divSize}, 500);
                 }
+                console.log('Видимое поле')
                 $.ajax({
                     url: `http://127.0.0.1:8000/collection/${id}/cards/?q=${type}`,
                     type: 'GET',
-                    success: function(response) {
+                    success: function (response) {
                         let data = response
-                        for (let i = 1; i < 44; i++) {
-
+                        for (let i = 1; i < amound + 1; i++) {
                             if (i in data) {
-
-                                let CardsCreatedDiv = $('<div class="create-card-form"></div>');
+                                let CardsCreatedDiv = $('<div class="create-card-form"></div>')
+                                CardsCreatedDiv.css('background-color', divCollorCss)
                                 let SomeDiv = $('<div class="create-image-form"></div>');
+                                let Ptag = $('<p class="inner-font"></p>').text(data[i]['name'])
                                 let url = data[i]['url']
                                 let newImg = $('<img>', {
-                                    src: url, // Укажите путь к вашему изображению
+                                    src: url,
                                     alt: 'test',
-                                    // Описание изображения для доступности
                                 });
                                 SomeDiv.append(newImg);
                                 CardsCreatedDiv.append(SomeDiv)
+                                CardsCreatedDiv.append(Ptag)
                                 cardsListDiv.append(CardsCreatedDiv)
                             } else {
                                 let somediv = $('<div class="create-card-form"></div>')
+                                somediv.css('background-color', divCollorCss)
                                 let SomeoneDiv = $('<div class="create-image-form"></div>')
-                                let CreateLink = $('<a href="#" class="create-cards-link-form inner-font">Добавить<br>картинку</a>');
+                                let CreateLink = $('<a href="#" class="create-cards-link-form inner-font dynamic-element" data-bs-toggle="modal" data-bs-target="#createCardModal" id="createCardLink">Добавить<br>картинку</a>');
+                                CreateLink.attr('data-pos', i)
+                                CreateLink.attr('data-type', type)
+                                CreateLink.on('click', function () {
+                                    let collectionId = id
+                                    let dataType = $(this).attr('data-type');
+                                    let dataPos = $(this).attr('data-pos');
+                                    $('#submitBtn').attr('data-type', dataType).attr('data-pos', dataPos).attr('data-col-id', collectionId)
+                                });
                                 let Ptag = $('<p class="inner-font">Название карточки</p>')
                                 SomeoneDiv.append(CreateLink)
                                 somediv.append(SomeoneDiv)
@@ -153,17 +167,123 @@
                     error: function (jqXHR, testStatus, errorThrow) {
                         console.log(testStatus, errorThrow)
                     }
-                });
+                })
+            }).off('hidden.bs.collapse').on('hidden.bs.collapse', function () {
+                targetDiv.animate({height: '637px'}, 500);
+                let someDiv = $(this).find('#cardsListDisplay')
+                someDiv.empty()
+            })
+        }
+	</script>
+	<div class="modal fade" id="createCardModal" tabindex="-1" aria-labelledby="createCardModalLabel"
+		 aria-hidden="true">
+	<div class="modal-dialog modal-xl">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="createCardModalLabel">Заголовок модального окна</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+			</div>
+			<div class="modal-body create-cards-modal-display">
+				<div class="main-modal-content" id="mainContentModalCards">
+					<form id="createCads" enctype="multipart/form-data">
+						<div class="create-image-modal-display">
+							<label class="form-control change-photo-button"
+								   style="text-align: center; justify-content: right; flex-direction: row-reverse"
+								   tabindex="0">Изменить<br>фото
+								<img class="change-photo-image" src="/static/images/collection/create_cards/img.png"
+									 alt="Change Image">
+								<input type="file" name="file" class="invisible" id="inputImageCard"
+									   onchange="preview()">
+							</label>
+							<div class="create-card-form" style="background-color: #867661">
+								<div class="create-image-form">
+									<img id="frame" src="" class="img-fluid cards-image-view" width="170px"
+										 height="216px">
+								</div>
+								<p class="inner-font">Название карточки</p>
+							</div>
+							<div class="change-photo-button">
+								<img class="change-photo-image" src="/static/images/collection/create_cards/img.png"
+									 alt="Change Image">
+								<p class="inner-font">Изменить<br>фото</p>
+							</div>
+						</div>
+						<div class="input-name-card">
+							<label class="inner-font label-name-input" for="cardsNameInput">Название:</label>
+							<input class="inner-font" id="cardsNameInput" name="name" placeholder="Введите название"
+								   type="text" required>
+						</div>
+						<div class="mb-3 description-cards-input-display">
+							<label for="cardInfoInput"
+								   class="form-label inner-font description-cards">Описание: </label>
+							<textarea class="form-control inner-font" name="info" id="cardInfoInput"
+									  placeholder="Введите текст" rows="6" required></textarea>
+						</div>
+						<button type="submit" id="submitBtn" onclick="STestFunc(this)" class="btn btn-primary">Сохранить
+							изменения
+						</button>
+					</form>
+				</div>
+			</div>
+			<div class="modal-footer">
+			</div>
+		</div>
 
+		<script>
+            function STestFunc(button) {
+                event.preventDefault();
+                const form = new FormData(document.querySelector("form[id='createCads']"));
+                const id = button.getAttribute('data-col-id')
+                const type = button.getAttribute('data-type')
+                const position = button.getAttribute('data-pos')
+                form.append('type_', type)
+                form.append('position', position)
+                {#const object = {};#}
+                {#form.forEach(function (value, key) {#}
+                {#    object[key] = value;#}
+                fetch(`http://127.0.0.1:8000/collection/${id}/card/create/`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    body: form
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data)
+                        const taskId = data.task_id
 
-                {#$(`#collapseExample-${id}`).on('hidden.bs.collapse', function () {#}
-                {#    cardsListDiv.empty()#}
-                {#   console.log("Коллапс закрыт");#}
+                        function checkTaskStatus(taskId) {
+                            fetch(`http://127.0.0.1:8000/tasks/${taskId}/`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log('Task status:', data.status);
+                                    if (data.status === 'SUCCESS' || data.status === 'FAILURE') {
+                                        clearInterval(checkInterval);
+                                        console.log(data);
+                                        location.href = ''
+                                    }
+                                })
+                                .catch(error => console.error('Error:', error));
+                        }
 
-            }
-        </script>
+                        const checkInterval = setInterval(() => checkTaskStatus(taskId), 100);
 
+                    })
+                    .catch(error => console.error(error));
+            };
+		</script>
+	</div>
+	<script>
+        function preview() {
+            let frame = document.getElementById('frame');
+            frame.style.display = 'block'
+            frame.src = URL.createObjectURL(event.target.files[0]);
+        }
+	</script>
+	<script>
+        function ActivateCollection(button) {
+            let id = $(button).data('col-id');
+            console.log(id)
+        }
+	</script>
 
-
-    </div>
 {% endblock %}

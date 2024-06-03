@@ -47,6 +47,18 @@ async def get_collection_by_status(
 
 
 @router.get(
+    "/active/",
+    response_model=GetCollection,
+    response_model_by_alias=True,
+    response_model_exclude_none=True,
+    status_code=status.HTTP_200_OK,
+)
+async def get_active_collections(user: User = Depends(get_current_user)):
+    data = await CollectionService(user.uid).get_active_collections_data()
+    return data
+
+
+@router.get(
     "/{id_collection}/",
     response_model=GetCollection,
     response_model_by_alias=True,

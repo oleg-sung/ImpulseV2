@@ -134,6 +134,28 @@ class CollectionService:
         collection_dict = collection_doc.to_dict()
         return collection_dict | {"id": collection_doc.id}
 
+    async def get_active_collections_data(self) -> dict:
+        collections_ref = await self.db.get_collection(self.collection_model_name)
+        query = (
+            collections_ref.where(
+                filter=FieldFilter("userCreatedID", "==", self.user_id)
+            )
+            .where(filter=FieldFilter("status", "==", CollectionStatus.ACTIVE))
+            .limit(1)
+        )
+        data = {}
+        async for collection in query.stream():
+            collection_dict = collection.to_dict()
+            amound_cards = await self._get_amount_cards_for_collection(
+                collection_dict["size"]
+            )
+            data.update(
+                collection_dict | {"id": collection.id, "amoundCards": amound_cards}
+            )
+        if data:
+            pass
+        return data
+
     async def collection_by_status(self, status: str) -> list:
         collections_ref = await self.db.get_collection(self.collection_model_name)
         query = (
@@ -146,7 +168,12 @@ class CollectionService:
         result = []
         async for collection in query.stream():
             collection_dict = collection.to_dict()
-            result.append(collection_dict | {"id": collection.id})
+            amound_cards = await self._get_amount_cards_for_collection(
+                collection_dict["size"]
+            )
+            result.append(
+                collection_dict | {"id": collection.id, "amoundCards": amound_cards}
+            )
         return result
 
     async def get_all_collections_data(self) -> dict:
@@ -164,8 +191,24 @@ class CollectionService:
         )
         async for collection in query_set.stream():
             collection_dict = collection.to_dict()
-            data.append(collection_dict | {"id": collection.id})
+            amount_cards = await self._get_amount_cards_for_collection(
+                collection_dict["size"]
+            )
+            data.append(
+                collection_dict | {"id": collection.id, "amount_cards": amount_cards}
+            )
         return {"num": len(data), "collections": data}
+
+    @staticmethod
+    async def _get_amount_cards_for_collection(size: CollectionSize) -> dict[str, int]:
+        amound_cards_dict = CollectionSize.limit_cards()
+        common, uncommon, rare, legendary = amound_cards_dict.get(size)
+        return {
+            "common": common,
+            "uncommon": uncommon,
+            "rare": rare,
+            "legendary": legendary,
+        }
 
     async def change_status_collection(
         self, _id: str, status: CollectionStatus

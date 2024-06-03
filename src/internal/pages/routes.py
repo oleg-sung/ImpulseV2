@@ -9,6 +9,7 @@ from internal.collection.routes import (
     get_limit_cards_in_collection,
     get_card_from_collection,
     get_collection_by_status,
+    get_active_collections,
 )
 from internal.collection.schema.card import CardType
 from internal.team.routes import get_teams, get_team
@@ -74,6 +75,16 @@ def created_collection_page(
     return templates.TemplateResponse(
         "frontend/main/collections/created_collection.html",
         {"request": request, "collections": collection},
+    )
+
+
+@router.get("/collections/active/", response_class=HTMLResponse)
+def get_active_collection_page(
+    request: Request, collection: dict = Depends(get_active_collections)
+):
+    return templates.TemplateResponse(
+        "frontend/main/collections/get_active_collection.html",
+        {"request": request, "collection": collection},
     )
 
 

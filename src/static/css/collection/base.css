@@ -292,7 +292,7 @@ img {
 
 .create-card-form {
     margin-right: 10px;
-    background-color: #867661;
+    /*background-color: #867661;*/
     width: 200px;
     height: 300px;
     border: 3px solid;
@@ -321,5 +321,107 @@ img {
     position: relative;
     color: #FFFFFF;
     top: 30px;
-    left: 20px
+    text-align: center;
+}
+
+.main-modal-content {
+    display: grid;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    justify-items: center;
+}
+
+.create-cards-modal-display {
+    height: 800px;
+    justify-content: center;
+
+}
+
+.create-image-modal-display {
+    display: flex;
+    width: 785px;
+    height: 300px;
+    padding: 0 30px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.change-photo-button {
+    display: flex;
+    border: 1px solid #8C8C8C;
+    gap: 15px;
+    width: 188px;
+    height: 78px;
+    padding: 15px;
+}
+
+.change-photo-image {
+    width: 48px;
+    height: 48px;
+}
+
+.custom-file-button input[type=file] {
+    margin-left: -2px !important;
+}
+
+.custom-file-button input[type=file]::-webkit-file-upload-button {
+    display: none;
+}
+
+.custom-file-button input[type=file]::file-selector-button {
+    display: none;
+}
+
+.custom-file-button:hover label {
+    /*background-color: #dde0e3;*/
+    cursor: pointer;
+}
+
+.test-class-label {
+    height: 100%;
+    width: 100%;
+    text-align: right;
+}
+
+.cards-image-view {
+    display: none;
+    width: 170px;
+    height: 216px;
+}
+
+.input-name-card {
+    text-align: center;
+    margin-top: 40px;
+    display: flex;
+    width: 100%;
+    height: 40px;
+    border-radius: 0 0 1px 0;
+    border-bottom: 1px solid #0A0A0A33;
+    gap: 30px;
+}
+
+#cardsNameInput {
+    width: 100%;
+}
+
+.label-name-input {
+    position: relative;
+    top: 8px;
+    text-align: center;
+}
+
+input[type="text"]:focus {
+    outline: none;
+}
+
+input[type="text"] {
+    outline: none;
+    border: none;
+}
+
+.description-cards {
+    margin-top: 20px;
+    font-weight: 500;
+    font-size: 20px;
 }

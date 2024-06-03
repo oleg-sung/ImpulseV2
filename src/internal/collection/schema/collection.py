@@ -45,8 +45,16 @@ class Collection(BaseModel):
         use_enum_values = True
 
 
+class CardsDict(BaseModel):
+    common: int
+    uncommon: int
+    rare: int
+    legendary: int
+
+
 class GeneralCollection(Collection):
     id: str
+    amount_cards: CardsDict = Field(alias="amountCards")
 
 
 class CreateNewCollection(BaseModel):
@@ -81,6 +89,11 @@ class GetCollection(Collection):
     cards: list[str]
     created_at: datetime.datetime = Field(alias="createdAt")
     motto: Optional[str] = Field(default=None)
+    amound_cards: CardsDict = Field(alias="amoundCards")
+
+    class Config:
+        use_enum_values = True
+        populate_by_name = True
 
 
 class ChangeStatusCollection(Collection):
