@@ -282,7 +282,23 @@
 	<script>
         function ActivateCollection(button) {
             let id = $(button).data('col-id');
+			const dictx = {"status": "active"}
+			const zer = JSON.stringify(dictx)
+			console.log(zer)
             console.log(id)
+            fetch(`http://127.0.0.1:8000/collection/${id}/change/status/`, {
+                    method: 'PATCH',
+                    credentials: 'include',
+                     headers: {
+						'Content-Type': 'application/json;charset=utf-8'
+					 },
+                    body: zer
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data)
+                    })
+                    .catch(error => console.error('Error:', error));
         }
 	</script>
 

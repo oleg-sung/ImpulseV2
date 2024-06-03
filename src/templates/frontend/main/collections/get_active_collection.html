@@ -121,7 +121,6 @@
                         if (targetDiv.height() < 600) {
                             targetDiv.animate({height: divSize}, 500);
                         }
-                        console.log('Видимое поле')
                         $.ajax({
                             url: `http://127.0.0.1:8000/collection/${id}/cards/?q=${type}`,
                             type: 'GET',
