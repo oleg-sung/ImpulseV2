@@ -205,15 +205,21 @@
 										<label class="form-control change-photo-button"
 											    style="text-align: center; justify-content: right; flex-direction: row-reverse"
 											    tabindex="0">Добавить обложку
+
 												<img class="change-photo-image" src="/static/images/collection/get_activ_collection/img.png"
 													 alt="Change Image">
-													<input type="file" name="file" class="invisible" id="inputImageCard"
+													<input type="file" name="file" class="invisible change-photo-button" id="inputImageCard"
 												    onchange="preview()">
 										</label>
-
-{#										<img class="change-photo-image" src="/static/images/collection/get_activ_collection/img.png"#}
-{#																		 alt="Create View Image">#}
-{#										<p class="inner-font">Добавить обложку</p>#}
+									</div>
+								</div>
+								<div class="create-view-collection">
+									<p class="view-title inner-font">Обложка коллекции:</p>
+									<div class="mb-3 div-input-text-collection form-floating">
+										<label for="cardInfoInput"
+											   class="form-label inner-font description-cards"></label>
+										<textarea class="form-control inner-font area-text-collection" name="info" id="cardInfoInput"
+												  placeholder="Введите текст" required></textarea>
 									</div>
 								</div>
 							</div>
