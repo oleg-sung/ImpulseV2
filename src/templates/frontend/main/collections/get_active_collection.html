@@ -190,14 +190,52 @@
 				  </div>
 				  <div class="modal-body">
 					<div class="creating-collection-space">
+						<form action="#">
+							<div class="input-name-card">
+								<label class="inner-font label-name-input" for="cardsNameInput">Название:</label>
+								<input class="inner-font" id="cardsNameInput" name="name" placeholder="Введите название"
+									   type="text" required>
+							</div>
+							<div class="create-collection-main-input">
+								<div class="create-view-collection">
+									<p class="view-title inner-font">Обложка коллекции:</p>
+									<div id="createViewDiv" class="create-view-div">
+										<img id="frame" src="" width="100%"
+										 height="100%">
+										<label class="form-control change-photo-button"
+											    style="text-align: center; justify-content: right; flex-direction: row-reverse"
+											    tabindex="0">Добавить обложку
+												<img class="change-photo-image" src="/static/images/collection/get_activ_collection/img.png"
+													 alt="Change Image">
+													<input type="file" name="file" class="invisible" id="inputImageCard"
+												    onchange="preview()">
+										</label>
+
+{#										<img class="change-photo-image" src="/static/images/collection/get_activ_collection/img.png"#}
+{#																		 alt="Create View Image">#}
+{#										<p class="inner-font">Добавить обложку</p>#}
+									</div>
+								</div>
+							</div>
+						</form>
 					</div>
 				  </div>
 				  <div class="modal-footer">
+				  
 					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
 					<button type="button" class="btn btn-primary">Сохранить изменения</button>
 				  </div>
 				</div>
 			</div>
 		</div>
+		<script>
+	        function preview() {
+	            let frame = document.getElementById('frame');
+                let view = document.getElementById('createViewDiv');
+				view.style.backgroundImage =`url(${URL.createObjectURL(event.target.files[0])})`
+	            {#frame.style.display = 'block'#}
+	            {#frame.src = URL.createObjectURL(event.target.files[0]);#}
+	        }
+		</script>
 	{% endif %}
 {% endblock %}

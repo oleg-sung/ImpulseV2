@@ -20,5 +20,34 @@
 .creating-collection-space {
     height: 600px;
     width: 100%;
-    background-color: #4F4856;
 }
+
+.create-collection-main-input {
+    margin-top: 20px;
+}
+
+.create-view-collection {
+    width: 512px;
+    height: 324px;
+    gap: 15px;
+}
+
+.view-title {
+    font-weight: 500;
+    font-size: 20px;
+    color: black;
+}
+
+.create-view-div {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    justify-items: center;
+    width: 450px;
+    height: 279px;
+    padding: 91px 150px 91px 150px;
+    gap: 15px;
+    border: 1px solid #353140
+}
+
