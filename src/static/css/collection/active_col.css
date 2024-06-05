@@ -78,5 +78,34 @@
 textarea.form-control {
     border: none;
     height: 100% !important;
-    /* Задайте желаемую высоту */
+}
+
+.selected-collection-size {
+    display: inline-flex;
+    margin-top: 60px;
+}
+
+.selecte-title {
+    font-size: 20px;
+    font-weight: 500;
+    color: black;
+}
+
+.btn-check:checked + .btn {
+    background-color: #4F4856B2; /* Цвет фона при выборе */
+    color: white; /* Цвет текста при выборе */
+}
+
+.form-check, .form-check-inline {
+    display: flex;
+    align-items: center;
+}
+
+.change-size-radio {
+    width: 109px;
+    height: 57px;
+    border-radius: 11px;
+    padding: 15px 40px 15px 40px;
+    gap: 10px;
+    color: black;
 }

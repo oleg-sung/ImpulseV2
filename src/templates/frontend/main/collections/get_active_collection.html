@@ -223,6 +223,21 @@
 									</div>
 								</div>
 							</div>
+							<div class="selected-collection-size">
+								<p class="selecte-title inner-font">Колличество карточек:</p>
+								<div class="form-check">
+									<input type="radio" class="form-check-input btn-check" name="options-base" id="option5" autocomplete="off">
+									<label style="color: black" class="form-check-label btn change-size-radio" for="option5">40</label>
+								</div>
+								<div class="form-check">
+									<input type="radio" class="form-check-input btn-check" name="options-base" id="option6" autocomplete="off">
+									<label style="color: black" class="form-check-label btn change-size-radio" for="option6">60</label>
+								</div>
+								<div class="form-check">
+									<input type="radio" class="form-check-input btn-check" name="options-base" id="option7"  autocomplete="off">
+									<label style="color: black" class="form-check-label btn change-size-radio" for="option7">80</label>
+								</div>
+							</div>
 						</form>
 					</div>
 				  </div>
@@ -242,6 +257,13 @@
 	            {#frame.style.display = 'block'#}
 	            {#frame.src = URL.createObjectURL(event.target.files[0]);#}
 	        }
+		</script>
+		<script>
+			$(document).ready(function() {
+			    $('.btn-check').on('click', function() {
+			        $(this).next('.btn').toggleClass('active');
+			    });
+			});
 		</script>
 	{% endif %}
 {% endblock %}
