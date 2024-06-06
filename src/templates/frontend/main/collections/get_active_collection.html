@@ -190,7 +190,7 @@
 				  </div>
 				  <div class="modal-body">
 					<div class="creating-collection-space">
-						<form action="#">
+						<form action="#" id="createCollection">
 							<div class="input-name-card">
 								<label class="inner-font label-name-input" for="cardsNameInput">Название:</label>
 								<input class="inner-font" id="cardsNameInput" name="name" placeholder="Введите название"
@@ -208,43 +208,43 @@
 
 												<img class="change-photo-image" src="/static/images/collection/get_activ_collection/img.png"
 													 alt="Change Image">
-													<input type="file" name="file" class="invisible change-photo-button" id="inputImageCard"
+													<input type="file" name="view" class="invisible change-photo-button" id="inputImageCollection"
 												    onchange="preview()">
 										</label>
 									</div>
 								</div>
 								<div class="create-view-collection">
-									<p class="view-title inner-font">Обложка коллекции:</p>
+									<p class="view-title inner-font">Описание коллекции:</p>
 									<div class="mb-3 div-input-text-collection form-floating">
 										<label for="cardInfoInput"
 											   class="form-label inner-font description-cards"></label>
-										<textarea class="form-control inner-font area-text-collection" name="info" id="cardInfoInput"
+										<textarea class="form-control inner-font area-text-collection" name="motto" id="cardInfoInput"
 												  placeholder="Введите текст" required></textarea>
 									</div>
 								</div>
 							</div>
 							<div class="selected-collection-size">
 								<p class="selecte-title inner-font">Колличество карточек:</p>
-								<div class="form-check">
-									<input type="radio" class="form-check-input btn-check" name="options-base" id="option5" autocomplete="off">
-									<label style="color: black" class="form-check-label btn change-size-radio" for="option5">40</label>
+								<div class="form-check radio-collection-size">
+									<input type="radio" class="form-check-input btn-check" name="size" value="fortyCards" id="option3" autocomplete="off">
+									<label style="color: black" class="form-check-label btn change-size-radio" for="option3">40</label>
 								</div>
-								<div class="form-check">
-									<input type="radio" class="form-check-input btn-check" name="options-base" id="option6" autocomplete="off">
-									<label style="color: black" class="form-check-label btn change-size-radio" for="option6">60</label>
+								<div class="form-check radio-collection-size">
+									<input type="radio" class="form-check-input btn-check" name="size" value="sixtyCards" id="option2" autocomplete="off">
+									<label style="color: black" class="form-check-label btn change-size-radio"  for="option2">60</label>
 								</div>
-								<div class="form-check">
-									<input type="radio" class="form-check-input btn-check" name="options-base" id="option7"  autocomplete="off">
-									<label style="color: black" class="form-check-label btn change-size-radio" for="option7">80</label>
+								<div class="form-check radio-collection-size">
+									<input type="radio" class="form-check-input btn-check" name="size" value="eightyCards" id="option1" autocomplete="off">
+									<label style="color: black" class="form-check-label btn change-size-radio" for="option1">80</label>
 								</div>
+							</div>
+							<div class="btn-possition-modal">
+								<button type="submit" class="btn btn-primary">Сохранить изменения</button>
 							</div>
 						</form>
 					</div>
 				  </div>
 				  <div class="modal-footer">
-				  
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
-					<button type="button" class="btn btn-primary">Сохранить изменения</button>
 				  </div>
 				</div>
 			</div>
@@ -264,6 +264,35 @@
 			        $(this).next('.btn').toggleClass('active');
 			    });
 			});
+		</script>
+		<script>
+        document.getElementById('createCollection').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formData = new FormData(document.querySelector("form[id='createCollection']"));
+            const object = {};
+            formData.forEach(function (value, key) {
+                object[key] = value;
+            });
+
+            fetch('http://127.0.0.1:8000/collection/create/', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(object)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Обработка полученных данных
+                    console.log(data);
+
+                    location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created';
+                })
+                .catch(error => {
+                    console.error('Ошибка загрузки данных:', error)
+                });
+        });
 		</script>
 	{% endif %}
 {% endblock %}

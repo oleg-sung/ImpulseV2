@@ -82,6 +82,8 @@ textarea.form-control {
 
 .selected-collection-size {
     display: inline-flex;
+    justify-content: center;
+    text-align: center;
     margin-top: 60px;
 }
 
@@ -96,16 +98,33 @@ textarea.form-control {
     color: white; /* Цвет текста при выборе */
 }
 
-.form-check, .form-check-inline {
-    display: flex;
-    align-items: center;
-}
-
 .change-size-radio {
+    align-items: center;
+    display: flex;
+    margin-left: 20px;
     width: 109px;
     height: 57px;
     border-radius: 11px;
     padding: 15px 40px 15px 40px;
     gap: 10px;
     color: black;
+    border: 1px solid black;
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
 }
+
+.change-size-radio:hover {
+    border: 1px solid black !important;
+}
+
+.radio-collection-size {
+    display: flex;
+    top: -30px;
+}
+
+.btn-possition-modal {
+    margin-top: 60px;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+

@@ -60,6 +60,7 @@ class GeneralCollection(Collection):
 class CreateNewCollection(BaseModel):
     size: CollectionSize = Field(default=CollectionSize.forty_cards)
     name: str = Field(min_length=2, max_length=60)
+    motto: Optional[str] = Field(None, alias="motto")
 
     class Config:
         populate_by_name = True
@@ -67,6 +68,7 @@ class CreateNewCollection(BaseModel):
 
 
 class DataToCreateCollection(Collection):
+    motto: Optional[str] = Field(None, alias="motto")
     status: CollectionStatus = Field(default=CollectionStatus.CREATED)
     cards: list = []
     date: datetime.datetime = Field(
