@@ -7,12 +7,11 @@ from google.cloud.storage import Blob
 
 from internal.collection.schema.collection import (
     DataToCreateCollection,
-    CreateNewCollection,
     ChangeStatusCollection,
     CollectionSize,
     CollectionStatus,
-)
-from pkg.celery_tools.tools import upload_file_task
+    CoverCreate, )
+from pkg.celery_tools.tools import upload_file_task, delete_file_task
 from .schema.card import ImageCard, CardType
 from ..database import db, storage
 
@@ -115,23 +114,54 @@ class CollectionService:
     def __init__(self, user_id: str):
         self.user_id = user_id
         self.db = db
+        self.bucket = storage
 
-    async def create_collection(self, data: CreateNewCollection) -> dict:
-        validate_data = DataToCreateCollection(**data.model_dump()).model_dump(
+    async def create_collection(self, data: dict, cover: UploadFile = None) -> dict:
+        result = {}
+        if cover:
+            image = CoverCreate(
+                file=await cover.read(),
+                content_type=cover.content_type,
+                size=cover.size,
+            )
+            data = data | {"cover": image.id}
+            path = f"Collection Views/{image.id}"
+            task = upload_file_task.delay(
+                content=image.file,
+                path=path,
+                content_type=image.content_type,
+            )
+            result["task_id"] = task.id
+        validate_data = DataToCreateCollection(**data).model_dump(
             by_alias=True, exclude_none=True
         ) | {"userCreatedID": self.user_id}
         collection_doc = await self.db.create_doc(
             self.collection_model_name, validate_data
         )
-        return {
-            "status": True,
-            "msg": "The collection created",
-            "id": collection_doc.id,
-        }
+        result.update(
+            {
+                "status": True,
+                "msg": "The collection created",
+                "id": collection_doc.id,
+            }
+        )
+        return result
+
+    async def __upload_cover_for_collection(self):
+        pass
+
+    async def __get_cover_url(self, _id: str) -> str:
+        name = f"Collection Views/{_id}"
+        image = await self.bucket.get_blob(name)
+        return image.public_url
 
     async def get_collection_data(self, _id: str) -> dict:
         collection_doc = await self.db.get_doc(self.collection_model_name, _id)
         collection_dict = collection_doc.to_dict()
+        if collection_dict.get("cover", None):
+            collection_dict["cover"] = await self.__get_cover_url(
+                collection_dict["cover"]
+            )
         return collection_dict | {"id": collection_doc.id}
 
     async def get_active_collections_data(self) -> dict:
@@ -149,11 +179,11 @@ class CollectionService:
             amound_cards = await self._get_amount_cards_for_collection(
                 collection_dict["size"]
             )
-            data.update(
-                collection_dict | {"id": collection.id, "amoundCards": amound_cards}
-            )
-        if data:
-            pass
+            add_data = {"id": collection.id, "amoundCards": amound_cards}
+            if collection_dict.get("cover", None):
+                add_data["cover"] = await self.__get_cover_url(collection_dict["cover"])
+            data.update(collection_dict | add_data)
+
         return data
 
     async def collection_by_status(self, status: str) -> list:
@@ -171,6 +201,10 @@ class CollectionService:
             amound_cards = await self._get_amount_cards_for_collection(
                 collection_dict["size"]
             )
+            if collection_dict.get("cover", None):
+                collection_dict["cover"] = await self.__get_cover_url(
+                    collection_dict["cover"]
+                )
             result.append(
                 collection_dict | {"id": collection.id, "amoundCards": amound_cards}
             )
@@ -194,9 +228,12 @@ class CollectionService:
             amount_cards = await self._get_amount_cards_for_collection(
                 collection_dict["size"]
             )
-            data.append(
-                collection_dict | {"id": collection.id, "amount_cards": amount_cards}
-            )
+            add_data = {"id": collection.id, "amount_cards": amount_cards}
+            if collection_dict.get("cover", None):
+                collection_dict["cover"] = await self.__get_cover_url(
+                    collection_dict["cover"]
+                )
+            data.append(collection_dict | add_data)
         return {"num": len(data), "collections": data}
 
     @staticmethod
@@ -243,3 +280,32 @@ class CollectionService:
         )
         await self.db.update_doc(self.collection_model_name, _id, validated_data)
         return {"status": True, "id": collection_doc.id}
+
+    async def __get_old_covet(self, _id: str) -> str:
+        collection_doc = await self.db.get_doc(self.collection_model_name, _id)
+        collection_dict = collection_doc.to_dict()
+        name = f"Collection Views/{collection_dict["cover"]}"
+        return name
+
+    async def change_collection_data(self, _id: str, cover: UploadFile = None, motto: str = None) -> dict:
+        update_dict = {}
+        if cover:
+            old_cover = await self.__get_old_covet(_id)
+            image = CoverCreate(
+                file=await cover.read(),
+                content_type=cover.content_type,
+                size=cover.size,
+            )
+
+            update_dict["cover"] = image.id
+            path = f"Collection Views/{image.id}"
+            task = upload_file_task.delay(
+                content=image.file,
+                path=path,
+                content_type=image.content_type,
+            )
+            delete_file_task.delay(old_cover)
+        if motto:
+            update_dict["motto"] = motto
+        await self.db.update_doc(self.collection_model_name, _id, update_dict)
+        return {"task_id": "1231231231312", "status": True}

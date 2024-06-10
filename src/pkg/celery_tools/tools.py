@@ -29,6 +29,6 @@ def upload_file_task(
 
 @celery_app.task(name="delete_file")
 def delete_file_task(name: str):
-    blob = storage.get_blob(name)
+    blob = storage.bucket.get_blob(name)
     blob.delete()
     return {"delete": "success"}

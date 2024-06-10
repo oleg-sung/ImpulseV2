@@ -190,7 +190,7 @@
 				  </div>
 				  <div class="modal-body">
 					<div class="creating-collection-space">
-						<form action="#" id="createCollection">
+						<form action="#" id="createCollection" enctype="multipart/form-data">
 							<div class="input-name-card">
 								<label class="inner-font label-name-input" for="cardsNameInput">Название:</label>
 								<input class="inner-font" id="cardsNameInput" name="name" placeholder="Введите название"
@@ -208,7 +208,7 @@
 
 												<img class="change-photo-image" src="/static/images/collection/get_activ_collection/img.png"
 													 alt="Change Image">
-													<input type="file" name="view" class="invisible change-photo-button" id="inputImageCollection"
+													<input type="file" name="cover" class="invisible change-photo-button" id="inputImageCollection"
 												    onchange="preview()">
 										</label>
 									</div>
@@ -266,33 +266,47 @@
 			});
 		</script>
 		<script>
-        document.getElementById('createCollection').addEventListener('submit', function (event) {
+        document.getElementById('createCollection').addEventListener('submit',  function (event) {
             event.preventDefault();
-            const formData = new FormData(document.querySelector("form[id='createCollection']"));
+			const form = new FormData(document.querySelector("form[id='createCollection']"));
             const object = {};
-            formData.forEach(function (value, key) {
+            form.forEach(function (value, key) {
                 object[key] = value;
             });
 
             fetch('http://127.0.0.1:8000/collection/create/', {
                 method: 'POST',
                 credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(object)
+                body: form
             })
                 .then(response => response.json())
                 .then(data => {
-                    // Обработка полученных данных
-                    console.log(data);
+                    console.log(data)
+                    if (data.task_id){
+						const taskId = data.task_id
+	                    function checkTaskStatus(taskId) {
+	                            fetch(`http://127.0.0.1:8000/tasks/${taskId}/`)
+	                                .then(response => response.json())
+	                                .then(data => {
+	                                    console.log('Task status:', data.status);
+	                                    if (data.status === 'SUCCESS' || data.status === 'FAILURE') {
+	                                        clearInterval(checkInterval);
+	                                        console.log(data);
+	                                        location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created';
+	                                    }
+	                                })
+	                                .catch(error => console.error('Error:', error));
+	                        }
+	                     const checkInterval = setInterval(() => checkTaskStatus(taskId), 100);
+					}
 
-                    location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created';
+
                 })
                 .catch(error => {
                     console.error('Ошибка загрузки данных:', error)
                 });
         });
 		</script>
+
 	{% endif %}
 {% endblock %}

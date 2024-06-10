@@ -1,9 +1,12 @@
 import datetime
+import uuid
 from enum import Enum
 from typing import Optional
 
 from firebase_admin import firestore
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, HttpUrl
+
+from internal.schema.image import Image
 
 
 class CollectionStatus(str, Enum):
@@ -67,6 +70,15 @@ class CreateNewCollection(BaseModel):
         use_enum_values = True
 
 
+class UpdateCollection(BaseModel):
+    motto: Optional[str] = Field(None, alias="motto")
+    cover: Optional[str] = Field(None, alias="cover")
+
+    class Config:
+        populate_by_name = True
+        use_enum_values = True
+
+
 class DataToCreateCollection(Collection):
     motto: Optional[str] = Field(None, alias="motto")
     status: CollectionStatus = Field(default=CollectionStatus.CREATED)
@@ -74,11 +86,14 @@ class DataToCreateCollection(Collection):
     date: datetime.datetime = Field(
         default=firestore.SERVER_TIMESTAMP, alias="createdAt"
     )
+    cover: Optional[str] = Field(None, alias="cover")
 
 
 class ResponseCreateCollection(BaseModel):
     status: bool
     id: str
+    msg: str
+    task_id: Optional[str] = Field(None, alias="taskId")
 
 
 class GetAllCollection(BaseModel):
@@ -92,6 +107,7 @@ class GetCollection(Collection):
     created_at: datetime.datetime = Field(alias="createdAt")
     motto: Optional[str] = Field(default=None)
     amound_cards: CardsDict = Field(alias="amoundCards")
+    cover: Optional[HttpUrl] = Field(None, alias="cover")
 
     class Config:
         use_enum_values = True
@@ -103,3 +119,16 @@ class ChangeStatusCollection(Collection):
 
     class Config:
         exclude = {"cards", "size", "name"}
+
+
+class CoverCreate(Image):
+    id: str = Field(default_factory=lambda: uuid.uuid4().hex, exclude=True)
+
+
+class CollectionUpdate(BaseModel):
+    cover: Optional[CoverCreate] = None
+    motto: Optional[str] = Field(None, alias="motto")
+
+    class Config:
+        use_enum_values = True
+        populate_by_name = True

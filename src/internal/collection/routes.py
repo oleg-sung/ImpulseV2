@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Optional
 
 from fastapi import APIRouter, Depends, UploadFile, Form, Body, Query
 from starlette import status
@@ -6,11 +6,11 @@ from starlette import status
 from .dependencies import cheak_collection_id, cheak_club_name
 from .schema.card import CardType, GetCard
 from .schema.collection import (
-    CreateNewCollection,
     ResponseCreateCollection,
     GetAllCollection,
     GetCollection,
     CollectionStatus,
+    CollectionSize,
 )
 from .services import CollectionService, CardService
 from ..task.schema import CreateTask
@@ -72,19 +72,37 @@ async def get_collection(id_collection: str, user: User = Depends(get_current_us
 
 @router.post(
     "/create/",
-    response_model=ResponseCreateCollection,
     status_code=status.HTTP_201_CREATED,
 )
 async def create_collection(
-    data: CreateNewCollection = Depends(cheak_club_name),
+    size: Annotated[CollectionSize, Form()],
+    name: Optional[Annotated[str, Form(max_length=40)]] = Depends(cheak_club_name),
+    cover: UploadFile = None,
+    motto: Annotated[str, Form()] = None,
     user: User = Depends(get_current_user),
 ):
     """
     Create a new empty collection
     :return: JSON data
     """
+    data_dict = {"size": size, "name": name, "motto": motto}
+    data = await CollectionService(user.uid).create_collection(data_dict, cover)
+    return data
 
-    data = await CollectionService(user.uid).create_collection(data)
+
+@router.put(
+    "/{id_collection}/change/",
+    status_code=status.HTTP_201_CREATED,
+)
+async def change_collection_info(
+    id_collection: str,
+    file: UploadFile = None,
+    motto: Annotated[str, Form()] = None,
+    user: User = Depends(get_current_user),
+):
+    data = await CollectionService(user.uid).change_collection_data(
+        id_collection, cover=file, motto=motto
+    )
     return data
 
 
