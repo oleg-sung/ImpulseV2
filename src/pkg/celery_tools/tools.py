@@ -32,3 +32,9 @@ def delete_file_task(name: str):
     blob = storage.bucket.get_blob(name)
     blob.delete()
     return {"delete": "success"}
+
+
+@celery_app.task(name="delete_list_file")
+def delete_list_files_task(file_list: list):
+    storage.bucket.delete_blobs(file_list)
+    return {"delete": "success"}

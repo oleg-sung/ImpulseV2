@@ -7,17 +7,31 @@
 				<div class="collection-title-display">
 					<p class="collection-title inner-font">{{ collection.name }}</p>
 					<button class="active-collection-spase">
-						<span>Активировать коллекцию</span>
+						<span>Завершить&nbsp;коллекцию</span>
 					</button>
+					<div class="dropdown toggle-collection">
+					<button class="btn btn-secondary toggle-collection" type="button" data-bs-toggle="dropdown"
+					        aria-expanded="false">
+						<img src="/static/images/collection/create_cards/img_1.png"></button>
+					<ul class="dropdown-menu">
+						<li><a class="dropdown-item btn btn-primary open-modal" data-cover="{{ collection.cover }}"
+						       data-col-id="{{ collection.id }}" data-motto="{{ collection.motto }}"
+						       data-name="{{ collection.name }}" id="openModalBtn" href="#" data-bs-toggle="modal"
+						       data-bs-target="#changeCollectionData">Редактировать коллекцию</a></li>
+						<li>
+							<hr class="dropdown-divider">
+						</li>
+					</ul>
+				</div>
 				</div>
 				<div class="collection-info">
-					<p class="amoun-cards inner-font">Всего карточек: {{ collection.size }}</p>
-					<p class="collection-status-display inner-font">Статус: {{ collection.status }} </p>
+					<p class="amoun-cards inner-font">Всего карточек: {% if collection.size == "sixtyCards" %}60{% elif collection.size == "eightyCards" %}80{% else %}40{% endif %}</p>
+					<p class="collection-status-display inner-font">Статус: {% if collection.status == 'created' %}Созданная{% elif collection.status == "active" %}Активная{% else %}В архиве{% endif %} </p>
 				</div>
 				<div class="collection-items-display">
 					<div class="collection-cover-display">
 						{% if collection.cover %}
-							<img src="https://s-cdn.sportbox.ru/images/styles/upload/fp_fotos/6b/b7/f23826911f9e07882ab082534677d9075d6ea6d55e740138464440.jpg"
+							<img src="{{ collection.cover }}"
 								 alt="Collection cover">
 						{% else %}
 							Обложка коллекции отуствует
@@ -141,24 +155,6 @@
                                         CardsCreatedDiv.append(SomeDiv)
                                         CardsCreatedDiv.append(Ptag)
                                         cardsListDiv.append(CardsCreatedDiv)
-                                    } else {
-                                        let somediv = $('<div class="create-card-form"></div>')
-                                        somediv.css('background-color', divCollorCss)
-                                        let SomeoneDiv = $('<div class="create-image-form"></div>')
-                                        let CreateLink = $('<a href="#" class="create-cards-link-form inner-font dynamic-element" data-bs-toggle="modal" data-bs-target="#createCardModal" id="createCardLink">Добавить<br>картинку</a>');
-                                        CreateLink.attr('data-pos', i)
-                                        CreateLink.attr('data-type', type)
-                                        CreateLink.on('click', function () {
-                                            let collectionId = id
-                                            let dataType = $(this).attr('data-type');
-                                            let dataPos = $(this).attr('data-pos');
-                                            $('#submitBtn').attr('data-type', dataType).attr('data-pos', dataPos).attr('data-col-id', collectionId)
-                                        });
-                                        let Ptag = $('<p class="inner-font">Название карточки</p>')
-                                        SomeoneDiv.append(CreateLink)
-                                        somediv.append(SomeoneDiv)
-                                        somediv.append(Ptag)
-                                        cardsListDiv.append(somediv);
                                     }
                                 }
                             },
@@ -174,6 +170,123 @@
                 }
 			</script>
 		</div>
+		<div class="modal fade" id="changeCollectionData" tabindex="-1" aria-labelledby="changeCollectionData"
+	     aria-hidden="true">
+		<div class="modal-dialog modal-xl">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="changeCollectionData">Modal title</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body create-cards-modal-display">
+					<div class="main-modal-content" id="mainContentModalCards">
+						<form id="updateCollection" enctype="multipart/form-data">
+							<div class="change-view-modal-display ">
+								<label class="form-control change-photo-button"
+								       style="text-align: center; justify-content: right; flex-direction: row-reverse"
+								       tabindex="0">Изменить<br>фото
+									<img class="change-photo-image" src="/static/images/collection/create_cards/img.png"
+									     alt="Change Image">
+									<input type="file" name="file" class="invisible" id="inputImageCard"
+									       onchange="preview2()">
+								</label>
+								<div class="collections-views">
+									<div class="change-view-collection">
+										<img id="frame-view" src="" class="collection-view-display" width="580px"
+										     height="279px">
+									</div>
+								</div>
+								<div class="change-photo-button">
+									<img class="change-photo-image" src="/static/images/collection/create_cards/img.png"
+									     alt="Change Image">
+									<p class="inner-font">Изменить<br>фото</p>
+								</div>
+							</div>
+							<div class="input-name-card correct-div-collection">
+								<p class="inner-font label-name-input" for="cardsNameInput">Название:</p>
+								<p class="inner-font collection-update-name" id="collectionName"></p>
+							</div>
+							<div class="mb-3 description-cards-input-display">
+								<label for="cardInfoInput"
+								       class="form-label inner-font description-cards">Описание: </label>
+								<textarea class="form-control inner-font" name="motto" id="collectionMotto"
+								          placeholder="Введите текст" rows="6"></textarea>
+							</div>
+							<button type="submit" id="selectChanges" onclick="postChangeCollectionInfo(this)"
+							        class="btn btn-primary">Сохранить изменения
+							</button>
+						</form>
+					</div>
+				</div>
+				<div class="modal-footer">
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+        function postChangeCollectionInfo(button) {
+            event.preventDefault();
+            var id = $(button).data('id')
+            const form = new FormData(document.querySelector("form[id='updateCollection']"));
+            const object = {};
+            form.forEach(function (value, key) {
+                object[key] = value;
+            });
+
+            fetch(`http://127.0.0.1:8000/collection/${id}/change/`, {
+                method: 'PUT',
+                credentials: 'include',
+                body: form
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    if (data.task_id) {
+                        console.log(data.task_id)
+                        console.log(data['task_id'])
+                        const taskId = data['task_id']
+
+                        function checkTaskStatus(taskId) {
+                            fetch(`http://127.0.0.1:8000/tasks/${taskId}/`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log('Task status:', data.status);
+                                    if (data.status === 'SUCCESS' || data.status === 'FAILURE') {
+                                        clearInterval(checkInterval);
+                                        console.log(data);
+                                        location.href = 'http://127.0.0.1:8000/pages/collections/active/';
+                                    }
+                                })
+                                .catch(error => console.error('Error:', error));
+                        }
+
+                        const checkInterval = setInterval(() => checkTaskStatus(taskId), 200);
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка загрузки данных:', error)
+                });
+        }
+	</script>
+	<script>
+        $(document).ready(function () {
+            $('.open-modal').on('click', function (e) {
+                e.preventDefault(); // Предотвращаем стандартное поведение ссылки
+                var modalId = $(this).data('bs-target'); // Получаем идентификатор модального окна из атрибута data-bs-target
+                var dataId = $(this).data('col-id');
+                console.log('DAta')
+                $('#collectionName').text($(this).data('name'))
+                $('#collectionMotto').val($(this).data('motto'))
+                $('#selectChanges').attr('data-id', dataId)
+                var cover = $(this).data('cover')
+                if (cover) {
+                    $('#frame-view').attr('src', cover)
+                }
+
+
+            });
+        });
+	</script>
 	{% else %}
 		<div class="title-empty">
 			<p class="inner-font description-empty" style="color: black">Сейчас у вас нет созданных коллекций.</p>

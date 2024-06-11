@@ -28,8 +28,8 @@
 				</div>
 			</div>
 			<div class="collection-info">
-				<p class="amoun-cards inner-font">Всего карточек: {{ collection.size }}</p>
-				<p class="collection-status-display inner-font">Статус: {{ collection.status }} </p>
+				<p class="amoun-cards inner-font">Всего карточек: {% if collection.size == "sixtyCards" %}60{% elif collection.size == "eightyCards" %}80{% else %}40{% endif %}</p>
+				<p class="collection-status-display inner-font">Статус: {% if collection.status == 'created' %}Созданная{% elif collection.satuse == "active" %}Активная{% else %}В архиве{% endif %}</p>
 			</div>
 			<div class="collection-items-display">
 				<div class="collection-cover-display">
@@ -259,8 +259,8 @@
 						       tabindex="0">Изменить<br>фото
 							<img class="change-photo-image" src="/static/images/collection/create_cards/img.png"
 							     alt="Change Image">
-							<input type="file" name="cover" class="invisible" id="inputImageCard"
-							       onchange="preview()">
+							<input type="file" name="file" class="invisible" id="inputImageCard"
+							       onchange="preview()" required>
 						</label>
 						<div class="create-card-form" style="background-color: #867661">
 							<div class="create-image-form">
@@ -278,12 +278,12 @@
 					<div class="input-name-card">
 						<label class="inner-font label-name-input" for="cardsNameInput">Название:</label>
 						<input class="inner-font" id="cardsNameInput" name="name" placeholder="Введите название"
-						       type="text">
+						       type="text" required>
 					</div>
 					<div class="mb-3 description-cards-input-display">
 						<label for="cardInfoInput"
 						       class="form-label inner-font description-cards">Описание: </label>
-						<textarea class="form-control inner-font" name="motto" id="cardInfoInput"
+						<textarea class="form-control inner-font" name="info" id="cardInfoInput"
 						          placeholder="Введите текст" rows="6" required></textarea>
 					</div>
 					<button type="submit" id="submitBtn" onclick="STestFunc(this)" class="btn btn-primary">Сохранить
@@ -297,15 +297,13 @@
 		<script>
             function STestFunc(button) {
                 event.preventDefault();
+                button.style.display = "none";
                 const form = new FormData(document.querySelector("form[id='createCads']"));
                 const id = button.getAttribute('data-col-id')
                 const type = button.getAttribute('data-type')
                 const position = button.getAttribute('data-pos')
                 form.append('type_', type)
                 form.append('position', position)
-                {#const object = {};#}
-                {#form.forEach(function (value, key) {#}
-                {#    object[key] = value;#}
                 fetch(`http://127.0.0.1:8000/collection/${id}/card/create/`, {
                     method: 'POST',
                     credentials: 'include',
@@ -315,22 +313,24 @@
                     .then(data => {
                         console.log(data)
                         const taskId = data.task_id
+                        if (taskId) {
+                            function checkTaskStatus(taskId) {
+                                fetch(`http://127.0.0.1:8000/tasks/${taskId}/`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        console.log('Task status:', data.status);
+                                        if (data.status === 'SUCCESS' || data.status === 'FAILURE') {
+                                            clearInterval(checkInterval);
+                                            console.log(data);
+                                            location.href = ''
+                                        }
+                                    })
+                                    .catch(error => console.error('Error:', error));
+                            }
 
-                        function checkTaskStatus(taskId) {
-                            fetch(`http://127.0.0.1:8000/tasks/${taskId}/`)
-                                .then(response => response.json())
-                                .then(data => {
-                                    console.log('Task status:', data.status);
-                                    if (data.status === 'SUCCESS' || data.status === 'FAILURE') {
-                                        clearInterval(checkInterval);
-                                        console.log(data);
-                                        location.href = ''
-                                    }
-                                })
-                                .catch(error => console.error('Error:', error));
+                            const checkInterval = setInterval(() => checkTaskStatus(taskId), 500);
                         }
 
-                        const checkInterval = setInterval(() => checkTaskStatus(taskId), 100);
 
                     })
                     .catch(error => console.error(error));
@@ -367,9 +367,18 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data)
+                    if (data.detail === 'Collection is not full') {
+                        alert('Коллекция не полная')
+                    } else if (data.detail === 'There is already an active collection') {
+                        alert('Уже есть кативная коллекция')
+                    } else {
+                        location.href = 'http://127.0.0.1:8000/pages/collections/active/';
+                    }
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                        console.error('Error:', error)
+                    }
+                );
         }
 	</script>
 	<script>
@@ -377,7 +386,7 @@
             $('.open-modal').on('click', function (e) {
                 e.preventDefault(); // Предотвращаем стандартное поведение ссылки
                 var modalId = $(this).data('bs-target'); // Получаем идентификатор модального окна из атрибута data-bs-target
-                var dataId = $(this).data('col-id'); // Получаем данные из атрибута data-id
+                var dataId = $(this).data('col-id');
                 console.log('DAta')
                 $('#collectionName').text($(this).data('name'))
                 $('#collectionMotto').val($(this).data('motto'))
@@ -409,24 +418,27 @@
                 .then(response => response.json())
                 .then(data => {
                     console.log(data)
-                    {#if (data.task_id){#}
-                    {#	const taskId = data.task_id#}
-                    {#    function checkTaskStatus(taskId) {#}
-                    {#            fetch(`http://127.0.0.1:8000/tasks/${taskId}/`)#}
-                    {#                .then(response => response.json())#}
-                    {#                .then(data => {#}
-                    {#                    console.log('Task status:', data.status);#}
-                    {#                    if (data.status === 'SUCCESS' || data.status === 'FAILURE') {#}
-                    {#                        clearInterval(checkInterval);#}
-                    {#                        console.log(data);#}
-                    {#                        location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created';#}
-                    {#                    }#}
-                    {#                })#}
-                    {#                .catch(error => console.error('Error:', error));#}
-                    {#        }#}
-                    {#     const checkInterval = setInterval(() => checkTaskStatus(taskId), 100);#}
+                    if (data.task_id) {
+                        console.log(data.task_id)
+                        console.log(data['task_id'])
+                        const taskId = data['task_id']
 
+                        function checkTaskStatus(taskId) {
+                            fetch(`http://127.0.0.1:8000/tasks/${taskId}/`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log('Task status:', data.status);
+                                    if (data.status === 'SUCCESS' || data.status === 'FAILURE') {
+                                        clearInterval(checkInterval);
+                                        console.log(data);
+                                        location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created';
+                                    }
+                                })
+                                .catch(error => console.error('Error:', error));
+                        }
 
+                        const checkInterval = setInterval(() => checkTaskStatus(taskId), 200);
+                    }
                 })
                 .catch(error => {
                     console.error('Ошибка загрузки данных:', error)

@@ -11,7 +11,7 @@ from internal.collection.schema.collection import (
     CollectionSize,
     CollectionStatus,
     CoverCreate, )
-from pkg.celery_tools.tools import upload_file_task, delete_file_task
+from pkg.celery_tools.tools import upload_file_task, delete_file_task, delete_list_files_task
 from .schema.card import ImageCard, CardType
 from ..database import db, storage
 
@@ -266,7 +266,7 @@ class CollectionService:
             result = await query.get()
             if result:
                 raise HTTPException(
-                    status_code=403, detail="Уже есть активная коллекция"
+                    status_code=403, detail="There is already an active collection"
                 )
             size = CollectionSize.get_size_dict(collection_dict["size"])
             if len(collection_dict["cards"]) < size:
@@ -289,6 +289,7 @@ class CollectionService:
 
     async def change_collection_data(self, _id: str, cover: UploadFile = None, motto: str = None) -> dict:
         update_dict = {}
+        result_dict = {"status": True}
         if cover:
             old_cover = await self.__get_old_covet(_id)
             image = CoverCreate(
@@ -304,8 +305,27 @@ class CollectionService:
                 path=path,
                 content_type=image.content_type,
             )
-            delete_file_task.delay(old_cover)
+            delet_task = delete_file_task.delay(old_cover)
+            result_dict['task_id'] = task.id
+            result_dict['delet_task_id'] = delet_task.id
         if motto:
             update_dict["motto"] = motto
         await self.db.update_doc(self.collection_model_name, _id, update_dict)
-        return {"task_id": "1231231231312", "status": True}
+        return result_dict
+
+    async def delete_collection(self, _id: str) -> dict:
+        collection_doc = await self.db.get_doc(self.collection_model_name, _id)
+        collection_dict = collection_doc.to_dict()
+        if collection_dict['status'] == CollectionStatus.ACTIVE or collection_dict['status'] == CollectionStatus.CLOSED:
+            raise HTTPException(403, detail="Access denied")
+            
+        cards_list = collection_dict["cards"]
+        if collection_dict.get("cover", False):
+            name = f"Collection Views/{collection_dict["cover"]}"
+            delete_file_task.delay(name)
+        base_card_path = f"thumbnail/{_id}/"
+        file_list_id = [base_card_path + cards_id for cards_id in cards_list]
+        task = delete_list_files_task.delay(file_list_id)
+        await self.db.delete_doc(self.collection_model_name, _id)
+        return {'task_id': task.id}
+

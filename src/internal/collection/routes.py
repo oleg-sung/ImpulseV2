@@ -129,6 +129,15 @@ async def change_status(
     return data
 
 
+@router.delete(
+    "/{id_collection}/delete/",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+async def delete_collection(id_collection: str, user: User = Depends(get_current_user)):
+    data = await CollectionService(user.uid).delete_collection(id_collection)
+    return data
+
+
 @router.post(
     "/{id_collection}/card/create/",
     response_model=CreateTask,
