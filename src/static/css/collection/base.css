@@ -291,8 +291,14 @@ img {
 }
 
 .create-card-form {
+    display: block;
     margin-right: 10px;
     /*background-color: #867661;*/
+    justify-content: center;
+    justify-items: center;
+    text-align: center;
+    align-items: center;
+    align-content: center;
     width: 200px;
     height: 300px;
     border: 3px solid;
@@ -304,7 +310,6 @@ img {
     align-content: center;
     text-align: center;
     position: relative;
-    top: 20px;
     width: 170px;
     height: 220px;
     left: 12px;
@@ -320,9 +325,16 @@ img {
 .create-card-form p {
     position: relative;
     color: #FFFFFF;
-    top: 30px;
     text-align: center;
 }
+
+#getCardInfo {
+    position: relative;
+    color: #FFFFFF;
+    text-align: center;
+    margin-right: auto;
+}
+
 
 .main-modal-content {
     display: grid;
@@ -463,4 +475,60 @@ input[type="text"] {
 
 #collectionName {
     margin-top: 8px;
+}
+
+
+.delete-col-body {
+    justify-content: center;
+    justify-items: center;
+    text-align: center;
+}
+
+.delete-col-description {
+    justify-content: center;
+}
+
+
+.modal-header, .modal-body {
+    border-bottom: none;
+    border-top: none /* Удаляем нижнюю границу */
+}
+
+.modal-footer {
+    border: none !important;
+}
+
+.btn-custom-exit {
+    color: #FFFFFF;
+    background-color: #251F2BCC;
+    border: 1px solid #C8C9D2;
+    padding: 10px 20px;
+    border-radius: 11px;
+    width: 105px;
+    height: 41px;
+    margin-right: 20px;
+    transition: color 0.3s;
+}
+
+.btn-custom-exit:hover {
+    color: black;
+}
+
+
+.btn-confirm-delete {
+    color: #E41730;
+    background-color: #251F2BCC;
+    border: 1px solid #E41730;
+    padding: 10px 20px;
+    border-radius: 11px;
+    width: 105px;
+    height: 41px;
+    margin-left: 20px;
+    transition: color 0.3s;
+}
+
+.btn-confirm-delete:hover {
+    color: #FFFFFF;
+    background-color: #E41730;
+
 }

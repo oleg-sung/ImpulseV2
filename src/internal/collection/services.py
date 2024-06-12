@@ -316,7 +316,8 @@ class CollectionService:
     async def delete_collection(self, _id: str) -> dict:
         collection_doc = await self.db.get_doc(self.collection_model_name, _id)
         collection_dict = collection_doc.to_dict()
-        if collection_dict['status'] == CollectionStatus.ACTIVE or collection_dict['status'] == CollectionStatus.CLOSED:
+        if (collection_dict['status'] == CollectionStatus.ACTIVE or collection_dict['status'] == CollectionStatus.CLOSED
+                or collection_dict['userCreatedID'] != self.user_id):
             raise HTTPException(403, detail="Access denied")
             
         cards_list = collection_dict["cards"]

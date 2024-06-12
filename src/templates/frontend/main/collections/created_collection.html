@@ -23,13 +23,17 @@
 						<li>
 							<hr class="dropdown-divider">
 						</li>
-						<li><a class="dropdown-item " href="#">Удалить коллекцию</a></li>
+						<li><a class="dropdown-item btn btn-primary open-delete-modal" style="color: #E41730" data-col-id="{{ collection.id }}" data-bs-toggle="modal" data-bs-target="#deleteCollectionModal" href="#">Удалить коллекцию</a></li>
 					</ul>
 				</div>
 			</div>
 			<div class="collection-info">
-				<p class="amoun-cards inner-font">Всего карточек: {% if collection.size == "sixtyCards" %}60{% elif collection.size == "eightyCards" %}80{% else %}40{% endif %}</p>
-				<p class="collection-status-display inner-font">Статус: {% if collection.status == 'created' %}Созданная{% elif collection.satuse == "active" %}Активная{% else %}В архиве{% endif %}</p>
+				<p class="amoun-cards inner-font">Всего карточек: {% if collection.size == "sixtyCards" %}
+				                                  60{% elif collection.size == "eightyCards" %}80{% else %}
+				                                  40{% endif %}</p>
+				<p class="collection-status-display inner-font">Статус: {% if collection.status == 'created' %}
+				                                                Созданная{% elif collection.satuse == "active" %}
+				                                                Активная{% else %}В архиве{% endif %}</p>
 			</div>
 			<div class="collection-items-display">
 				<div class="collection-cover-display">
@@ -147,7 +151,8 @@
                                 let CardsCreatedDiv = $('<div class="create-card-form"></div>')
                                 CardsCreatedDiv.css('background-color', divCollorCss)
                                 let SomeDiv = $('<div class="create-image-form"></div>');
-                                let Ptag = $('<p class="inner-font"></p>').text(data[i]['name'])
+                                let cardId = data[i]['id']
+                                let Ptag = $('<a id="getCardInfo" href="#" class="inner-font" data-card-id="' + cardId + '"></a>').text(data[i]['name'])
                                 let url = data[i]['url']
                                 let newImg = $('<img>', {
                                     src: url,
@@ -160,7 +165,7 @@
                             } else {
                                 let somediv = $('<div class="create-card-form"></div>')
                                 somediv.css('background-color', divCollorCss)
-                                let SomeoneDiv = $('<div class="create-image-form"></div>')
+                                let SomeoneDiv = $('<div class="create-image-form" style="top: 7px"></div>')
                                 let CreateLink = $('<a href="#" class="create-cards-link-form inner-font dynamic-element" data-bs-toggle="modal" data-bs-target="#createCardModal" id="createCardLink">Добавить<br>картинку</a>');
                                 CreateLink.attr('data-pos', i)
                                 CreateLink.attr('data-type', type)
@@ -170,7 +175,7 @@
                                     let dataPos = $(this).attr('data-pos');
                                     $('#submitBtn').attr('data-type', dataType).attr('data-pos', dataPos).attr('data-col-id', collectionId)
                                 });
-                                let Ptag = $('<p class="inner-font">Название карточки</p>')
+                                let Ptag = $('<p class="inner-font" style="top: 7px">Название карточки</p>')
                                 SomeoneDiv.append(CreateLink)
                                 somediv.append(SomeoneDiv)
                                 somediv.append(Ptag)
@@ -189,6 +194,23 @@
             })
         }
 	</script>
+	<div class="modal fade" id="deleteCollectionModal" tabindex="-1" aria-labelledby="deleteCollectionModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content" style="background-color: #251F2BCC;">
+		        <div class="modal-header delete-col-description">
+		            <h1 class="modal-title fs-5" id="#deleteCollectionModalLabel">Вы уверенны?</h1>
+		        </div>
+		        <div class="modal-body delete-col-body">
+		            <p>Все данные этой коллекции будут удалены</p>
+
+		        </div>
+		         <div class="modal-footer">
+					<button type="button" class="btn-custom-exit" data-bs-dismiss="modal">Отмена</button>
+		            <button id="deleteCollectonButton" type="button" class="btn-confirm-delete" onclick="deleteCollection(this)">Удалить</button>
+		        </div>
+			</div>
+		</div>
+	</div>
 	<div class="modal fade" id="changeCollectionData" tabindex="-1" aria-labelledby="changeCollectionData"
 	     aria-hidden="true">
 		<div class="modal-dialog modal-xl">
@@ -337,6 +359,7 @@
             };
 		</script>
 	</div>
+
 	<script>
         function preview() {
             let frame = document.getElementById('frame');
@@ -383,6 +406,12 @@
 	</script>
 	<script>
         $(document).ready(function () {
+            $('.open-delete-modal').on('click', function (e) {
+				e.preventDefault();
+                var dataId = $(this).data('col-id');
+                $('#deleteCollectonButton').attr('data-id', dataId)
+            });
+
             $('.open-modal').on('click', function (e) {
                 e.preventDefault(); // Предотвращаем стандартное поведение ссылки
                 var modalId = $(this).data('bs-target'); // Получаем идентификатор модального окна из атрибута data-bs-target
@@ -398,8 +427,10 @@
 
 
             });
+
         });
 	</script>
+
 	<script>
         function postChangeCollectionInfo(button) {
             event.preventDefault();
@@ -444,6 +475,23 @@
                     console.error('Ошибка загрузки данных:', error)
                 });
         }
+	</script>
+	<script>
+		function deleteCollection(button) {
+            var id = $(button).data('id')
+            fetch(`http://127.0.0.1:8000/collection/${id}/delete/`, {
+                method: 'DELETE',
+                credentials: 'include',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created';
+                }).catch(error => {
+                    console.error('Ошибка загрузки данных:', error)
+                    location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created';
+                    })
+		}
 	</script>
 
 {% endblock %}
