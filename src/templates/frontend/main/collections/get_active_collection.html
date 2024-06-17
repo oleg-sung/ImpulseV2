@@ -145,7 +145,7 @@
                                         let CardsCreatedDiv = $('<div class="create-card-form"></div>')
                                         CardsCreatedDiv.css('background-color', divCollorCss)
                                         let SomeDiv = $('<div class="create-image-form"></div>');
-                                        let Ptag = $('<p class="inner-font"></p>').text(data[i]['name'])
+                                        let Ptag = $('<a href="#" id="getCardDetails" class="inner-font" data-bs-toggle="modal" data-bs-target="#getCardDitailsModal"></a>').text(data[i]['name'])
                                         let url = data[i]['url']
                                         let newImg = $('<img>', {
                                             src: url,
@@ -216,6 +216,47 @@
 							        class="btn btn-primary">Сохранить изменения
 							</button>
 						</form>
+					</div>
+				</div>
+				<div class="modal-footer">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="getCardDitailsModal" tabindex="-1" aria-labelledby="#getCardDitailsModalLabel"
+	     aria-hidden="true">
+		<div class="modal-dialog modal-xl">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="getCardDitailsModalLabel">Заголовок модального окна</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+				</div>
+				<div class="modal-body create-cards-modal-display">
+					<div class="main-modal-content"  id="mainContentModalCards">
+							<div class="create-image-modal-display get-card-view">
+
+								<div class="create-card-form" style="background-color: #867661">
+									<div class="create-image-form">
+										<img id="cardImageView" style="display: block" src="" class="img-fluid cards-image-view" width="170px"
+								            height="216px">
+									</div>
+								</div>
+
+							</div>
+							<div class="get-card-name">
+								<p class="inner-font label-name-input">Название:</p>
+								<p class="inner-font" id="cardName" type="text">asdadadadadsaddsad</p>
+							</div>
+							<div style="margin-right: auto;">
+								<p class="inner-font description-cards">Описание: </p>
+							</div>
+							<div class="cards-motto">
+								<div class="cards-description-display">
+								    <p class="inner-font" id="cardMotto">Чемпионат мира по футболу 2022 года — 22-й чемпионат мира по футболу ФИФА, финальная часть которого прошла с 20 ноября по 18 декабря 2022 года в Катаре. Эта страна впервые в своей истории приняла чемпионат мира по футболу.
+Из-за сильной летней жары в Катаре этот чемпионат мира провели с конца ноября до середины декабря — это был первый чемпионат мира, который состоялся не в мае,июне или июле; также были сокращены сроки чемпионата — всего 29 дней.
+Это первый чемпионат мира, который прошёл в стране арабского мира, первый — в стране с абсолютной монархией, и первый в стране с мусульманским большинством, а также второй чемпионат мира, который прошёл в Азии (после турнира 2002 года в Республике Корея и Японии). Кроме того, это последний чемпионат мира ФИФА с 32 командами в финальной стадии.</p>
+								</div>
+							</div>
 					</div>
 				</div>
 				<div class="modal-footer">

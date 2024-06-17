@@ -12,7 +12,7 @@ from internal.collection.schema.collection import (
     CollectionStatus,
     CoverCreate, )
 from pkg.celery_tools.tools import upload_file_task, delete_file_task, delete_list_files_task
-from .schema.card import ImageCard, CardType
+from .schema.card import ImageCard, CardType, ChangeCardMetadata
 from ..database import db, storage
 
 
@@ -106,6 +106,40 @@ class CardService:
             cards_type = blob.metadata["type"]
             limit_dict[cards_type] -= 1
         return limit_dict
+
+    async def change_card_info(self, id_card: str, data: dict, file: UploadFile = None) -> dict:
+        result = {'status': True}
+        name = f"thumbnail/{self.id_collection}/{id_card}"
+        blob = await self.bucket.get_blob(name)
+        metadata = blob.metadata
+        validate_data = ChangeCardMetadata(**data).model_dump(exclude_none=True)
+        for key in validate_data.keys():
+            metadata[key] = validate_data[key]
+        if file.size:
+            metadata.pop('id')
+            delete_task = delete_file_task.delay(name)
+            image = ImageCard(
+                file=await file.read(),
+                content_type=file.content_type,
+                size=file.size,
+                metadata=metadata,
+            )
+            metadata = image.metadata.custom_dump()
+            name = f"thumbnail/{self.id_collection}/{metadata['id']}"
+            task = upload_file_task.delay(image.file, name, image.content_type, metadata)
+            collection = await self.db.get_doc('collection', self.id_collection)
+            collection_dict = collection.to_dict()
+            cards_id_list = collection_dict['cards']
+            cards_id_list.remove(id_card)
+            cards_id_list.append(metadata['id'])
+            await self.db.update_doc('collection', self.id_collection, {"cards": cards_id_list})
+            result['task_id'] = task.id
+            result['delete_task'] = delete_task.id
+        else:
+            blob.metadata = metadata
+            blob.update()
+
+        return result
 
 
 class CollectionService:

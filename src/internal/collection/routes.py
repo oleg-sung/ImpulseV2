@@ -157,6 +157,24 @@ async def add_card_in_collection(
     return data
 
 
+@router.put(
+    "/{id_collection}/card/{id_card}/change/", status_code=status.HTTP_201_CREATED
+)
+async def change_card_info(
+    id_collection: str,
+    id_card: str,
+    file: UploadFile = None,
+    name: Annotated[str, Form(max_length=20, min_length=2)] = None,
+    info: Annotated[str, Form(max_length=200)] = None,
+    user: User = Depends(get_current_user),
+):
+    metadata = {"name": name, "info": info}
+    data = await CardService(id_collection, user.uid).change_card_info(
+        id_card, metadata, file
+    )
+    return data
+
+
 @router.get(
     "/{id_collection}/card/{id_card}/",
     response_model=GetCard,

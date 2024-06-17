@@ -152,7 +152,11 @@
                                 CardsCreatedDiv.css('background-color', divCollorCss)
                                 let SomeDiv = $('<div class="create-image-form"></div>');
                                 let cardId = data[i]['id']
-                                let Ptag = $('<a id="getCardInfo" href="#" class="inner-font" data-card-id="' + cardId + '"></a>').text(data[i]['name'])
+                                let cardInfo = data[i]['name']
+                                let cardName = data[i]['info']
+                                let cardImage = data[i]['url']
+                                let collectionId = data[i]['collection']
+                                let Ptag = $('<a id="getCardInfo" href="#" class="inner-font" onclick="fillDataCard(this)" data-col-id="' + collectionId + '" data-card-image="' + cardImage + '" data-card-info="' + cardInfo + '"  data-card-name="' + cardName + '" data-card-id="' + cardId + '" data-bs-toggle="modal" data-bs-target="#updateCardModal" id="updateCardLink"></a>').text(data[i]['name'])
                                 let url = data[i]['url']
                                 let newImg = $('<img>', {
                                     src: url,
@@ -166,7 +170,7 @@
                                 let somediv = $('<div class="create-card-form"></div>')
                                 somediv.css('background-color', divCollorCss)
                                 let SomeoneDiv = $('<div class="create-image-form" style="top: 7px"></div>')
-                                let CreateLink = $('<a href="#" class="create-cards-link-form inner-font dynamic-element" data-bs-toggle="modal" data-bs-target="#createCardModal" id="createCardLink">Добавить<br>картинку</a>');
+                                let CreateLink = $('<a href="#" class="create-cards-link-form inner-font dynamic-element " data-bs-toggle="modal" data-bs-target="#createCardModal" id="createCardLink">Добавить<br>картинку</a>');
                                 CreateLink.attr('data-pos', i)
                                 CreateLink.attr('data-type', type)
                                 CreateLink.on('click', function () {
@@ -255,6 +259,61 @@
 							</div>
 							<button type="submit" id="selectChanges" onclick="postChangeCollectionInfo(this)"
 							        class="btn btn-primary">Сохранить изменения
+							</button>
+						</form>
+					</div>
+				</div>
+				<div class="modal-footer">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="updateCardModal" tabindex="-1" aria-labelledby="updateCardModalLabel"
+	     aria-hidden="true">
+		<div class="modal-dialog modal-xl">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="updateCardModalLabel">Заголовок модального окна</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+				</div>
+				<div class="modal-body create-cards-modal-display">
+					<div class="main-modal-content" id="mainContentModalCards">
+						<form id="updateCads" enctype="multipart/form-data">
+							<div class="create-image-modal-display">
+								<label class="form-control change-photo-button"
+						            style="text-align: center; justify-content: right; flex-direction: row-reverse"
+						            tabindex="0">Изменить<br>фото
+									<img class="change-photo-image" src="/static/images/collection/create_cards/img.png"
+							            alt="Change Image">
+									<input type="file" name="file" class="invisible" id="inputImageCard"
+							            onchange="preview3()">
+								</label>
+								<div class="create-card-form" style="background-color: #867661">
+									<div class="create-image-form">
+										<img id="frame-card-view" style="display: block" src="" class="img-fluid cards-image-view" width="170px"
+								            height="216px">
+									</div>
+									<p class="inner-font">Название карточки</p>
+								</div>
+								<div class="change-photo-button">
+									<img class="change-photo-image" src="/static/images/collection/create_cards/img.png"
+							            alt="Change Image">
+									<p class="inner-font">Изменить<br>фото</p>
+								</div>
+							</div>
+							<div class="input-name-card">
+								<label class="inner-font label-name-input" for="cardsNameInput">Название:</label>
+								<input class="inner-font" id="updateCardName" name="name" placeholder="Введите название"
+								       type="text" required>
+							</div>
+							<div class="mb-3 description-cards-input-display">
+								<label for="cardInfoInput"
+								       class="form-label inner-font description-cards">Описание: </label>
+								<textarea class="form-control inner-font" name="info" id="updateCardInfoInput"
+								          placeholder="Введите текст" rows="6" required></textarea>
+							</div>
+							<button type="submit" id="submitUpdateBtn" onclick="UpdateCard(this)" class="btn btn-primary">Сохранить
+							                                                                                       изменения
 							</button>
 						</form>
 					</div>
@@ -372,6 +431,12 @@
             frame.style.display = 'block'
             frame.src = URL.createObjectURL(event.target.files[0]);
         }
+
+        function preview3() {
+            let frame = document.getElementById('frame-card-view');
+            frame.style.display = 'block'
+            frame.src = URL.createObjectURL(event.target.files[0]);
+        }
 	</script>
 	<script>
         function ActivateCollection(button) {
@@ -413,8 +478,8 @@
             });
 
             $('.open-modal').on('click', function (e) {
-                e.preventDefault(); // Предотвращаем стандартное поведение ссылки
-                var modalId = $(this).data('bs-target'); // Получаем идентификатор модального окна из атрибута data-bs-target
+                e.preventDefault();
+                var modalId = $(this).data('bs-target');
                 var dataId = $(this).data('col-id');
                 console.log('DAta')
                 $('#collectionName').text($(this).data('name'))
@@ -425,10 +490,65 @@
                     $('#frame-view').attr('src', cover)
                 }
 
-
             });
 
         });
+	</script>
+	<script>
+		function UpdateCard (button) {
+			event.preventDefault();
+            button.style.display = "none";
+            const form = new FormData(document.querySelector("form[id='updateCads']"));
+            const card_id = button.getAttribute('data-id')
+            const col_id = button.getAttribute('data-col-id')
+            fetch(`http://127.0.0.1:8000/collection/${col_id}/card/${card_id}/change/`, {
+                method: 'PUT',
+                credentials: 'include',
+                body: form
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    const taskId = data.task_id
+                    if (taskId) {
+                        function checkTaskStatus(taskId) {
+                            fetch(`http://127.0.0.1:8000/tasks/${taskId}/`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log('Task status:', data.status);
+                                    if (data.status === 'SUCCESS' || data.status === 'FAILURE') {
+                                        clearInterval(checkInterval);
+                                        console.log(data);
+                                        location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created'
+                                    }
+                                })
+                                .catch(error => console.error('Error:', error));
+                        }
+
+                        const checkInterval = setInterval(() => checkTaskStatus(taskId), 500);
+                    } else {
+                        location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created'
+                    }
+
+
+                })
+                .catch(error => console.error(error));
+		}
+        function fillDataCard (btn) {
+			event.preventDefault()
+            var dataId = $(btn).data('card-id');
+            var cardName = $(btn).data('card-name')
+            var cardInfo = $(btn).data('card-info')
+            var collectionId = $(btn).data('col-id')
+            $('#updateCardName').val(cardInfo)
+            $('#updateCardInfoInput').val(cardName)
+            $('#submitUpdateBtn').attr('data-id', dataId).attr('data-col-id', collectionId)
+            var image = $(btn).data('card-image')
+            if (image) {
+                $('#frame-card-view').attr('src', image)
+                $('#frame-card-view').display = 'block'
+            }
+        }
 	</script>
 
 	<script>

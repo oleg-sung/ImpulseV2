@@ -128,3 +128,45 @@ textarea.form-control {
     justify-content: center;
 }
 
+.get-card-view {
+    justify-content: center !important;
+}
+
+.get-card-name {
+    position: relative;
+    text-align: center;
+    display: flex;
+    width: 100%;
+    top: 20px;
+    height: 40px;
+    border-radius: 0 0 1px 0;
+    border-bottom: 1px solid #0A0A0A33;
+    gap: 30px;
+}
+
+.cards-motto {
+    position: relative;
+    height: 300px;
+}
+
+.cards-description-display {
+    overflow: auto;
+    width: 850px;
+    height: 100%;
+    margin-left: auto;
+    color: #8C8C8C;
+    font-size: 17px;
+    font-weight: 400;
+    border: 1px solid #8C8C8C;
+    padding: 16px 25px;
+    gap: 10px;
+
+}
+
+.description-cards {
+    margin-top: 20px;
+    position: relative;
+    top: 30px;
+    font-weight: 500;
+    font-size: 20px;
+}

@@ -1,5 +1,6 @@
 import uuid
 from enum import Enum
+from typing import Optional
 
 from pydantic import BaseModel, Field, HttpUrl
 
@@ -43,3 +44,8 @@ class ImageCard(Image):
 class GetCard(Metadata):
     id: str
     url: HttpUrl
+
+
+class ChangeCardMetadata(BaseModel):
+    name: Optional[str] = None
+    info: Optional[str] = None
