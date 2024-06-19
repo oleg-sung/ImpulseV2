@@ -6,7 +6,7 @@
 			<div id="collectionDisplay" data-id="{{ collection.id }}" class="created-collection-display">
 				<div class="collection-title-display">
 					<p class="collection-title inner-font">{{ collection.name }}</p>
-					<button class="active-collection-spase">
+					<button class="active-collection-spase" onclick="CloseCollection(this)" data-col-id="{{ collection.id }}">
 						<span>Завершить&nbsp;коллекцию</span>
 					</button>
 					<div class="dropdown toggle-collection">
@@ -108,6 +108,34 @@
 					</div>
 				</div>
 			</div>
+			<div class="archive-collections">
+				<h1 class="arch-collection-description inner-font">Закрытые коллекции</h1>
+				<div class="collections-list-ml">
+                {% for collection in close_collections %}
+                    <div class="collection-ml" style="background-color:#FFFFFF; border: solid black;" >
+                        <div style="margin-bottom: 30px; position: relative; top:10px;">
+                            <a class="title-collection-ml" href="."
+                               style="color:black">{{ collection.name }}</a>
+                        </div>
+                        <img class="collection-cars-ml" src="/static/images/cards/common.png" alt="Common">
+                        <img class="collection-cars-ml" src="/static/images/cards/uncommon.png" alt="Uncommon">
+                        <img class="collection-cars-ml" src="/static/images/cards/rare.png" alt="Rare">
+                        <img class="collection-cars-ml" src="/static/images/cards/legendary.png" alt="Legendary">
+                        <div class="status-and-amound-ml">
+                            <p class="collection-status-ml"
+                               style="color:black">
+                                Завершенная
+                            </p>
+                            <p class="amount-cards-ml"
+                               style="color:black; border: 2px solid black;">
+                                {% if collection.size == 'fortyCards' %}40{% elif collection.size == 'sixtyCards' %}
+                                    60{% else %}80{% endif %}
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+			</div>
 			<script>
                 function TestFunc(button) {
                     let id = $(button).data('id');
@@ -145,8 +173,11 @@
                                         let CardsCreatedDiv = $('<div class="create-card-form"></div>')
                                         CardsCreatedDiv.css('background-color', divCollorCss)
                                         let SomeDiv = $('<div class="create-image-form"></div>');
-                                        let Ptag = $('<a href="#" id="getCardDetails" class="inner-font" data-bs-toggle="modal" data-bs-target="#getCardDitailsModal"></a>').text(data[i]['name'])
-                                        let url = data[i]['url']
+                                        let cardName = data[i]['name']
+		                                let cardInfo = data[i]['info']
+										let url = data[i]['url']
+                                        let Ptag = $('<a href="#" id="getCardDetails" class="inner-font" onclick="fillCardDitails(this)" data-image-url="' + url + '" data-card-name="' + cardName + '" data-card-info="' + cardInfo + '" data-bs-toggle="modal" data-bs-target="#getCardDitailsModal"></a>').text(data[i]['name'])
+
                                         let newImg = $('<img>', {
                                             src: url,
                                             alt: 'test',
@@ -202,19 +233,22 @@
 									<p class="inner-font">Изменить<br>фото</p>
 								</div>
 							</div>
-							<div class="input-name-card correct-div-collection">
-								<p class="inner-font label-name-input" for="cardsNameInput">Название:</p>
-								<p class="inner-font collection-update-name" id="collectionName"></p>
-							</div>
-							<div class="mb-3 description-cards-input-display">
-								<label for="cardInfoInput"
-								       class="form-label inner-font description-cards">Описание: </label>
-								<textarea class="form-control inner-font" name="motto" id="collectionMotto"
-								          placeholder="Введите текст" rows="6"></textarea>
+							<div class="collection-motto-change">
+								<div class="input-name-card correct-div-collection">
+									<p class="inner-font label-name-input" >Название:</p>
+									<p class="inner-font collection-update-name" id="collectionName"></p>
+								</div>
+								<div class="mb-3 descriptio-collection-input-display">
+									<label for="cardInfoInput"
+									       class="form-label inner-font description-cards">Описание: </label>
+									<textarea class="form-control inner-font" name="motto" id="collectionMotto"
+									          placeholder="Введите текст" rows="6"></textarea>
+								</div>
 							</div>
 							<button type="submit" id="selectChanges" onclick="postChangeCollectionInfo(this)"
 							        class="btn btn-primary">Сохранить изменения
 							</button>
+
 						</form>
 					</div>
 				</div>
@@ -245,16 +279,14 @@
 							</div>
 							<div class="get-card-name">
 								<p class="inner-font label-name-input">Название:</p>
-								<p class="inner-font" id="cardName" type="text">asdadadadadsaddsad</p>
+								<p class="inner-font" id="cardName" type="text"></p>
 							</div>
 							<div style="margin-right: auto;">
 								<p class="inner-font description-cards">Описание: </p>
 							</div>
 							<div class="cards-motto">
 								<div class="cards-description-display">
-								    <p class="inner-font" id="cardMotto">Чемпионат мира по футболу 2022 года — 22-й чемпионат мира по футболу ФИФА, финальная часть которого прошла с 20 ноября по 18 декабря 2022 года в Катаре. Эта страна впервые в своей истории приняла чемпионат мира по футболу.
-Из-за сильной летней жары в Катаре этот чемпионат мира провели с конца ноября до середины декабря — это был первый чемпионат мира, который состоялся не в мае,июне или июле; также были сокращены сроки чемпионата — всего 29 дней.
-Это первый чемпионат мира, который прошёл в стране арабского мира, первый — в стране с абсолютной монархией, и первый в стране с мусульманским большинством, а также второй чемпионат мира, который прошёл в Азии (после турнира 2002 года в Республике Корея и Японии). Кроме того, это последний чемпионат мира ФИФА с 32 командами в финальной стадии.</p>
+								    <p class="inner-font" id="cardInfo"></p>
 								</div>
 							</div>
 					</div>
@@ -264,6 +296,7 @@
 			</div>
 		</div>
 	</div>
+
 	<script>
         function postChangeCollectionInfo(button) {
             event.preventDefault();
@@ -328,6 +361,17 @@
             });
         });
 	</script>
+	<script>
+			function fillCardDitails (button) {
+                let imageUrl = $(button).data('image-url')
+                let cardName = $(button).data('card-name')
+                let cardInfo = $(button).data('card-info')
+                $("#cardImageView").attr('src', imageUrl)
+                $("#cardName").text(cardName)
+                $("#cardInfo").text(cardInfo)
+			}
+	</script>
+
 	{% else %}
 		<div class="title-empty">
 			<p class="inner-font description-empty" style="color: black">Сейчас у вас нет созданных коллекций.</p>
@@ -461,6 +505,60 @@
                 });
         });
 		</script>
-
+		<div class="archive-collections" style="margin-left: 150px; margin-top: 100px">
+			<h1 class="arch-collection-description inner-font">Закрытые коллекции</h1>
+			<div class="collections-list-ml">
+	        {% for collection in close_collections %}
+	            <div class="collection-ml" style="background-color:#FFFFFF; border: solid black;" >
+	                <div style="margin-bottom: 30px; position: relative; top:10px;">
+	                    <p class="title-collection-ml inner-font"
+	                       style="color:black; font-size: 21px; font-weight: 500">{{ collection.name }}</p>
+	                </div>
+	                <img class="collection-cars-ml" src="/static/images/cards/common.png" alt="Common">
+	                <img class="collection-cars-ml" src="/static/images/cards/uncommon.png" alt="Uncommon">
+	                <img class="collection-cars-ml" src="/static/images/cards/rare.png" alt="Rare">
+	                <img class="collection-cars-ml" src="/static/images/cards/legendary.png" alt="Legendary">
+	                <div class="status-and-amound-ml">
+	                    <p class="collection-status-ml"
+	                       style="color:black">
+	                        Завершенная
+	                    </p>
+	                    <p class="amount-cards-ml"
+	                       style="color:black; border: 2px solid black;">
+	                        {% if collection.size == 'fortyCards' %}40{% elif collection.size == 'sixtyCards' %}
+	                            60{% else %}80{% endif %}
+	                    </p>
+	                </div>
+	            </div>
+	        {% endfor %}
+	    </div>
 	{% endif %}
+	<script>
+        function CloseCollection(button) {
+            let id = $(button).data('col-id');
+            const dictx = {"status": "closed"}
+            const zer = JSON.stringify(dictx)
+            console.log(zer)
+            console.log(id)
+            fetch(`http://127.0.0.1:8000/collection/${id}/change/status/`, {
+                method: 'PATCH',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: zer
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    location.href = 'http://127.0.0.1:8000/pages/collections/active/';
+
+                })
+                .catch(error => {
+                        console.error('Error:', error)
+                    }
+                );
+        }
+	</script>
+
 {% endblock %}

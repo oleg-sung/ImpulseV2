@@ -163,10 +163,21 @@ textarea.form-control {
 
 }
 
-.description-cards {
+
+.description-get-cards {
     margin-top: 20px;
     position: relative;
     top: 30px;
     font-weight: 500;
     font-size: 20px;
+}
+
+.arch-collection-description {
+    font-size: 32px;
+    font-weight: 500;
+}
+
+.active-collection-spase:hover {
+    background-color: #353140;
+    color: #E41730;
 }

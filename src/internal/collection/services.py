@@ -244,6 +244,21 @@ class CollectionService:
             )
         return result
 
+    async def get_close_collection(self) -> list:
+        collections_ref = await self.db.get_collection(self.collection_model_name)
+        query = (
+            collections_ref.where(
+                filter=FieldFilter("userCreatedID", "==", self.user_id)
+            )
+            .where(filter=FieldFilter("status", "==", 'closed'))
+            .order_by("createdAt", direction=firestore.Query.DESCENDING)
+        )
+        result = []
+        async for collection in query.stream():
+            collection_dict = collection.to_dict()
+            result.append(collection_dict)
+        return result
+
     async def get_all_collections_data(self) -> dict:
         """
         Getting the data for all collections
@@ -313,7 +328,7 @@ class CollectionService:
             by_alias=True,
         )
         await self.db.update_doc(self.collection_model_name, _id, validated_data)
-        return {"status": True, "id": collection_doc.id}
+        return {"status": True, "id": collection_doc.id, 'msg': 'successful'}
 
     async def __get_old_covet(self, _id: str) -> str:
         collection_doc = await self.db.get_doc(self.collection_model_name, _id)
@@ -324,7 +339,7 @@ class CollectionService:
     async def change_collection_data(self, _id: str, cover: UploadFile = None, motto: str = None) -> dict:
         update_dict = {}
         result_dict = {"status": True}
-        if cover:
+        if cover and cover.size:
             old_cover = await self.__get_old_covet(_id)
             image = CoverCreate(
                 file=await cover.read(),

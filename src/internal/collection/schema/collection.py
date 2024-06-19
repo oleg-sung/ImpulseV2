@@ -114,6 +114,10 @@ class GetCollection(Collection):
         populate_by_name = True
 
 
+class GetCloseCollectionList(Collection):
+    pass
+
+
 class ChangeStatusCollection(Collection):
     status: CollectionStatus
 

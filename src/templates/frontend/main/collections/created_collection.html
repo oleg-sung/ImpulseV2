@@ -23,7 +23,9 @@
 						<li>
 							<hr class="dropdown-divider">
 						</li>
-						<li><a class="dropdown-item btn btn-primary open-delete-modal" style="color: #E41730" data-col-id="{{ collection.id }}" data-bs-toggle="modal" data-bs-target="#deleteCollectionModal" href="#">Удалить коллекцию</a></li>
+						<li><a class="dropdown-item btn btn-primary open-delete-modal" style="color: #E41730"
+						       data-col-id="{{ collection.id }}" data-bs-toggle="modal"
+						       data-bs-target="#deleteCollectionModal" href="#">Удалить коллекцию</a></li>
 					</ul>
 				</div>
 			</div>
@@ -198,20 +200,23 @@
             })
         }
 	</script>
-	<div class="modal fade" id="deleteCollectionModal" tabindex="-1" aria-labelledby="deleteCollectionModalLabel" aria-hidden="true">
+	<div class="modal fade" id="deleteCollectionModal" tabindex="-1" aria-labelledby="deleteCollectionModalLabel"
+	     aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content" style="background-color: #251F2BCC;">
-		        <div class="modal-header delete-col-description">
-		            <h1 class="modal-title fs-5" id="#deleteCollectionModalLabel">Вы уверенны?</h1>
-		        </div>
-		        <div class="modal-body delete-col-body">
-		            <p>Все данные этой коллекции будут удалены</p>
+				<div class="modal-header delete-col-description">
+					<h1 class="modal-title fs-5" id="#deleteCollectionModalLabel">Вы уверенны?</h1>
+				</div>
+				<div class="modal-body delete-col-body">
+					<p>Все данные этой коллекции будут удалены</p>
 
-		        </div>
-		         <div class="modal-footer">
+				</div>
+				<div class="modal-footer">
 					<button type="button" class="btn-custom-exit" data-bs-dismiss="modal">Отмена</button>
-		            <button id="deleteCollectonButton" type="button" class="btn-confirm-delete" onclick="deleteCollection(this)">Удалить</button>
-		        </div>
+					<button id="deleteCollectonButton" type="button" class="btn-confirm-delete"
+					        onclick="deleteCollection(this)">Удалить
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -281,23 +286,24 @@
 						<form id="updateCads" enctype="multipart/form-data">
 							<div class="create-image-modal-display">
 								<label class="form-control change-photo-button"
-						            style="text-align: center; justify-content: right; flex-direction: row-reverse"
-						            tabindex="0">Изменить<br>фото
+								       style="text-align: center; justify-content: right; flex-direction: row-reverse"
+								       tabindex="0">Изменить<br>фото
 									<img class="change-photo-image" src="/static/images/collection/create_cards/img.png"
-							            alt="Change Image">
+									     alt="Change Image">
 									<input type="file" name="file" class="invisible" id="inputImageCard"
-							            onchange="preview3()">
+									       onchange="preview3()">
 								</label>
 								<div class="create-card-form" style="background-color: #867661">
 									<div class="create-image-form">
-										<img id="frame-card-view" style="display: block" src="" class="img-fluid cards-image-view" width="170px"
-								            height="216px">
+										<img id="frame-card-view" style="display: block" src=""
+										     class="img-fluid cards-image-view" width="170px"
+										     height="216px">
 									</div>
 									<p class="inner-font">Название карточки</p>
 								</div>
 								<div class="change-photo-button">
 									<img class="change-photo-image" src="/static/images/collection/create_cards/img.png"
-							            alt="Change Image">
+									     alt="Change Image">
 									<p class="inner-font">Изменить<br>фото</p>
 								</div>
 							</div>
@@ -312,8 +318,9 @@
 								<textarea class="form-control inner-font" name="info" id="updateCardInfoInput"
 								          placeholder="Введите текст" rows="6" required></textarea>
 							</div>
-							<button type="submit" id="submitUpdateBtn" onclick="UpdateCard(this)" class="btn btn-primary">Сохранить
-							                                                                                       изменения
+							<button type="submit" id="submitUpdateBtn" onclick="UpdateCard(this)"
+							        class="btn btn-primary">Сохранить
+							                                изменения
 							</button>
 						</form>
 					</div>
@@ -472,7 +479,7 @@
 	<script>
         $(document).ready(function () {
             $('.open-delete-modal').on('click', function (e) {
-				e.preventDefault();
+                e.preventDefault();
                 var dataId = $(this).data('col-id');
                 $('#deleteCollectonButton').attr('data-id', dataId)
             });
@@ -495,8 +502,8 @@
         });
 	</script>
 	<script>
-		function UpdateCard (button) {
-			event.preventDefault();
+        function UpdateCard(button) {
+            event.preventDefault();
             button.style.display = "none";
             const form = new FormData(document.querySelector("form[id='updateCads']"));
             const card_id = button.getAttribute('data-id')
@@ -533,9 +540,10 @@
 
                 })
                 .catch(error => console.error(error));
-		}
-        function fillDataCard (btn) {
-			event.preventDefault()
+        }
+
+        function fillDataCard(btn) {
+            event.preventDefault()
             var dataId = $(btn).data('card-id');
             var cardName = $(btn).data('card-name')
             var cardInfo = $(btn).data('card-info')
@@ -570,8 +578,6 @@
                 .then(data => {
                     console.log(data)
                     if (data.task_id) {
-                        console.log(data.task_id)
-                        console.log(data['task_id'])
                         const taskId = data['task_id']
 
                         function checkTaskStatus(taskId) {
@@ -589,7 +595,10 @@
                         }
 
                         const checkInterval = setInterval(() => checkTaskStatus(taskId), 200);
+                    } else {
+                        location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created';
                     }
+
                 })
                 .catch(error => {
                     console.error('Ошибка загрузки данных:', error)
@@ -597,7 +606,7 @@
         }
 	</script>
 	<script>
-		function deleteCollection(button) {
+        function deleteCollection(button) {
             var id = $(button).data('id')
             fetch(`http://127.0.0.1:8000/collection/${id}/delete/`, {
                 method: 'DELETE',
@@ -608,10 +617,10 @@
                     console.log(data)
                     location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created';
                 }).catch(error => {
-                    console.error('Ошибка загрузки данных:', error)
-                    location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created';
-                    })
-		}
+                console.error('Ошибка загрузки данных:', error)
+                location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created';
+            })
+        }
 	</script>
 
 {% endblock %}
