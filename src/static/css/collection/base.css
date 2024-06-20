@@ -57,6 +57,7 @@ a:hover {
 }
 
 .created-collection-display-list {
+
     left: 8%;
     position: relative;
     top: 50px;
@@ -531,4 +532,75 @@ input[type="text"] {
     color: #FFFFFF;
     background-color: #E41730;
 
+}
+
+.change-photo-div {
+    align-items: center;
+    justify-items: center;
+    justify-content: center;
+    align-content: center;
+    border: 1px solid #8C8C8C;
+    width: 188px;
+    height: 78px;
+    border-radius: 10px;
+    padding: 15px;
+    gap: 15px;
+}
+
+.remove-view-btn {
+
+    border: 1px solid #8C8C8C;
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 10px;
+    width: 188px;
+    height: 78px;
+}
+
+.btn-card-create {
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    text-align: center;
+    display: flex;
+    width: 449px;
+    height: 56px;
+    border-radius: 10px;
+    padding: 16px 147px;
+    gap: 10px;
+    margin-top: 20px;
+    margin-left: 20%;
+    color: #FFFFFF;
+    background-color: #E41730;
+    transition: color 0.3s;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.btn-card-create:hover {
+    color: black;
+}
+
+.btn-collection-create {
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    text-align: center;
+    display: flex;
+    width: 449px;
+    height: 56px;
+    border-radius: 10px;
+    padding: 16px 147px;
+    gap: 10px;
+    margin-right: 10%;
+    color: #FFFFFF;
+    background-color: #E41730;
+    transition: color 0.3s;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.btn-collection-create:hover {
+    color: black;
 }
