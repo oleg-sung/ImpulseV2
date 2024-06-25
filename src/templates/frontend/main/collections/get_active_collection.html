@@ -212,22 +212,22 @@
 				<div class="modal-body create-cards-modal-display">
 					<div class="main-modal-content" id="mainContentModalCards">
 						<form id="updateCollection" enctype="multipart/form-data">
-							<div class="change-view-modal-display ">
+							<div class="change-view-modal-display">
 								<label class="form-control change-photo-button"
-								       style="text-align: center; justify-content: right; flex-direction: row-reverse"
+								       style="text-align: center; justify-content: right; flex-direction: row-reverse; margin-right: 20px"
 								       tabindex="0">Изменить<br>фото
 									<img class="change-photo-image" src="/static/images/collection/create_cards/img.png"
 									     alt="Change Image">
 									<input type="file" name="file" class="invisible" id="inputImageCard"
-									       onchange="preview2()">
+									       onchange="previewCollectionView()">
 								</label>
 								<div class="collections-views">
 									<div class="change-view-collection">
-										<img id="frame-view" src="" class="collection-view-display" width="580px"
+										<img id="frameCollectionView" src="" class="collection-view-display" width="580px" alt="text"
 										     height="279px">
 									</div>
 								</div>
-								<div class="change-photo-button">
+								<div class="change-photo-button" style="visibility: hidden;">
 									<img class="change-photo-image" src="/static/images/collection/create_cards/img.png"
 									     alt="Change Image">
 									<p class="inner-font">Изменить<br>фото</p>
@@ -239,14 +239,14 @@
 									<p class="inner-font collection-update-name" id="collectionName"></p>
 								</div>
 								<div class="mb-3 descriptio-collection-input-display">
-									<label for="cardInfoInput"
+									<label for="collectionMotto"
 									       class="form-label inner-font description-cards">Описание: </label>
-									<textarea class="form-control inner-font" name="motto" id="collectionMotto"
+									<textarea class="form-control inner-font" name="motto" id="collectionMotto" style="border: 1px solid #8C8C8C;"
 									          placeholder="Введите текст" rows="6"></textarea>
 								</div>
 							</div>
 							<button type="submit" id="selectChanges" onclick="postChangeCollectionInfo(this)"
-							        class="btn btn-primary">Сохранить изменения
+						        class="btn-card-create inner-font" style="margin-top: 60px">Сохранить&nbsp;изменения
 							</button>
 
 						</form>
@@ -354,22 +354,27 @@
                 $('#selectChanges').attr('data-id', dataId)
                 var cover = $(this).data('cover')
                 if (cover) {
-                    $('#frame-view').attr('src', cover)
+                    $('#frameCollectionView').attr('src', cover)
                 }
-
-
             });
         });
 	</script>
 	<script>
-			function fillCardDitails (button) {
-                let imageUrl = $(button).data('image-url')
-                let cardName = $(button).data('card-name')
-                let cardInfo = $(button).data('card-info')
-                $("#cardImageView").attr('src', imageUrl)
-                $("#cardName").text(cardName)
-                $("#cardInfo").text(cardInfo)
-			}
+        function previewCollectionView() {
+        let frame = document.getElementById('frameCollectionView');
+        frame.style.display = 'block'
+        frame.src = URL.createObjectURL(event.target.files[0]);
+        }
+	</script>
+	<script>
+		function fillCardDitails (button) {
+            let imageUrl = $(button).data('image-url')
+            let cardName = $(button).data('card-name')
+            let cardInfo = $(button).data('card-info')
+            $("#cardImageView").attr('src', imageUrl)
+            $("#cardName").text(cardName)
+            $("#cardInfo").text(cardInfo)
+		}
 	</script>
 
 	{% else %}
@@ -407,7 +412,7 @@
 												<img class="change-photo-image" src="/static/images/collection/get_activ_collection/img.png"
 													 alt="Change Image">
 													<input type="file" name="cover" class="invisible change-photo-button" id="inputImageCollection"
-												    onchange="preview()">
+												    onchange="previewCollectionView()">
 										</label>
 									</div>
 								</div>
@@ -447,15 +452,6 @@
 				</div>
 			</div>
 		</div>
-		<script>
-	        function preview() {
-	            let frame = document.getElementById('frame');
-                let view = document.getElementById('createViewDiv');
-				view.style.backgroundImage =`url(${URL.createObjectURL(event.target.files[0])})`
-	            {#frame.style.display = 'block'#}
-	            {#frame.src = URL.createObjectURL(event.target.files[0]);#}
-	        }
-		</script>
 		<script>
 			$(document).ready(function() {
 			    $('.btn-check').on('click', function() {

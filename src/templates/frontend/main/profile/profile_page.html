@@ -1,9 +1,43 @@
 {% extends 'frontend/main/base_main.html' %}
 
 {% block head %}
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/profile/profile.css') }}">
 {% endblock %}
 
 
 {% block content %}
-    <h1 style="color: black">Страница профиля!</h1>
+	<div class="general-full">
+		<div class="main-profile-view">
+			<h1 class="inner-font">Профиль</h1>
+			<div class="main-content-profile">
+				<div class="profile-info-view">
+					<h1 class="inner-font">Личные данные</h1>
+					<div class="profile-data">
+						<div class="profile-name-view">
+							<p class="profile-data_title inner-font">Имя:</p>
+						</div>
+						<div class="profile-name-view">
+							<p class="profile-data_title inner-font">Фамилия:</p>
+						</div>
+						<div class="profile-name-view">
+							<p class="profile-data_title inner-font">Отечество:</p>
+						</div>
+						<div class="profile-name-view">
+							<p class="profile-data_title inner-font">Email:</p>
+						</div>
+						<div class="profile-name-view">
+							<p class="profile-data_title inner-font">Телефон:</p>
+						</div>
+						<div class="profile-name-view">
+							<p class="profile-data_title inner-font">Дата рождения:</p>
+						</div>
+					</div>
+					<div class="update-profile-link">
+						<a href="#" class="update-user-profile inner-font">Редакстировать профиль</a>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
 {% endblock %}
