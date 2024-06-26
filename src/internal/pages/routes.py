@@ -54,9 +54,11 @@ async def club_page(request: Request):
 
 
 @router.get("/profile/", response_class=HTMLResponse)
-async def profile_page(request: Request):
+async def profile_page(request: Request, data: dict = Depends(get_user_profile)):
+    if data.get("birthdate", None):
+        data["birthdate"] = data["birthdate"].strftime("%d.%m.%Y")
     return templates.TemplateResponse(
-        "frontend/main/profile/profile_page.html", {"request": request}
+        "frontend/main/profile/profile_page.html", {"request": request, "data": data}
     )
 
 
