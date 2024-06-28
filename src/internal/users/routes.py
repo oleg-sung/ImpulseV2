@@ -13,7 +13,7 @@ from internal.users.schema.profile import (
     UpdateUserProfileSchema,
     UpdateResponse,
 )
-from internal.users.schema.user import UserLogin, User, UserCreate
+from internal.users.schema.user import UserLogin, User, UserCreate, ChangePassword
 from internal.users.services import UserServices, UserProfileService, ClubServices
 
 router = APIRouter(prefix="/user", tags=["user"])
@@ -70,12 +70,22 @@ async def login(response: Response, user: UserLogin = Body()):
 
 
 @router.post("/password/reset/", status_code=status.HTTP_201_CREATED)
-async def change_password(user: User = Depends(get_current_user)):
+async def reset_password(user: User = Depends(get_current_user)):
     """
     Send password reset link to user's email_tools address
     :return: JSON with status
     """
     data = await UserServices().send_password_reset_link(user.email)
+    return data
+
+
+@router.post("/password/change/", status_code=status.HTTP_201_CREATED)
+async def change_password(data: ChangePassword, user: User = Depends(get_current_user)):
+    """
+    Send password reset link to user's email_tools address
+    :return: JSON with status
+    """
+    data = await UserServices().do_change_password(data, user.uid)
     return data
 
 

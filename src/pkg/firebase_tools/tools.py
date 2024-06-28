@@ -126,6 +126,10 @@ class FirebaseAuthTools:
     def password_reset_link(email: str) -> str:
         return auth.generate_password_reset_link(email)
 
+    @staticmethod
+    def change_password(uid, new_password: str) -> None:
+        auth.update_user(uid, password=new_password)
+
 
 class FirebaseStorage:
     def __init__(self):

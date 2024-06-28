@@ -218,3 +218,10 @@ input[type="text"] {
 .sub-change-profile:hover {
     color: black;
 }
+
+.change-successfull {
+    display: none;
+    font-weight: 400;
+    font-size: 17px;
+    color: #FFFFFF;
+}

@@ -55,3 +55,20 @@ class User(BaseModel):
 
 class UserPasswordReset(BaseResponse):
     task_id: str
+
+
+class ChangePassword(BaseModel):
+    password: str
+    new_password: str
+
+    class Config:
+        use_enum_values = True
+        populate_by_name = True
+        arbitrary_types_allowed = True
+
+    @model_validator(mode="after")
+    def password_complexity(self):
+        result = len(self.new_password)
+        if 6 > result or result > 8:
+            raise ValueError("Password must be between 6 and 8 characters")
+        return self

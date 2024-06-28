@@ -47,9 +47,14 @@ async def register_page(request: Request):
 
 
 @router.get("/club/", response_class=HTMLResponse)
-async def club_page(request: Request):
+async def club_page(
+    request: Request,
+    club_data: dict = Depends(club_info),
+    user_data: dict = Depends(get_user_profile),
+):
     return templates.TemplateResponse(
-        "frontend/main/club/club_page.html", {"request": request}
+        "frontend/main/club/club_page.html",
+        {"request": request, "club": club_data, "user": user_data},
     )
 
 

@@ -7,7 +7,7 @@ from starlette import status
 from pkg.celery_tools.tools import send_email_task, upload_file_task, delete_file_task
 from .schema.club import CreateClub, ClubImage, UpdateClubSchema
 from .schema.profile import UserProfile, UpdateUserProfileSchema
-from .schema.user import UserCreate
+from .schema.user import UserCreate, ChangePassword
 from ..database import db, auth as fb_auth, storage
 from ..token.services import TokenService
 
@@ -170,3 +170,7 @@ class UserServices:
         task = send_email_task.delay(email, subject, link)
 
         return {"status": True, "task_id": task.id}
+
+    async def do_change_password(self, data: ChangePassword, uid: str) -> dict:
+        self.auth.change_password(uid, data.new_password)
+        return {"status": "success", "msq": "Password changed successfully"}

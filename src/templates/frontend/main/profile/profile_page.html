@@ -36,9 +36,9 @@
 						<div class="profile-name-view">
 							<p class="profile-data_title inner-font">Телефон:</p>
 							{% if  data.phone %}
-								<p type="text" class="profile-data_value inner-font">{{ data.phone }}</p>
+								<p class="profile-data_value inner-font">{{ data.phone }}</p>
 							{% else %}
-								<p type="text" class="profile-not_data_value inner-font">Не указано</p>
+								<p class="profile-not_data_value inner-font">Не указано</p>
 							{% endif %}
 						</div>
 						<div class="profile-name-view">
@@ -57,17 +57,21 @@
 				<div class="change-passwoed-view">
 					<h1 class="inner-font">Смена пароля</h1>
 					<div class="change-password-form">
-						<form action="#">
+						<p id="changeTrue" style="display: none" class="change-successfull inner-font">Пароль изменён.
+						                                                                               Данные
+						                                                                               сохранены.</p>
+						<form id="changePassword" action="#">
 							<label for="password"></label>
 							<input required id="password" class="input-reg" type="password" name="password"
-							       placeholder="Пароль (от 6 до 8 символов)">
+							       placeholder="Старый пароль">
 							<span class="cumancen"><i class="fas fa-eye"></i></span>
 
 							<label for="password1"></label>
-							<input required id="password1" class="input-reg" type="password" name="password1"
-							       placeholder="Подтверждение пароля">
+							<input required id="password1" class="input-reg" type="password" name="new_password"
+							       placeholder="Новый пароль (от 6 до 8 символов)">
 							<span class="cumancen1"><i class="fas fa-eye"></i></span>
-							<button class="change-button inner-font" id="enter" type="submit">Сохранить&nbsp;изменения
+							<button class="change-button inner-font" id="enter" type="submit"
+							        onclick="changePassword()">Сохранить&nbsp;изменения
 							</button>
 						</form>
 					</div>
@@ -121,7 +125,7 @@
 									</div>
 
 								</div>
-								<button type="submit" id="submitBtn"
+								<button type="submit" id="submitBtn" onclick="chnageInfo()"
 								        class="sub-change-profile inner-font">
 									Сохранить&nbsp;изменения
 								</button>
@@ -157,5 +161,63 @@
             }
 
         }
+
+        async function chnageInfo() {
+            event.preventDefault();
+            const formData = new FormData(document.querySelector("form[id='changeProfile']"));
+            const object = {};
+            formData.forEach(function (value, key) {
+                object[key] = value;
+            });
+            const json = JSON.stringify(object);
+
+            const response = await fetch('http://127.0.0.1:8000/user/profile/change/', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: json,
+            });
+            if (response.ok) {
+                return window.location.href = "http://127.0.0.1:8000/pages/profile/"
+            } else {
+                const errors = await response.json();
+                alert('Ошибка валидации: ' + JSON.stringify(errors));
+            }
+
+        }
+
+        async function changePassword() {
+            event.preventDefault();
+            const formData = new FormData(document.querySelector("form[id='changePassword']"));
+            const object = {};
+            formData.forEach(function (value, key) {
+                object[key] = value;
+            });
+            const json = JSON.stringify(object);
+
+            const response = await fetch('http://127.0.0.1:8000/user/password/change/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: json,
+            });
+            if (response.ok) {
+                let passOldInput = document.getElementById('password')
+                let passNewInput = document.getElementById('password1')
+                let passBtnInput = document.getElementById('enter')
+                passOldInput.style.display = 'none'
+                passBtnInput.style.display = 'none'
+                passNewInput.style.display = 'none'
+                let passPInput = document.getElementById('changeTrue')
+                passPInput.style.display = 'block'
+            } else {
+                const errors = await response.json();
+                alert('Ошибка валидации: ' + JSON.stringify(errors));
+            }
+
+        }
+
 	</script>
 {% endblock %}
