@@ -58,7 +58,7 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body" style="color: black">
-					<form action="#" id="changeClubInfo">
+					<form action="#" id="changeClubInfo" enctype="multipart/form-data">
 						<div class="main-conten-modal">
 							<div class="create-image-modal-display">
 								<label class="form-control change-photo-button"
@@ -67,7 +67,7 @@
 									<img class="change-photo-image" src="/static/images/collection/create_cards/img.png"
 									     alt="Change Image">
 									<input type="file" name="file" class="invisible" id="imageClub"
-									>
+									       onchange="previewClubImage()">
 								</label>
 								<div class="circle">
 									<img id='imageClubPrev' src="" alt="Club image">
@@ -81,9 +81,8 @@
 							</div>
 							<h1 class="change-club-title inner-font">Редактировать данные</h1>
 							<div class="profile-name-view" style="border-bottom: 1px solid black">
-								<label class="label-input-profile inner-font" style="color: black"
-								       for="clubName">Название:</label>
-								<input class="inner-font" id="clubName" name="name" type="text" required>
+								<p class="profile-data_title inner-font">Название:</p>
+								<p class="profile-data_value inner-font">{{ club.name }}</p>
 							</div>
 							<div class="profile-name-view" style="border-bottom: 1px solid black">
 								<label class="label-input-profile inner-font" style="color: black"
@@ -125,7 +124,7 @@
             var clubPhone = $(btn).data('phone')
             $('#clubName').val(clubName)
             if (clubMotto) {
-                $('#profileMiddleName').val(clubMotto)
+                $('#clubMotto').val(clubMotto)
             }
             if (clubImage) {
                 $('#imageClubPrev').attr('src', clubImage)
@@ -138,5 +137,49 @@
             }
 
         }
+
+        function chnageInfo() {
+            event.preventDefault();
+            const form = new FormData(document.querySelector("form[id='changeClubInfo']"));
+            fetch(`http://127.0.0.1:8000/user/club/change/`, {
+                method: 'PUT',
+                credentials: 'include',
+                body: form
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    const taskId = data.task_id
+                    if (taskId) {
+                        function checkTaskStatus(taskId) {
+                            fetch(`http://127.0.0.1:8000/tasks/${taskId}/`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log('Task status:', data.status);
+                                    if (data.status === 'SUCCESS' || data.status === 'FAILURE') {
+                                        clearInterval(checkInterval);
+                                        console.log(data);
+                                        location.href = 'http://127.0.0.1:8000/pages/club/'
+                                    }
+                                })
+                                .catch(error => console.error('Error:', error));
+                        }
+
+                        const checkInterval = setInterval(() => checkTaskStatus(taskId), 500);
+                    }
+
+                    location.href = 'http://127.0.0.1:8000/pages/club/'
+
+                })
+                .catch(error => console.error(error));
+        }
+
+        function previewClubImage() {
+            let frame = document.getElementById('imageClubPrev');
+            frame.style.display = 'block'
+            frame.src = URL.createObjectURL(event.target.files[0]);
+        }
+
+
 	</script>
 {% endblock %}

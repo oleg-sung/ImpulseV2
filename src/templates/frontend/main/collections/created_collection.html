@@ -301,6 +301,7 @@
                                 if (i in data) {
                                     let CardsCreatedDiv = $('<div class="create-card-form"></div>')
                                     CardsCreatedDiv.css('background-color', divCollorCss)
+                                    $('#mainCardFormUpdate').css('background-color', divCollorCss);
                                     let SomeDiv = $('<div class="create-image-form"></div>');
                                     let cardId = data[i]['id']
                                     let cardInfo = data[i]['name']
@@ -327,6 +328,7 @@
                                     CreateLink.on('click', function () {
                                         let collectionId = id
                                         let dataType = $(this).attr('data-type');
+                                        $('#mainCardForm').css('background-color', divCollorCss);
                                         let dataPos = $(this).attr('data-pos');
                                         $('#submitBtn').attr('data-type', dataType).attr('data-pos', dataPos).attr('data-col-id', collectionId)
                                     });
@@ -449,7 +451,7 @@
 									<input type="file" name="file" class="invisible" id="inputImageCard"
 									       onchange="preview3()">
 								</label>
-								<div class="create-card-form" style="background-color: #867661">
+								<div class="create-card-form" id="mainCardFormUpdate">
 									<div class="create-image-form">
 										<img id="frame-card-view" style="display: block" src=""
 										     class="img-fluid cards-image-view" width="170px"
@@ -510,7 +512,7 @@
 							       onchange="preview()" required>
 						</label>
 
-						<div class="create-card-form" style="background-color: #867661">
+						<div class="create-card-form" id="mainCardForm">
 							<div class="create-image-form">
 								<img id="frameCreate" src="" class="img-fluid cards-image-view" width="170px"
 								     height="216px">

@@ -1,4 +1,6 @@
-from fastapi import APIRouter, status, Depends, UploadFile, Body
+from typing import Annotated
+
+from fastapi import APIRouter, status, Depends, UploadFile, Body, Form
 from starlette.responses import Response
 
 from internal.task.schema import CreateTask
@@ -111,6 +113,32 @@ async def change_profile_info(
 async def club_info(user: User = Depends(get_current_user)):
     data = await ClubServices().get_club_dict(user.uid)
     return data
+
+
+@router.put("/club/change/", status_code=status.HTTP_201_CREATED)
+async def change_club_data(
+    file: UploadFile = None,
+    motto: Annotated[str, Form()] = None,
+    phone: Annotated[str, Form()] = None,
+    user: User = Depends(get_current_user),
+):
+    task_dick = {}
+    if file.size:
+        task_dick = await ClubServices().change_club_image(file, user.uid)
+
+    profile_update_dict = {}
+    if phone:
+        data_ = UpdateUserProfileSchema(phone=phone)
+        profile_update_dict = await UserProfileService().update_user_profile(
+            data_, user.uid
+        )
+
+    club_update_dict = {}
+    if motto:
+        data = {"motto": motto}
+        club_update_dict = await ClubServices().change_club_motto(data, user.uid)
+
+    return {**profile_update_dict, **club_update_dict, **task_dick}
 
 
 @router.patch(

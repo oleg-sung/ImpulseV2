@@ -105,10 +105,13 @@ class ClubServices:
         await self.db.update_doc(self.club_model_name, user_id, {"image": image.id})
         return {"task_id": task.id}
 
-    async def change_club_motto(self, data: UpdateClubSchema, user_id: str) -> dict:
-        validated_data = data.model_dump()
+    async def change_club_motto(self, data: dict, user_id: str) -> dict:
+        validated_data = UpdateClubSchema(**data).model_dump()
         await self.db.update_doc(self.club_model_name, user_id, validated_data)
         return {"status": "success"}
+
+    async def change_club_data(self, data):
+        pass
 
 
 #     def set_coach_to_club(self, data: dict, user_id: str) -> dict:
