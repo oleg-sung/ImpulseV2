@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+<body>
+{% block content %}
+    <div class="container mx-auto py-8 px-4">
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <div class="mb-4">
+                <h1 class="text-center text-2xl font-bold mb-4">Нужно подтверждение почты</h1>
+                <p class="text-center text-gray-700">
+                    На почтовый адрес {{ email }} отправленно письмо для поддтверждения.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="flex flex-col items-center justify-center h-screen">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+                onclick="location.href='{{ url_for('login_page') }}';">
+            Вход
+        </button>
+    </div>
+{% endblock %}
+</body>

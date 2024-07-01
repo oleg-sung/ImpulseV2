@@ -1,6 +1,7 @@
-from fastapi import HTTPException
+from typing import Annotated
 
-from .schema.collection import CreateCollection
+from fastapi import HTTPException, Form
+
 from ..database import db
 
 
@@ -9,8 +10,8 @@ async def cheak_collection_id(id_collection: str) -> str:
     return collection.id
 
 
-async def cheak_club_name(data: CreateCollection) -> CreateCollection:
-    result = await db.search_doc("collection", "name", "==", data.name)
+async def cheak_club_name(name: Annotated[str, Form(max_length=200)]) -> str:
+    result = await db.search_doc("collection", "name", "==", name)
     if len(await result.get()):
         raise HTTPException(status_code=400, detail="Collection already exists")
-    return data
+    return name

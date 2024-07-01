@@ -1,0 +1,95 @@
+{% extends 'frontend/home/base_home.html' %}
+
+
+{% block head %}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/registration.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <script src="/static/js/registration.js"></script>
+
+{% endblock %}
+{% block content %}
+    <div class="centered-div">
+        <div class="register-block">
+            <h1 class="title">Регистрация</h1>
+            <div class="register-block">
+                <div class="register-form">
+                    <form action="." id="registerForm" class="registeForm">
+                        <label for="email"></label>
+                        <input required id="email" class="input-reg" type="email" name="email" placeholder="Email">
+                        <label for="firstName"></label>
+                        <input required id="firstName" class="input-reg" type="text" name="firstName" placeholder="Имя">
+                        <label for="lastName"></label>
+                        <input required id="lastName" class="input-reg" type="text" name="lastName"
+                               placeholder="Фамилия">
+                        <label for="birthdate"></label>
+                        <input required id="birthdate" class="input-reg" name="birthdate" type="text"
+                               onfocus="this.type='date'"
+                               onblur="if(this.value===''){this.type='text'}" placeholder="Дата рождения">
+                        <label for="clubName"></label>
+                        <input required id="clubName" class="input-reg" name="name" type="text"
+                               placeholder="Название клуба">
+                        <label for="password"></label>
+                        <input required id="password" class="input-reg" type="password" name="password"
+                               placeholder="Пароль (от 6 до 8 символов)">
+                        <span class="cumancen"><i class="fas fa-eye"></i></span>
+
+                        <label for="password1"></label>
+                        <input required id="password1" class="input-reg" type="password" name="password1"
+                               placeholder="Подтверждение пароля">
+                        <span class="cumancen1"><i class="fas fa-eye"></i></span>
+                        <p class="info">Все поля обязательны для заполнения</p>
+                        <div class="approval">
+                            <input id="cheak-accept" name="cheak-accept" class="cheak-accept"
+                                   type="checkbox">
+                            <p class="check-title">Согласие на обработку персональных данных</p>
+                        </div>
+                        <button class="enter enter-reg" id="enter" type="submit">Регистрация</button>
+                        <div id="loading-reg" class="loading"></div>
+                        <div id="errors-reg" class="errors">Ошибка сервера</div>
+                    </form>
+                </div>
+                <div class="end-link reg">
+                    <div>
+                        <a class="politic politic-reg" href="https://firebase.google.com/support/privacy">Политика
+                            конфиденциальности данных</a>
+                    </div>
+                    <div>
+                        <a class="reqister" href="{{ url_for('login_page') }}">Вход</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function (event) {
+            if (this.checkValidity()) {
+                // Форма валидна, вызываем функцию
+                registerUser();
+            } else {
+                // Форма невалидна, предотвращаем отправку
+                event.preventDefault();
+            }
+        });
+    </script>
+    <script>
+        const passField = document.getElementById('password');
+        const passField1 = document.getElementById('password1')
+        const showBtn = document.querySelectorAll("span i");
+        for (i = 0; i < showBtn.length; i++) {
+            showBtn[i].addEventListener('click', function () {
+                if (passField.type === "password") {
+                    passField.type = "text";
+                    passField1.type = "test"
+                } else {
+                    passField.type = "password";
+                    passField1.type = "password"
+                }
+            });
+        }
+    </script>
+    <script>
+
+    </script>
+{% endblock %}

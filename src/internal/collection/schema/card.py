@@ -1,5 +1,6 @@
 import uuid
 from enum import Enum
+from typing import Optional
 
 from pydantic import BaseModel, Field, HttpUrl
 
@@ -23,6 +24,7 @@ class Metadata(BaseModel):
     id: str = Field(default_factory=lambda: uuid.uuid4().hex, exclude=True)
     collection: str
     type: CardType
+    position: int
     name: str
     info: str
 
@@ -42,3 +44,8 @@ class ImageCard(Image):
 class GetCard(Metadata):
     id: str
     url: HttpUrl
+
+
+class ChangeCardMetadata(BaseModel):
+    name: Optional[str] = None
+    info: Optional[str] = None

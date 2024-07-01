@@ -1,0 +1,185 @@
+{% extends 'frontend/main/base_main.html' %}
+
+{% block head %}
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/club/club.css') }}">
+{% endblock %}
+
+
+{% block content %}
+	<div class="general-full">
+		<div class="main-club-content">
+			<div class="circle">
+				{% if club.image %}
+					<img src="{{ club.image }}" alt="Club image">
+				{% else %}
+					<img src="" alt="Club image">
+				{% endif %}
+			</div>
+			<div class="main-club-data">
+				<div class="profile-name-view">
+					<p class="profile-data_title inner-font">Название:</p>
+					<p class="profile-data_value inner-font">{{ club.name }}</p>
+				</div>
+				<div class="profile-name-view">
+					<p class="profile-data_title inner-font">Слоган:</p>
+					{% if club.motto %}
+						<p class="profile-data_value inner-font">{{ club.motto }}</p>
+					{% else %}
+						<p class="profile-not_data_value inner-font">Не указано</p>
+					{% endif %}
+				</div>
+				<div class="profile-name-view">
+					<p class="profile-data_title inner-font">Телефон:</p>
+					{% if user.phone %}
+						<p class="profile-data_value inner-font">{{ user.phone }}</p>
+					{% else %}
+						<p class="profile-not_data_value inner-font">Не указано</p>
+					{% endif %}
+				</div>
+				<div class="profile-name-view">
+					<p class="profile-data_title inner-font">Адрес:</p>
+					<p class="profile-data_value inner-font"></p>
+				</div>
+				<div class="update-profile-link">
+					<a href="#" class="link-to-change-club inner-font" data-name="{{ club.name }}"
+					   data-motto="{{ club.motto }}" data-phone="{{ user.phone }}" data-image="{{ club.image }}"
+					   data-bs-toggle="modal" data-bs-target="#clubChangeModal" onclick="fillDataClub(this)">Редактировать
+					                                                                                         данные</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="clubChangeModal" tabindex="-1" aria-labelledby="clubChangeModalLabel"
+	     aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="clubChangeModalLabel">Modal title</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body" style="color: black">
+					<form action="#" id="changeClubInfo" enctype="multipart/form-data">
+						<div class="main-conten-modal">
+							<div class="create-image-modal-display">
+								<label class="form-control change-photo-button"
+								       style="text-align: center; justify-content: right; flex-direction: row-reverse"
+								       tabindex="0">Изменить<br>фото
+									<img class="change-photo-image" src="/static/images/collection/create_cards/img.png"
+									     alt="Change Image">
+									<input type="file" name="file" class="invisible" id="imageClub"
+									       onchange="previewClubImage()">
+								</label>
+								<div class="circle">
+									<img id='imageClubPrev' src="" alt="Club image">
+								</div>
+								<button class="remove-view-btn">
+									<img class="change-photo-image"
+									     src="/static/images/collection/create_cards/img_2.png"
+									     alt="Change Image">
+									<p class="inner-font">Удалить<br>фото</p>
+								</button>
+							</div>
+							<h1 class="change-club-title inner-font">Редактировать данные</h1>
+							<div class="profile-name-view" style="border-bottom: 1px solid black">
+								<p class="profile-data_title inner-font">Название:</p>
+								<p class="profile-data_value inner-font">{{ club.name }}</p>
+							</div>
+							<div class="profile-name-view" style="border-bottom: 1px solid black">
+								<label class="label-input-profile inner-font" style="color: black"
+								       for="clubMotto">Слоган:</label>
+								<input class="inner-font" id="clubMotto" name="motto" type="text"
+								       placeholder="Не указано">
+							</div>
+							<div class="profile-name-view" style="border-bottom: 1px solid black">
+								<label class="label-input-profile inner-font" style="color: black"
+								       for="clubPhone">Телефон:</label>
+								<input class="inner-font" id="clubPhone" name="phone" type="text"
+								       placeholder="Не указано">
+							</div>
+							<div class="profile-name-view" style="border-bottom: 1px solid black">
+								<label class="label-input-profile inner-font" style="color: black"
+								       for="clubAddress">Адрес:</label>
+								<input class="inner-font" id="clubAddress" name="address" type="text"
+								       placeholder="Не указано">
+							</div>
+
+						</div>
+						<button type="submit" id="submitBtn" onclick="chnageInfo()"
+						        class="sub-change-profile inner-font">
+							Сохранить&nbsp;изменения
+						</button>
+					</form>
+				</div>
+				<div class="modal-footer">
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+        function fillDataClub(btn) {
+            event.preventDefault()
+            var clubName = $(btn).data('name');
+            var clubMotto = $(btn).data('motto')
+            var clubImage = $(btn).data('image')
+            var clubPhone = $(btn).data('phone')
+            $('#clubName').val(clubName)
+            if (clubMotto) {
+                $('#clubMotto').val(clubMotto)
+            }
+            if (clubImage) {
+                $('#imageClubPrev').attr('src', clubImage)
+
+            } else {
+                $('#imageClubPrev').attr('src', '/static/images/club/img.png')
+            }
+            if (clubPhone) {
+                $('#clubPhone').val(clubPhone)
+            }
+
+        }
+
+        function chnageInfo() {
+            event.preventDefault();
+            const form = new FormData(document.querySelector("form[id='changeClubInfo']"));
+            fetch(`http://127.0.0.1:8000/user/club/change/`, {
+                method: 'PUT',
+                credentials: 'include',
+                body: form
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    const taskId = data.task_id
+                    if (taskId) {
+                        function checkTaskStatus(taskId) {
+                            fetch(`http://127.0.0.1:8000/tasks/${taskId}/`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log('Task status:', data.status);
+                                    if (data.status === 'SUCCESS' || data.status === 'FAILURE') {
+                                        clearInterval(checkInterval);
+                                        console.log(data);
+                                        location.href = 'http://127.0.0.1:8000/pages/club/'
+                                    }
+                                })
+                                .catch(error => console.error('Error:', error));
+                        }
+
+                        const checkInterval = setInterval(() => checkTaskStatus(taskId), 500);
+                    }
+
+                    location.href = 'http://127.0.0.1:8000/pages/club/'
+
+                })
+                .catch(error => console.error(error));
+        }
+
+        function previewClubImage() {
+            let frame = document.getElementById('imageClubPrev');
+            frame.style.display = 'block'
+            frame.src = URL.createObjectURL(event.target.files[0]);
+        }
+
+
+	</script>
+{% endblock %}

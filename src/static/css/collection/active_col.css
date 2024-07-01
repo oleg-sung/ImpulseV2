@@ -1,0 +1,179 @@
+.title-empty {
+    display: grid;
+    margin-top: 40px;
+    justify-content: center;
+    align-content: center;
+}
+
+.button-positon {
+    display: grid;
+    margin-top: 40px;
+    justify-content: center;
+    align-content: center;
+}
+
+.description-empty {
+    font-size: 17px;
+    font-weight: 400;
+}
+
+.creating-collection-space {
+    height: 600px;
+    width: 100%;
+}
+
+.create-collection-main-input {
+    margin-top: 20px;
+    display: inline-flex;
+}
+
+.create-view-collection {
+    width: 512px;
+    height: 324px;
+    gap: 15px;
+}
+
+.view-title {
+    font-weight: 500;
+    font-size: 20px;
+    color: black;
+}
+
+.create-view-div {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    justify-items: center;
+    width: 450px;
+    height: 279px;
+    padding: 91px 150px 91px 150px;
+    gap: 15px;
+    border: 1px solid #353140
+}
+
+.borede-none {
+    width: 100%;
+    height: 100%;
+}
+
+.div-input-text-collection {
+    border: 1px solid #8C8C8C;
+    margin-left: auto;
+    background-color: #4CAF50;
+    width: 580px;
+    height: 280px;
+    gap: 15px;
+}
+
+.area-text-collection {
+    width: 100%;
+    height: 100%;
+}
+
+textarea.form-control {
+    border: none;
+    height: 100% !important;
+}
+
+.selected-collection-size {
+    display: inline-flex;
+    justify-content: center;
+    text-align: center;
+    margin-top: 60px;
+}
+
+.selecte-title {
+    font-size: 20px;
+    font-weight: 500;
+    color: black;
+}
+
+.btn-check:checked + .btn {
+    background-color: #4F4856B2; /* Цвет фона при выборе */
+    color: white; /* Цвет текста при выборе */
+}
+
+.change-size-radio {
+    align-items: center;
+    display: flex;
+    margin-left: 20px;
+    width: 109px;
+    height: 57px;
+    border-radius: 11px;
+    padding: 15px 40px 15px 40px;
+    gap: 10px;
+    color: black;
+    border: 1px solid black;
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+.change-size-radio:hover {
+    border: 1px solid black !important;
+}
+
+.radio-collection-size {
+    display: flex;
+    top: -30px;
+}
+
+.btn-possition-modal {
+    margin-top: 60px;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+
+.get-card-view {
+    justify-content: center !important;
+}
+
+.get-card-name {
+    position: relative;
+    text-align: center;
+    display: flex;
+    width: 100%;
+    top: 20px;
+    height: 40px;
+    border-radius: 0 0 1px 0;
+    border-bottom: 1px solid #0A0A0A33;
+    gap: 30px;
+}
+
+.cards-motto {
+    position: relative;
+    height: 300px;
+}
+
+.cards-description-display {
+    overflow: auto;
+    width: 850px;
+    height: 200px;
+    margin-left: auto;
+    color: #8C8C8C;
+    font-size: 17px;
+    font-weight: 400;
+    border: 1px solid #8C8C8C;
+    padding: 16px 25px;
+    gap: 10px;
+
+}
+
+
+.description-get-cards {
+    margin-top: 20px;
+    position: relative;
+    top: 30px;
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.arch-collection-description {
+    font-size: 32px;
+    font-weight: 500;
+}
+
+.active-collection-spase:hover {
+    background-color: #353140;
+    color: #E41730;
+}

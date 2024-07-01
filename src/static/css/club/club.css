@@ -1,0 +1,182 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.general-full {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+}
+
+.main-club-content {
+    display: flex;
+    width: 1320px;
+    height: 341px;
+    padding: 40px 0;
+    gap: 65px;
+}
+
+.circle {
+    width: 190px;
+    height: 190px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #353140;
+}
+
+.circle img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+
+}
+
+.main-club-data {
+    width: 990px;
+    height: 261px;
+    gap: 20px
+}
+
+.profile-data_value {
+    font-weight: 550;
+    font-size: 17px;
+    color: black;
+}
+
+.profile-not_data_value {
+    color: #818181;
+    font-weight: 300;
+    font-size: 15px;
+}
+
+.profile-data_title {
+    width: 150px;
+    font-weight: 400;
+    font-size: 15px;
+    color: black;
+}
+
+.profile-name-view {
+    margin-top: 10px;
+    display: inline-flex;
+    width: 100%;
+    height: 40px;
+    border-bottom: 1px solid #0A0A0A33
+}
+
+.link-to-change-club {
+    margin-top: 15px;
+    display: flex;
+    margin-left: auto;
+    color: black;
+    text-decoration: none;
+    flex-direction: row-reverse;
+}
+
+.update-user-profile {
+    display: flex;
+}
+
+.main-conten-modal {
+    height: 100%;
+    width: 100%;
+}
+
+.create-image-modal-display {
+    display: flex;
+    width: 765px;
+    height: 300px;
+    padding: 0 30px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.change-photo-image {
+    width: 48px;
+    height: 48px;
+}
+
+.custom-file-button input[type=file] {
+    margin-left: -2px !important;
+}
+
+.custom-file-button input[type=file]::-webkit-file-upload-button {
+    display: none;
+}
+
+.custom-file-button input[type=file]::file-selector-button {
+    display: none;
+}
+
+.custom-file-button:hover label {
+    cursor: pointer;
+}
+
+
+.change-photo-button {
+    display: flex;
+    border: 1px solid #8C8C8C;
+    gap: 15px;
+    width: 188px;
+    height: 78px;
+    padding: 15px;
+}
+
+.remove-view-btn {
+    border: 1px solid #8C8C8C;
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 10px;
+    width: 188px;
+    height: 78px;
+}
+
+.change-club-title {
+    color: black;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.label-input-profile {
+    display: flex;
+    width: 150px;
+    align-items: end;
+    text-align: center;
+    line-height: 40px;
+}
+
+input[type="text"]:focus {
+    outline: none;
+}
+
+input[type="text"] {
+    outline: none;
+    border: none;
+}
+
+.sub-change-profile {
+    margin-left: 17%;
+    margin-top: 70px;
+    height: 56px;
+    border-radius: 10px;
+    padding: 16px 147px;
+    gap: 10px;
+    background-color: #E41730;
+    color: #FFFFFF;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 10px;
+    transition: color 0.3s;
+}
+
+.sub-change-profile:hover {
+    color: black;
+}

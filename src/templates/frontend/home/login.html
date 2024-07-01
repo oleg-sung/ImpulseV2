@@ -1,0 +1,72 @@
+{% extends 'frontend/home/base_home.html' %}
+
+{% block head %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/login.css') }}">
+    <script src="/static/js/login.js"></script>
+{% endblock %}
+{% block content %}
+    <div class="fullscreen-div">
+        <div class="centered-div">
+            <div class="input-block-div">
+                <h1 class="input-title">Вход</h1>
+                <form action=".." id="loginUser">
+                    <div class="input-div">
+                        <label for="email"></label>
+                        <input required id="email" class="email-enter" type="email" placeholder="Email">
+                        <label for="password"></label>
+                        <input required id="password" class="pass-enter" type="password" placeholder="Пароль">
+                        <span class="cumancen"><i class="fas fa-eye"></i></span>
+                        <div class="under-input">
+                            <div class="remember">
+                                <input type="checkbox" name="rememberme">
+                                <label class="rememberme-label" for="rememberme">Запомнить меня</label>
+                            </div>
+                            <div class="forgot-password">
+                                <a class="pass" href=".">Забыли пароль?</a>
+                            </div>
+                        </div>
+                        <button class="enter" id="enter" type="submit">Войти</button>
+                        <div id="loading-enter" class="loading"></div>
+                        <div id="errors-enter" class="errors">Тест</div>
+                    </div>
+                </form>
+            </div>
+            <div class="end-link">
+                <div>
+                    <a class="politic" href="https://firebase.google.com/support/privacy">Политика конфиденциальности
+                        данных</a>
+                </div>
+                <div>
+                    <a class="reqister" href="{{ url_for('register_page') }}" onclick="">Регистрация</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        document.getElementById('loginUser').addEventListener('submit', function (event) {
+            if (this.checkValidity()) {
+                loginUser();
+            } else {
+                event.preventDefault();
+            }
+        });
+    </script>
+    <script>
+        const passField = document.getElementById('password');
+        const showBtn = document.querySelector("span i");
+        showBtn.onclick = (() => {
+            if (passField.type === "password") {
+                passField.type = "text";
+                showBtn.classList.add("conceal-btn");
+            } else {
+                passField.type = "password";
+                showBtn.classList.remove("conceal-btn");
+            }
+        });
+    </script>
+
+{% endblock %}

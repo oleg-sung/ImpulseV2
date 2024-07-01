@@ -1,8 +1,10 @@
 from src.configuration.routes.routes import *
-from src.internal.users import routes as user
-from src.internal.task import routes as task
-from src.internal.token import routes as token
 from src.internal.collection import routes as collection
+from src.internal.pages import routes as pages
+from src.internal.task import routes as task
+from src.internal.team import routes as team
+from src.internal.token import routes as token
+from src.internal.users import routes as user
 
 __routes__ = Routes(
     routers=(
@@ -10,5 +12,7 @@ __routes__ = Routes(
         task.router,
         token.router,
         collection.router,
+        pages.router,
+        team.router,
     )
 )

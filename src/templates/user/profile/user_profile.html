@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/twd/demo.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4 justify-content-center"
+         style="background-color: rgba(37, 31, 43, 0.8);">
+        <div>
+            <h1 class="text-white mb-6 ml-10" style="font-size: 20px">Информация профиле</h1>
+            <div class="ml-8 flex flex-col space-y-2">
+
+                <p class="text-white">Тип: {% if profile.userType=='admin' %}Администратор{% endif %}</p>
+                <p class="text-white">Email: {{ profile.email }}</p>
+                <p class="text-white">Имя: {{ profile.firstName }}</p>
+                <p class="text-white">Фамилия: {{ profile.lastName }}</p>
+                <p class="text-white">Отчество: {{ profile.middleName }}</p>
+                <p class="text-white">День рождения: {{ profile.birthdate.strftime('%Y.%m.%d') }}</p>
+                <p class="text-white">Телефон: {{ profile.phone }}</p>
+                <p class="text-white">O cебе: {{ profile.info }}</p>
+            </div>
+            <div class="ml-8 flex flex-col space-y-2 text-xl-center text-center mt-10">
+                <a href="{{ url_for('club_detail_info') }}"
+                   class="text-white border border-gray-300 rounded-lg px-2 py-2 effect">
+                    Мой клуб</a>
+                <a href="{{ url_for('change_user_password') }}"
+                   class="text-white border border-gray-300 rounded-lg px-2 py-2 effect" onclick="">
+                    Редактировать профиль </a>
+                <button onclick="changePasswordConfirm()"
+                        class="text-white border border-gray-300 rounded-lg px-2 py-2 effect">
+                    Изменить пароль
+                </button>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        function changePasswordConfirm() {
+            if (confirm("Вы уверены, что хотете изменить пароль?")) {
+                window.location.href = "{{ url_for('reset_password').include_query_params(email=profile.email) }}"
+            } else {
+                alert("Операция отменена");
+            }
+        }
+    </script>
+    <script>
+
+    </script>
+{% endblock %}

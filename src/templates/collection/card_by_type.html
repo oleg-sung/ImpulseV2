@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <button class="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            style=background-color:#131313FF;"
+            onclick="location.href='{{ url_for('collection_detail', id_collection=id_collection) }}'">
+        Информаци о коллекции
+    </button>
+    <div class="ml-[680px] p-6 max-w-sm mx-auto bg-white flex items-center space-x-4 justify-content-center"
+         xmlns="http://www.w3.org/1999/html">
+        <button class="bg-gray-500 hover:bru text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                style=background-color:#867661;"
+                onclick="location.href='{{ url_for('get_cards_by_type', id_collection=id_collection).include_query_params(q="common") }}'">
+            Обычные
+        </button>
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                style=background-color:#156514;"
+                onclick="location.href='{{ url_for('get_cards_by_type', id_collection=id_collection).include_query_params(q="uncommon") }}'">
+            Необычные
+        </button>
+        <button class="bg-purple-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                style=background-color:#14276f;"
+                onclick="location.href='{{ url_for('get_cards_by_type', id_collection=id_collection).include_query_params(q="rare") }}'">
+            Редкие
+        </button>
+        <button class="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                style=background-color:#b39930;"
+                onclick="location.href='{{ url_for('get_cards_by_type', id_collection=id_collection).include_query_params(q="legendary") }}'">
+            Легендарные
+        </button>
+
+    </div>
+
+    <h1 class="text-xl font-medium text-black">Список {% if type=='rare' %} редких{% elif type=='legendary' %}
+        легендарных{% elif type=='common' %}обычных{% elif type=='uncommon' %}необычных{% endif %} карточек
+    </h1>
+
+    <div class="flex flex-wrap">
+
+
+        {% for card in cards %}
+            <div class="m-2 p-6 rounded-xl shadow-md flex flex-col items-center"
+                 style="background-color:{% if card.type=='rare' %}#14276f;{% elif card.type=='legendary' %}#b39930;{% elif card.type=='common' %}#867661;{% elif card.type=='uncommon' %}#156514;{% endif %}">
+
+                <img src="{{ card.url }}"
+                     class="w-[240px] h-[330px]" alt="Картинка">
+                <a href="{{ url_for('card_detail', id_collection=id_collection, id_card=card.id) }}"
+                   class="text-white mt-2">{{ card.name }}</a>
+
+
+            </div>
+        {% endfor %}
+        {% for i in range(limit) %}
+            <div class="m-2 p-6 rounded-xl shadow-md flex flex-col items-center"
+                 style="background-color: {% if type=='rare' %}#14276f;{% elif type=='legendary' %}#b39930;{% elif type=='common' %}#867661;{% elif type=='uncommon' %}#156514;{% endif %}">
+                <img src="https://img.freepik.com/free-photo/front-view-of-football-and-hexagonal-shape_23-2148796889.jpg"
+                     class="w-[240px] h-[330px]" alt="Картинка">
+                <a class="text-white mt-2"
+                   href="{{ url_for('create_card', id_collection=id_collection).include_query_params(q=type) }}">Создать
+                    картинку</a>
+            </div>
+        {% endfor %}
+
+    </div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'frontend/main/base_main.html' %}
+
+{% block head %}
+	<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/collection/base.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/collection/active_col.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/main/home.css') }}">
+{% endblock %}
+
+
+{% block content %}
+	<div class="d-flex justify-content-center">
+		<div id="choiceCollection" class="div-with-border">
+			<div class="activ-collection justify-content-end align-items-center text-center">
+				<a href="{{ url_for("get_active_collection_page") }}"
+				   class="no-descr activ-title ">
+					Активная коллекция
+				</a>
+			</div>
+			<div class="created-collection justify-content-end align-items-center text-center">
+				<a href="{{ url_for("created_collection_page").include_query_params(status="created") }}"
+				   class="no-descr activ-title ">
+					Созданные коллекции
+				</a>
+			</div>
+
+		</div>
+	</div>
+	{% block body %}{% endblock %}
+{% endblock %}

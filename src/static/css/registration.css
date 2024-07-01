@@ -1,0 +1,158 @@
+@import url("loading.css");
+@import url("login.css");
+@import url("errors.css");
+
+body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.centered-div {
+    display: flex;
+    justify-content: center;
+    width: 511px;
+    height: 830px;
+    top: 124px;
+    left: 464px;
+    border-radius: 30px;
+    padding: 30px;
+    gap: 40px;
+    background-color: #251F2BCC;
+}
+
+.register-block {
+    display: compact;
+    position: relative;
+    width: 451px;
+    height: 562px;
+    gap: 20px;
+    top: 10%;
+}
+
+.title {
+    text-align: center;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 28px;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+    color: #FFFFFF;
+}
+
+.register-block {
+    position: relative;
+    width: 451px;
+    height: 432px;
+    gap: 20px;
+    top: 0;
+}
+
+.register-form {
+    flex-direction: column;
+    width: 451px;
+    height: 376px;
+    gap: 8px;
+}
+
+.input-reg {
+    margin-top: 7px;
+    display: flex;
+    width: 427px;
+    height: 52px;
+    border: none;
+    border-radius: 7px;
+    padding: 4px 12px;
+    gap: 10px;
+    background-color: #FFFFFF;
+}
+
+.info {
+    position: relative;
+    top: -40px;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 13px;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+    color: #FFFFFF;
+}
+
+
+.approval {
+    display: inline-block;
+}
+
+.cheak-accept {
+    display: block;
+    width: 20px;
+    height: 20px;
+    top: 510px;
+}
+
+.check-title {
+    position: relative;
+    top: -44px;
+    left: 32px;
+    display: inline-block;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 17px;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+    color: #fff;
+}
+
+#cumancen-reg-1 {
+    position: relative;
+    top: -40px;
+}
+
+.enter-reg {
+    position: relative;
+    top: -50px;
+}
+
+.politic-reg {
+    position: relative;
+    top: 15px;
+}
+
+.reg {
+    position: relative;
+    top: 220px;
+}
+
+#errors-reg {
+    display: none;
+    position: relative;
+    top: -43px;
+}
+
+#loading-reg {
+    position: relative;
+    display: none;
+    top: -127px;
+    left: 212px;
+}
+
+
+#password1 {
+    position: relative;
+    top: -17px;
+}
+
+
+.cumancen1 {
+    position: relative;
+    width: 30px;
+    height: 30px;
+    top: -55px;
+    left: 410px;
+}

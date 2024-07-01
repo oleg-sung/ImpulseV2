@@ -31,18 +31,19 @@ class Settings(BaseSettings):
     CELERY_BROKER_URL: str
     CELERY_RESULT_BACKEND: str
     CELERY_EAGER: bool
-    model_config = SettingsConfigDict(
-        env_file=os.path.abspath("/home/sungurov/fast/Impulse/env/.test.env")
-    )
+    model_config = SettingsConfigDict(env_file=os.path.abspath("env/.test.env"))
 
 
-class DevelopmentConfig(Settings): ...
+class DevelopmentConfig(Settings):
+    ...
 
 
-class ProductionConfig(Settings): ...
+class ProductionConfig(Settings):
+    ...
 
 
-class TestingConfig(Settings): ...
+class TestingConfig(Settings):
+    ...
 
 
 settings = Settings()

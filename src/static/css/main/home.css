@@ -1,0 +1,581 @@
+.general-content-ml {
+
+    height: 100%;
+    margin-left: 60px;
+    margin-right: 60px;
+    padding: 40px 0;
+    gap: 65px;
+}
+
+.general-collection-ml {
+    height: 369px;
+}
+
+.title-ml {
+    display: flex;
+    height: 56px;
+}
+
+.title-ml h1 {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+    color: black;
+}
+
+.create-collection-ml {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    width: 449px;
+    height: 100%;
+    margin-left: auto;
+    border-radius: 10px;
+    padding: 16px 147px;
+    gap: 10px;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 20px;
+    font-weight: 500;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+    color: #fff;
+    background-color: #E41730;
+    transition: color 0.2s linear;
+}
+
+.create-collection-ml:hover {
+    color: black;
+}
+
+.collections-list-ml {
+    position: relative;
+    top: 5%;
+    width: 100%;
+    height: 305px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.collection-ml {
+    position: static;
+    display: inline-block;
+    margin-right: 100px;
+    width: 428px;
+    height: 263px;
+    border-radius: 13px;
+    padding: 18px 28px;
+    background-color: #4F4856;
+    vertical-align: top;
+}
+
+.collection-cars-ml {
+    margin-right: 15px;
+    width: 78px;
+    height: 111px;
+    border-radius: 5px;
+}
+
+.collection-ml a {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 22px;
+    font-variation-settings: "slnt" 0;
+    color: white;
+}
+
+.status-and-amound-ml {
+    top: 25px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 29px;
+}
+
+.status-and-amound-ml p {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 17px;
+    font-variation-settings: "slnt" 0;
+    color: white;
+}
+
+.amount-cards-ml {
+    position: relative;
+    margin-left: auto;
+    width: 58px;
+    height: 29px;
+    border-radius: 14px;
+    padding: 4px 10px;
+    border: 1px solid #FFFFFF;
+    align-items: center;
+    text-align: center;
+    line-height: 20px;
+}
+
+.general-coach-tokens-ml {
+    position: relative;
+    top: 20px;
+}
+
+.token-discription-ml h1 {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+    color: black;
+}
+
+.token-discription-info-ml {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-size: 17px;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+    color: black;
+}
+
+.token-title-ml {
+    top: 10px;
+    position: relative;
+    display: flex;
+
+}
+
+.token-list-ml {
+    top: 20px;
+    position: relative;
+    width: 100%;
+    height: 200px;
+    gap: 99px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.ios-toggle {
+    display: none;
+}
+
+.checkbox-label {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    background-color: #ccc;
+    border-radius: 34px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.checkbox-label:before {
+    content: "";
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+.ios-toggle:checked + .checkbox-label {
+    background-color: #4CAF50;
+}
+
+.ios-toggle:checked + .checkbox-label:before {
+    transform: translateX(26px);
+}
+
+
+.display-token-ml {
+    display: inline-block;
+    border-left: 1px solid #4F4856B2;
+    padding: 12px;
+    height: 140px;
+    width: 373px;
+    margin-right: 80px;
+}
+
+.token-code-ml {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    line-height: 27px;
+    text-align: center;
+    height: 57px;
+    width: 220px;
+    padding: 15px 30px;
+    gap: 10px;
+    background-color: #4F4856;
+    border-radius: 7px;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+    color: white;
+}
+
+.code-and-toggle-ml {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 57px;
+}
+
+.toggle {
+    top: 13px;
+    position: relative;
+    margin-left: auto;
+}
+
+
+.token-info-ml {
+    display: flex;
+    top: 30px;
+    position: relative;
+}
+
+.info-title-ml {
+    margin-left: 2px;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: 17px;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+    color: black;
+}
+
+.amoun-users-ml {
+    position: relative;
+    top: 5%;
+    margin-right: 9px;
+    margin-left: auto;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: 17px;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+    color: black;
+    width: 48px;
+    height: 28px;
+    border-radius: 11px;
+    gap: 10px;
+    text-align: center;
+    line-height: 17px;
+    padding: 4px 10px;
+    border: 2px solid #4F4856B2;
+}
+
+.general-team {
+    position: relative;
+    top: 50px;
+    width: 100%;
+    height: 342px;
+    gap: 30px;
+}
+
+.general-team-title {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+    color: black;
+}
+
+.team-list {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+}
+
+.team-display {
+    margin-right: 80px;
+    width: 328px;
+    height: 235px;
+    border-radius: 14px;
+    padding: 18px 28px;
+    gap: 12px;
+    background-color: #4F4856;
+}
+
+.team-info {
+    top: 4%;
+    position: relative;
+    display: flex;
+}
+
+.round-image {
+    position: relative;
+    top: 6px;
+    left: 0;
+    width: 60px;
+    height: 60px;
+}
+
+.team-description {
+    position: relative;
+    left: 8%;
+    top: -2%;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 22px;
+    font-variation-settings: "slnt" 0;
+    color: white;
+}
+
+.coach-block {
+    display: flex;
+}
+
+.team-coach {
+    position: relative;
+    top: 20px;
+    margin-left: 6px;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: 17px;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+    color: white;
+}
+
+.coack-avatar {
+    position: relative;
+    top: 22px;
+    left: 20px;
+    margin-right: auto;
+    justify-content: center;
+    align-content: center;
+    background-color: #353140;;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    text-align: center;
+}
+
+.coack-avatar img {
+    margin-top: 3px;
+    height: 50px;
+    width: 50px;
+}
+
+.change-team-coach {
+    top: 20%;
+    position: relative;
+    margin-bottom: auto;
+    width: 100%;
+    height: 41px;
+    border-radius: 11px;
+    padding: 10px 20px;
+    background-color: inherit;
+    border: 1px solid #E41730;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-size: 17px;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+    color: white;
+    transition: color 0.2s linear;
+}
+
+.change-team-coach:hover {
+    color: red;
+}
+
+.general-token-modal {
+    height: 500px;
+    width: 100%;
+}
+
+
+.title-token-modal {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    text-align: center;
+}
+
+#tokenCode {
+    width: 400px;
+    height: 51px;
+    border-radius: 7px;
+    border: 1px solid #4F4856B2;
+    padding: 15px 30px;
+    gap: 10px;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+    color: black;
+}
+
+.auth-count-modal-token {
+    align-items: center;
+    position: relative;
+    display: flex;
+    top: 10%;
+    width: 100%;
+    height: 70px;
+}
+
+.auth-title {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 17px;
+    font-variation-settings: "slnt" 0;
+    color: black;
+}
+
+.amount-auth-modal {
+    width: 43px;
+    height: 32px;
+    border-radius: 11px;
+    border: 1px solid #4F4856B2;
+    padding: 4px 15px;
+    gap: 10px;
+    position: relative;
+    margin-left: auto;
+    right: 20px;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 17px;
+    font-variation-settings: "slnt" 0;
+    color: black;
+}
+
+
+#userList {
+    position: relative;
+    top: 100px;
+
+}
+
+.full-name {
+    height: 30px;
+    position: relative;
+    top: 22px;
+    left: 20px;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 17px;
+    font-variation-settings: "slnt" 0;
+    color: black;
+}
+
+.modal-image-avatar {
+    width: 60px;
+    height: 60px;
+}
+
+.display-user-token-modal {
+    display: flex;
+    width: 100%;
+    height: 80px;
+    align-content: center;
+}
+
+.margin-left-auto {
+    margin-left: auto;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: center;
+}
+
+.token-create-btn {
+    background-color: #E41730;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 17px;
+    font-variation-settings: "slnt" 0;
+}
+
+.token-create-btn:hover {
+    background-color: #E41730;
+    color: black;
+
+
+}
+
+.text-modal-body {
+    text-align: center;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 20px;
+    font-variation-settings: "slnt" 0;
+    color: black;
+}
+
+.display-modal-title {
+    position: relative;
+    top: 8px;
+}
+
+.token-create-btn-no {
+    background-color: #4F4856B2;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 17px;
+    font-variation-settings: "slnt" 0;
+}
+
+.token-create-btn-no:hover {
+    background-color: #4F4856B2;
+    color: black;
+}
+
+.delete-token-icon {
+    background-color: white;
+    color: black;
+}
+
+.delete-token-icon:active, .delete-token-icon:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.close-window-modal:active, .close-window-modal:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+

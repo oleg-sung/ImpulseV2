@@ -1,0 +1,234 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.general-full {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+}
+
+.main-profile-view {
+    width: 1320px;
+    height: 644px;
+    top: 80px;
+    left: 60px;
+    padding: 40px 0;
+    gap: 30px;
+    display: block;
+}
+
+.main-profile-view h1 {
+    color: black;
+    font-weight: 600;
+    font-size: 32px;
+}
+
+.main-content-profile {
+    display: flex;
+    align-items: start;
+    margin-top: 30px;
+    width: 100%;
+    height: 95%;
+    margin-bottom: auto;
+}
+
+.profile-info-view {
+    margin-top: auto;
+    background-color: #4F4856;
+    width: 742px;
+    height: 550px;
+    border-radius: 30px;
+    padding: 30px;
+    gap: 40px;
+}
+
+.profile-info-view h1 {
+    color: #FFFFFF;
+    font-weight: 500;
+    font-size: 28px;
+}
+
+.profile-data {
+    margin-top: 50px;
+    display: grid;
+    height: 400px;
+    width: 100%;
+}
+
+.profile-name-view {
+    display: inline-flex;
+    width: 100%;
+    height: 40px;
+    border-bottom: 1px solid #FFFFFF33
+}
+
+.profile-data_title {
+    width: 150px;
+    font-weight: 400;
+    font-size: 15px;
+}
+
+.update-user-profile {
+    margin-top: -18px;
+    margin-left: auto;
+    border: none;
+    color: #FFFFFF;
+    text-decoration: none
+}
+
+.update-profile-link {
+    display: flex;
+}
+
+.profile-data_value {
+    font-weight: 550;
+    font-size: 17px;
+}
+
+.profile-not_data_value {
+    color: #818181;
+    font-weight: 300;
+    font-size: 15px;
+}
+
+.change-passwoed-view {
+    margin-left: auto;
+    /*margin-top: 39px;*/
+    width: 511px;
+    height: 329px;
+    border-radius: 30px;
+    padding: 30px;
+    gap: 40px;
+    background-color: #4F4856;
+}
+
+.change-passwoed-view h1 {
+    font-weight: 500;
+    font-size: 28px;
+    color: #FFFFFF;
+}
+
+.hange-password-form {
+    background-color: #5110a0;
+    width: 100%;
+    height: 100%;
+}
+
+.input-reg {
+    display: flex;
+    width: 100%;
+    height: 52px;
+    border: none;
+    border-radius: 7px;
+    padding: 4px 12px;
+    gap: 10px;
+    background-color: #FFFFFF;
+}
+
+.change-button {
+    margin-top: 20px;
+    background-color: #4F4856;
+    border: 2px solid #E41730;
+    width: 100%;
+    height: 56px;
+    padding: 16px 76px 16px 76px;
+    gap: 10px;
+    border-radius: 10px;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 500;
+    text-align: center;
+    line-height: 20px;
+    transition: color 0.2s linear;
+}
+
+.change-button:hover {
+    color: black;
+}
+
+.change-profile-data-form {
+    justify-content: center;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    gap: 30px;
+}
+
+.change-profile-main-form {
+    width: 500px;
+    height: 397px;
+    gap: 30px;
+}
+
+.change-profile-data {
+    color: black;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.label-name-input {
+    color: black;
+    position: relative;
+    top: 8px;
+    text-align: center;
+}
+
+input[type="text"]:focus {
+    outline: none;
+}
+
+input[type="text"] {
+    outline: none;
+    border: none;
+}
+
+.label-input-profile {
+    display: flex;
+    width: 150px;
+    align-items: end;
+    text-align: center;
+    line-height: 40px;
+}
+
+.main-form-change div {
+    margin-top: 10px;
+}
+
+#changeProfile {
+    display: grid;
+}
+
+.sub-change-profile {
+    margin-top: 70px;
+    height: 56px;
+    border-radius: 10px;
+    padding: 16px 147px;
+    gap: 10px;
+    background-color: #E41730;
+    color: #FFFFFF;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 10px;
+    transition: color 0.3s;
+}
+
+.sub-change-profile:hover {
+    color: black;
+}
+
+.change-successfull {
+    display: none;
+    font-weight: 400;
+    font-size: 17px;
+    color: #FFFFFF;
+}
+
+#profileBirthDate {
+    outline: none;
+    border: none;
+}

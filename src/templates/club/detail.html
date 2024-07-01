@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/twd/demo.css') }}">
+{% endblock %}
+
+
+{% block content %}
+    <div class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex flex-wrap items-center space-x-4 justify-content-center"
+         style="background-color: rgba(37, 31, 43, 0.8);">
+        <div class="ml-16 text-white space-y-4">
+
+            {% if club.image %}
+                <img src="{{ club.image }}" width="200" height="200" alt="Картинка">
+            {% else %}
+                <img
+                        src="https://www.shutterstock.com/image-vector/default-ui-image-placeholder-wireframes-600nw-1037719192.jpg"
+                        width="200" height="200" alt="Картинка">
+
+            {% endif %}
+            <a class="ml-2 effect" href=".">Изменить изображение</a>
+            <h1 class="ml-[70px]" style="font-size: 20px">{{ club.name }}</h1>
+            <p>Описание: {{ club.motto }}</p>
+            {#            <p>Телефон: {{ phone }}</p>#}
+
+        </div>
+        <div>
+            <a href="{{ url_for('change_club_info_page') }}"
+               class=" ml-10 mt-10 text-white border border-gray-300 rounded-lg px-2 py-2 effect">Редактировать
+                описание
+            </a>
+        </div>
+
+    </div>
+
+{% endblock %}

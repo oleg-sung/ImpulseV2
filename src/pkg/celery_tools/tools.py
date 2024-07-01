@@ -24,11 +24,17 @@ def upload_file_task(
     content: str, path: str, content_type: str = None, metadata: dict = None
 ):
     storage.upload_file_to_storage(content, path, content_type, metadata)
-    return {"status": "success"}
+    return {"storage": storage.bucket.name}
 
 
 @celery_app.task(name="delete_file")
 def delete_file_task(name: str):
-    blob = storage.get_blob(name)
+    blob = storage.bucket.get_blob(name)
     blob.delete()
+    return {"delete": "success"}
+
+
+@celery_app.task(name="delete_list_file")
+def delete_list_files_task(file_list: list):
+    storage.bucket.delete_blobs(file_list)
     return {"delete": "success"}

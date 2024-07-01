@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends
 from starlette import status
 
 from internal.token.dependens import get_token
-from internal.token.schema import BaseResponseToken, GetTokens, Token
+from internal.token.schema import BaseResponseToken, GetTokens, Token, UserDataByToken
 from internal.token.services import TokenService
 from internal.users.dependens import get_current_user
 from internal.users.schema.user import User
@@ -64,4 +64,14 @@ async def delete_token(token: Token = Depends(get_token)):
 @router.get("/coachs/", status_code=status.HTTP_200_OK)
 async def get_coach(user: User = Depends(get_current_user)):
     data = await TokenService().get_coach_by_tokens(user.uid)
+    return data
+
+
+@router.get(
+    "/users/",
+    response_model=list[UserDataByToken],
+    status_code=status.HTTP_200_OK,
+)
+async def get_users_by_token(token: Token = Depends(get_token)):
+    data = await TokenService().get_detail_info_for_token(token.id)
     return data

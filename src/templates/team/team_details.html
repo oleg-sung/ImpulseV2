@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/twd/demo.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4 justify-content-center"
+         style="background-color: rgba(37, 31, 43, 0.8);">
+        <div>
+            <div class="mt-4 ml-10 text-xl font-medium text-white">Информация о команде</div>
+            <div class="ml-10 mt-10 items-center flex-1 justify-content-center space-y-4">
+                <p class="text-white">Название: {{ team.title }}</p>
+                <p class="text-white">Тренер: {{ team.coach.firstName }} {{ team.coach.lastName }}</p>
+
+            </div>
+            <button class="ml-[85px] mt-10 text-white border border-gray-300 rounded-lg px-2 py-2 effect">Замена
+                тренера
+            </button>
+
+
+        </div>
+    </div>
+{% endblock %}

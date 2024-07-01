@@ -1,8 +1,18 @@
 import datetime
+import uuid
 from enum import Enum
+from typing import Optional
 
 from firebase_admin import firestore
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, HttpUrl
+
+from internal.schema.image import Image
+
+
+class CollectionStatus(str, Enum):
+    CREATED = "created"
+    ACTIVE = "active"
+    CLOSED = "closed"
 
 
 class CollectionSize(str, Enum):
@@ -19,10 +29,18 @@ class CollectionSize(str, Enum):
         size_dict = {"fortyCards": 40, "sixtyCards": 60, "eightyCards": 80}
         return size_dict.get(size, None)
 
+    @staticmethod
+    def limit_cards() -> dict:
+        return {
+            "fortyCards": (25, 10, 4, 1),
+            "sixtyCards": (38, 15, 6, 1),
+            "eightyCards": (50, 20, 8, 2),
+        }
+
 
 class Collection(BaseModel):
     size: CollectionSize
-    is_active: bool = Field(alias="isActive")
+    status: CollectionStatus
     name: str
 
     class Config:
@@ -30,23 +48,52 @@ class Collection(BaseModel):
         use_enum_values = True
 
 
+class CardsDict(BaseModel):
+    common: int
+    uncommon: int
+    rare: int
+    legendary: int
+
+
 class GeneralCollection(Collection):
     id: str
+    amount_cards: CardsDict = Field(alias="amountCards")
 
 
-class CreateCollection(Collection):
-    size: CollectionSize = CollectionSize.forty_cards
+class CreateNewCollection(BaseModel):
+    size: CollectionSize = Field(default=CollectionSize.forty_cards)
+    name: str = Field(min_length=2, max_length=60)
+    motto: Optional[str] = Field(None, alias="motto")
+
+    class Config:
+        populate_by_name = True
+        use_enum_values = True
+
+
+class UpdateCollection(BaseModel):
+    motto: Optional[str] = Field(None, alias="motto")
+    cover: Optional[str] = Field(None, alias="cover")
+
+    class Config:
+        populate_by_name = True
+        use_enum_values = True
+
+
+class DataToCreateCollection(Collection):
+    motto: Optional[str] = Field(None, alias="motto")
+    status: CollectionStatus = Field(default=CollectionStatus.CREATED)
     cards: list = []
-    is_active: bool = Field(default=True, alias="isActive")
-    name: str = Field(min_length=2, max_length=40)
-    crated_at: datetime.datetime = Field(
+    date: datetime.datetime = Field(
         default=firestore.SERVER_TIMESTAMP, alias="createdAt"
     )
+    cover: Optional[str] = Field(None, alias="cover")
 
 
 class ResponseCreateCollection(BaseModel):
     status: bool
     id: str
+    msg: str
+    task_id: Optional[str] = Field(None, alias="taskId")
 
 
 class GetAllCollection(BaseModel):
@@ -57,15 +104,35 @@ class GetAllCollection(BaseModel):
 class GetCollection(Collection):
     id: str
     cards: list[str]
+    created_at: datetime.datetime = Field(alias="createdAt")
+    motto: Optional[str] = Field(default=None)
+    amound_cards: CardsDict = Field(alias="amoundCards")
+    cover: Optional[HttpUrl] = Field(None, alias="cover")
+
+    class Config:
+        use_enum_values = True
+        populate_by_name = True
 
 
-class DisableCollection(Collection):
-    is_active: bool = Field(alias="isActive")
+class GetCloseCollectionList(Collection):
+    pass
 
-    @model_validator(mode="after")
-    def disable(self):
-        self.is_active = False if self.is_active else True
-        return self
+
+class ChangeStatusCollection(Collection):
+    status: CollectionStatus
 
     class Config:
         exclude = {"cards", "size", "name"}
+
+
+class CoverCreate(Image):
+    id: str = Field(default_factory=lambda: uuid.uuid4().hex, exclude=True)
+
+
+class CollectionUpdate(BaseModel):
+    cover: Optional[CoverCreate] = None
+    motto: Optional[str] = Field(None, alias="motto")
+
+    class Config:
+        use_enum_values = True
+        populate_by_name = True

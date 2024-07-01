@@ -1,0 +1,298 @@
+{% extends 'frontend/main/base_main.html' %}
+
+
+{% block head %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/main/home.css') }}">
+    <script src="/static/js/main/coach-tocken.js"></script>
+
+{% endblock %}
+
+{% block content %}
+    <div class="general-content-ml">
+        <div class="general-collection-ml">
+            <div class="title-ml">
+                <h1 class="discription-ml">Коллекции</h1>
+                <button class="create-collection-ml" type="button">Создать новую коллекцию</button>
+            </div>
+            <div class="collections-list-ml">
+                {% for collection in collections %}
+                    <div class="collection-ml"
+                         style={% if collection.status == 'created' %}"background-color:#FFFFFF; border: solid black; "{% endif %}>
+                        <div style="margin-bottom: 30px; position: relative; top:10px;">
+                            <a class="title-collection-ml" href="."
+                               style={% if collection.status == 'created' %}"color:black"{% endif %}>{{ collection.name }}</a>
+                        </div>
+                        <img class="collection-cars-ml" src="/static/images/cards/common.png" alt="Common">
+                        <img class="collection-cars-ml" src="/static/images/cards/uncommon.png" alt="Uncommon">
+                        <img class="collection-cars-ml" src="/static/images/cards/rare.png" alt="Rare">
+                        <img class="collection-cars-ml" src="/static/images/cards/legendary.png" alt="Legendary">
+                        <div class="status-and-amound-ml">
+                            <p class="collection-status-ml"
+                               style={% if collection.status == 'created' %}"color:black"{% endif %}>
+                                {% if collection.status == 'created' %}Созданная{% else %}Активная{% endif %}
+                            </p>
+                            <p class="amount-cards-ml"
+                               style={% if collection.status == 'created' %}"color:black; border: 2px solid black;"{% endif %}>
+                                {% if collection.size == 'fortyCards' %}40{% elif collection.size == 'sixtyCards' %}
+                                    60{% else %}80{% endif %}
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="general-coach-tokens-ml">
+            <div class="token-title-ml">
+                <div class="token-discription-ml">
+                    <h1>Регистрация тренеров</h1>
+                    <p class="token-discription-info-ml">
+                        Здесь показаны коды для Регистрации тренеров, которые создавались Вами ранее.<br>
+                        Для активации неактивного кода нажмите на переключатель.
+                    </p>
+                </div>
+                <button class="create-collection-ml" data-bs-toggle="modal" data-bs-target="#confirmModal"
+                        id="create-coach-code"
+                        type="button">
+                    Сгенерировать новый код
+                </button>
+                <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"
+                                        aria-label="Закрыть">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="display-modal-title">
+                                    <p class="text-center text-modal-body">Сгенерировать новый код?</p>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary token-create-btn-no"
+                                        data-dismiss="modal" style="margin-right: auto">Нет
+                                </button>
+                                <button type="button" class="btn btn-primary token-create-btn" id="confirmAction">Да
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    document.getElementById('confirmAction').addEventListener('click', function () {
+                        fetch('http://127.0.0.1:8000/token/create/', {
+                            method: 'POST',
+                            credentials: 'include',
+                            headers: {
+                                'Content-Type': 'application/json',
+
+                            },
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data);
+                                location.reload();
+                            })
+                            .catch(error => {
+                                console.error('Ошибка загрузки данных:', error);
+                            });
+                    });
+                </script>
+            </div>
+            <div class="token-list-ml">
+                {% for token in tokens %}
+                    <div class="display-token-ml">
+                        <div class="code-and-toggle-ml">
+                            <p class="token-code-ml">{{ token.code }}</p>
+                            <div id="toggles" class="toggle">
+                                <input type="checkbox" name="checkbox" id="checkbox-{{ token.id }}"
+                                       class="ios-toggle"/>
+                                <label for="checkbox-{{ token.id }}"
+                                       class="checkbox-label" data-off="off"
+                                       data-on="on"></label>
+                            </div>
+                            <script>
+                                document.getElementById(`checkbox-{{ token.id }}`).addEventListener('click', function () {
+                                    this.disabled = true;
+                                    fetch(`http://127.0.0.1:8000/token/disable/{{ token.id }}/`, {
+                                        method: 'PATCH',
+                                        credentials: 'include',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+
+                                        },
+                                    })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            // Обработка полученных данных
+                                            console.log(data);
+
+                                            // Скрыть индикатор загрузки
+                                            this.disabled = false;
+                                            location.reload();
+                                        })
+                                        .catch(error => {
+                                            console.error('Ошибка загрузки данных:', error);
+                                            // Скрыть индикатор загрузки в случае ошибки
+                                            this.disabled = false;
+                                        });
+                                });
+                            </script>
+                        </div>
+                        <div class="token-info-ml">
+                            <p class="info-title-ml">Количество регистрация</p>
+                            <a class="amoun-users-ml" data-bs-toggle="modal" data-bs-target="#staticBackdrop" href="#"
+                               data-id="{{ token.id }}" data-code="{{ token.code }}" data-auth="{{ token.authCount }}">
+                                {{ token.authCount }}
+                            </a>
+                            <div class="modal fade" id="staticBackdrop" tabindex="-1" role="dialog"
+                                 aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <div class="delete-token-btn">
+                                                <button id="deleteToken" aria-label="Удалить" class="delete-token-icon">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                            <button type="button" class="close close-window-modal" data-dismiss="modal"
+                                                    aria-label="Закрыть">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="general-token-modal">
+                                                <div class="title-token-modal">
+                                                    <p class="token-code" id="tokenCode"></p>
+                                                </div>
+                                                <div class="auth-count-modal-token">
+                                                    <p class="auth-title">Количество регистраций</p>
+                                                    <p class="amount-auth-modal" id="amoundAuth"></p>
+                                                </div>
+                                                <div class="user-list" id="userList">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+
+                        let {{ token.id }} = document.getElementById('checkbox-{{ token.id }}');
+                        if ({{token.isActive | int}}) {
+                            {{ token.id }}.checked = true
+                        } else {
+                            {{ token.id }}.checked = false
+                        }
+                    </script>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="general-team">
+            <h1 class="general-team-title">Команды</h1>
+            <div class="team-list">
+                <div class="team-display">
+                    <div class="team-info">
+                        <div class="round-image-ml">
+                            <img src="/static/images/club/img.png" alt="Team image">
+                        </div>
+                        <p class="team-description">Спартак</p>
+                    </div>
+                    <div class="coach-block">
+                        <p class="team-coach">Тренер:&nbsp;&nbsp; Василий В.В.</p>
+                        <div class="coack-avatar">
+                            <img src="/static/images/coach/img.png" alt="Coach image">
+                        </div>
+                    </div>
+                    <button class="change-team-coach" type="button">
+                        Назначить нового тренера
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('#staticBackdrop').on('show.bs.modal', function (event) {
+            let modal = $(this);
+            let button = $(event.relatedTarget);
+            let id = button.data('id');
+            let code = button.data('code')
+            let authCound = button.data('auth')
+            if (authCound === 0) {
+                modal.find('#deleteToken').first().attr('data-id', id);
+                modal.find('#deleteToken').toggle(true)
+            } else {
+                modal.find('#deleteToken').toggle(false)
+            }
+            fetch(`http://127.0.0.1:8000/token/users/?token_id=${id}`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+                .then(response => response.json())
+                .then(users => {
+                    modal.find('#tokenCode').text(code);
+                    modal.find('#amoundAuth').text(authCound);
+                    let parent = document.querySelector('#userList')
+                    for (let i = 0; i < users.length; i++) {
+                        let userDis = document.createElement('div')
+                        let p = document.createElement('p');
+                        let img = document.createElement('img')
+                        let user = users[i]
+                        userDis.className = 'display-user-token-modal'
+                        p.className = 'full-name'
+                        p.textContent = `${user['lastName']} ` + `${user['firstName']}`
+                        p.style.color = 'black'
+                        img.src = '/static/images/users/no_avatar.png'
+                        img.className = 'round-image'
+                        img.classList.add('modal-image-avatar');
+                        parent.appendChild(userDis)
+                        userDis.appendChild(img)
+                        userDis.appendChild(p)
+                    }
+                })
+                .catch((error) => console.error('Error:', error))
+        });
+    </script>
+    <script>
+        $('#staticBackdrop').on('hidden.bs.modal', function (e) {
+            $(this).removeData('bs.modal');
+            $(this).find('#userList').empty();
+        });
+    </script>
+    <script>
+        document.getElementById('deleteToken').addEventListener('click', function () {
+            let token = document.getElementById('deleteToken')
+            let tokenId = token.dataset.id
+            fetch(`http://127.0.0.1:8000/token/delete/${tokenId}/`, {
+                method: 'DELETE',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+
+                },
+            })
+                .then(response => {
+                    const status = response.status
+                    if (status === 204) {
+                        location.reload();
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка загрузки данных:', error);
+                });
+        });
+    </script>
+{% endblock %}

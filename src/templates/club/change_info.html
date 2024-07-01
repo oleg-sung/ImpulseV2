@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/twd/demo.css') }}">
+{% endblock %}
+
+{% block content %}
+    <div class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4 justify-content-center"
+         style="background-color: rgba(37, 31, 43, 0.8);">
+
+        <form id='changeMotto' class="mt-8 space-y-8">
+            <h1 class="text-white ml-2" style="font-size: 20px">Изменение описания клуба</h1>
+            <div class="rounded-md shadow-sm space-y-4">
+                <div>
+                        <textarea
+                                class="text-black rounded-none relative block w-full px-3 py-2 border border-gray-300"
+                                id="motto"
+                                rows="6"
+                                cols="45"
+                                name="motto"
+                        >{{ club.motto }}
+
+                    </textarea>
+                </div>
+
+            </div>
+            <div class="flex items-center justify-between ml-[110px]">
+                <button class=" text-white border border-gray-300 rounded-lg px-2 py-2 effect"
+                        type="submit">
+                    Применить
+                </button>
+
+            </div>
+        </form>
+    </div>
+    <script>
+        async function chnageInfo() {
+            event.preventDefault();
+            const infoData = document.getElementById('motto').value;
+
+            const object = {};
+            object['motto'] = infoData
+
+
+            const json = JSON.stringify(object);
+
+
+            const response = await fetch('http://127.0.0.1:8000/user/club/change/motto/', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: json,
+            });
+            if (response.ok) {
+                return window.location.href = "http://127.0.0.1:8000/pages/club/"
+            } else {
+                const errors = await response.json();
+                alert('Ошибка валидации: ' + JSON.stringify(errors));
+            }
+
+        }
+    </script>
+    <script>
+        document.getElementById('changeMotto').addEventListener('submit', function (event) {
+            if (this.checkValidity()) {
+                chnageInfo();
+            } else {
+                event.preventDefault();
+            }
+        });
+    </script>
+
+{% endblock %}

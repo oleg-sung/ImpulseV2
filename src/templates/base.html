@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/twd/demo.css') }}">
+    <style>
+        body {
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+    {% block head %}{% endblock %}
+    <title>Document</title>
+</head>
+<body>
+<nav class="flex justify-between text-2xl" style="background-color: rgba(37, 31, 43, 0.8); ">
+    <div class="flex space-x-4">
+        <a href='{{ url_for('home_page') }}' class="text-white effect">Главная</a>
+        <a href='{{ url_for('token_list') }}' class="text-white effect">Регистрация тренера</a>
+        <a href='{{ url_for('collections_list') }}' class="text-white  effect">Коллекции</a>
+        <a href="{{ url_for('get_teams') }}" class="text-white effect">Команды</a>
+    </div>
+    <ul class="flex-gap-5 mr-10">
+        <li>
+            <a href='{{ url_for('user_profile') }}' class="text-white effect">Мой аккаунт</a>
+        </li>
+        <li>
+            <a href='{{ url_for('logout_app') }}' class="text-white effect">Выйти</a>
+        </li>
+    </ul>
+</nav>
+<hr>
+<div id="content" class="align-content-md-center">
+    {% block content %}{% endblock %}
+</div>
+</body>
+</html>

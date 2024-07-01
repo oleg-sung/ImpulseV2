@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <div class="flex flex-col align-items-start pb-5">
+        <button id="createToken" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                style="background-color: #E41730">
+            Создать новый код
+        </button>
+
+
+    </div>
+    {#    <div class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex-wrap items-center space-x-4">#}
+    <div class="text-xl font-medium text-black">Список кодов</div>
+    <div class="flex flex-wrap">
+
+        {% for token in tokens %}
+
+            <div class="m-2 p-6 max-w-sm mx-2 bg-white rounded-xl shadow-md flex-wrap items-center space-x-4"
+                 style="background-color: rgba(37, 31, 43, 0.8);">
+                <a class="text-gray-500 p-14 mb-[4px]" style="color: #FFFFFF"
+                   href="{{ url_for('token_detail', token_id=token.id) }}">Информация по коду</a>
+                <p class="text-gray-500 mt-6" style="color: #FFFFFF"> {{ token.id }}</p>
+                <p class="text-gray-500" style="color: #FFFFFF">Статус: {% if token.isActive %}Активный{% else %}
+                    Неактивный{% endif %}</p>
+                <p class="text-gray-500" type="date" style="color: #FFFFFF">Дата
+                    создания: {{ token.createdAt.strftime('%Y-%m-%d в %H:%M') }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        document.getElementById('createToken').addEventListener('click', function () {
+            this.disabled = true;
+            fetch('http://127.0.0.1:8000/token/create/', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Обработка полученных данных
+                    console.log(data);
+
+                    // Скрыть индикатор загрузки
+                    this.disabled = false;
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('Ошибка загрузки данных:', error);
+                    // Скрыть индикатор загрузки в случае ошибки
+                    this.disabled = false;
+                });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,223 @@
+{% extends 'frontend/main/base_main.html' %}
+
+{% block head %}
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/profile/profile.css') }}">
+{% endblock %}
+
+
+{% block content %}
+	<div class="general-full">
+		<div class="main-profile-view">
+			<h1 class="inner-font">Профиль</h1>
+			<div class="main-content-profile">
+				<div class="profile-info-view">
+					<h1 class="inner-font">Личные данные</h1>
+					<div class="profile-data">
+						<div class="profile-name-view">
+							<p class="profile-data_title inner-font">Имя:</p>
+							<p class="profile-data_value inner-font">{{ data.firstName }}</p>
+						</div>
+						<div class="profile-name-view">
+							<p class="profile-data_title inner-font">Фамилия:</p>
+							<p class="profile-data_value inner-font">{{ data.lastName }}</p>
+						</div>
+						<div class="profile-name-view">
+							<p class="profile-data_title inner-font">Отчество:</p>
+							{% if  data.middleName %}
+								<p class="profile-data_value inner-font">{{ data.middleName }}</p>
+							{% else %}
+								<p class="profile-not_data_value inner-font">Не указано</p>
+							{% endif %}
+						</div>
+						<div class="profile-name-view">
+							<p class="profile-data_title inner-font">Email:</p>
+							<p class="profile-data_value inner-font">{{ data.email }}</p>
+						</div>
+						<div class="profile-name-view">
+							<p class="profile-data_title inner-font">Телефон:</p>
+							{% if  data.phone %}
+								<p class="profile-data_value inner-font">{{ data.phone }}</p>
+							{% else %}
+								<p class="profile-not_data_value inner-font">Не указано</p>
+							{% endif %}
+						</div>
+						<div class="profile-name-view">
+							<p class="profile-data_title inner-font">Дата рождения:</p>
+							<p class="profile-data_value inner-font">{{ data.birthdate }}</p>
+						</div>
+					</div>
+					<div class="update-profile-link">
+						<a href="#" onclick="fillDataCard(this)" data-fname="{{ data.firstName }}"
+						   data-lname="{{ data.lastName }}" data-mname="{{ data.middleName }}"
+						   data-phone="{{ data.phone }}" data-bday="{{ data.birthdate }}"
+						   class="update-user-profile inner-font" data-bs-toggle="modal"
+						   data-bs-target="#exampleModal">Редакстировать профиль</a>
+					</div>
+				</div>
+				<div class="change-passwoed-view">
+					<h1 class="inner-font">Смена пароля</h1>
+					<div class="change-password-form">
+						<p id="changeTrue" style="display: none" class="change-successfull inner-font">Пароль изменён.
+						                                                                               Данные
+						                                                                               сохранены.</p>
+						<form id="changePassword" action="#">
+							<label for="password"></label>
+							<input required id="password" class="input-reg" type="password" name="password"
+							       placeholder="Старый пароль">
+							<span class="cumancen"><i class="fas fa-eye"></i></span>
+
+							<label for="password1"></label>
+							<input required id="password1" class="input-reg" type="password" name="new_password"
+							       placeholder="Новый пароль (от 6 до 8 символов)">
+							<span class="cumancen1"><i class="fas fa-eye"></i></span>
+							<button class="change-button inner-font" id="enter" type="submit"
+							        onclick="changePassword()">Сохранить&nbsp;изменения
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="change-profile-data-form">
+						<div class="change-profile-main-form">
+							<h1 class="change-profile-data inner-font">Редактирование данных</h1>
+							<form id="changeProfile" action="#">
+								<div class="main-form-change">
+
+									<div class="profile-name-view" style="border-bottom: 1px solid black">
+										<label class="label-input-profile inner-font" style="color: black"
+										       for="profileFirstName">Имя:</label>
+										<input class="inner-font" id="profileFirstName" name="firstName" type="text">
+									</div>
+									<div class="profile-name-view" style="border-bottom: 1px solid black">
+										<label class="label-input-profile inner-font" style="color: black"
+										       for="profileLastName">Фамилия:</label>
+										<input class="inner-font" id="profileLastName" name="lastName" type="text">
+									</div>
+									<div class="profile-name-view" style="border-bottom: 1px solid black">
+										<label class="label-input-profile inner-font" style="color: black"
+										       for="profileMiddleName">Отчество:</label>
+										<input class="inner-font" id="profileMiddleName" name="middleName" type="text"
+										       placeholder="Не указано">
+									</div>
+									<div class="profile-name-view" style="border-bottom: 1px solid black">
+										<label class="label-input-profile inner-font" style="color: black"
+										       for="profilePhone">Телефон:</label>
+										<input class="inner-font" id="profilePhone" name="phone" type="text"
+										       placeholder="Не указано">
+									</div>
+									<div class="profile-name-view" style="border-bottom: 1px solid black">
+										<label class="label-input-profile inner-font" style="color: black"
+										       for="profileBirthDate">Дата&nbsp;рождения:</label>
+										<input class="inner-font" id="profileBirthDate" type="date" name="birthdate"
+
+										       value="1990-01-01">
+									</div>
+
+								</div>
+								<button type="submit" id="submitBtn" onclick="chnageInfo()"
+								        class="sub-change-profile inner-font">
+									Сохранить&nbsp;изменения
+								</button>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+        function fillDataCard(btn) {
+            event.preventDefault()
+            var dataFirstName = $(btn).data('fname');
+            var dataLastName = $(btn).data('lname')
+            var dataModdleName = $(btn).data('mname')
+            var dataPhone = $(btn).data('phone')
+            var dataBDay = $(btn).data('bday')
+            $('#profileFirstName').val(dataFirstName)
+            $('#profileLastName').val(dataLastName)
+            if (dataModdleName) {
+                $('#profileMiddleName').val(dataModdleName)
+            }
+            if (dataBDay) {
+                var parts = dataBDay.split('.');
+                var newDate = parts[2] + '-' + parts[1] + '-' + parts[0];
+                $('#profileBirthDate').val(newDate)
+            }
+            if (dataPhone) {
+                $('#profilePhone').val(dataPhone)
+            }
+
+        }
+
+        async function chnageInfo() {
+            event.preventDefault();
+            const formData = new FormData(document.querySelector("form[id='changeProfile']"));
+            const object = {};
+            formData.forEach(function (value, key) {
+                object[key] = value;
+            });
+            const json = JSON.stringify(object);
+
+            const response = await fetch('http://127.0.0.1:8000/user/profile/change/', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: json,
+            });
+            if (response.ok) {
+                return window.location.href = "http://127.0.0.1:8000/pages/profile/"
+            } else {
+                const errors = await response.json();
+                alert('Ошибка валидации: ' + JSON.stringify(errors));
+            }
+
+        }
+
+        async function changePassword() {
+            event.preventDefault();
+            const formData = new FormData(document.querySelector("form[id='changePassword']"));
+            const object = {};
+            formData.forEach(function (value, key) {
+                object[key] = value;
+            });
+            const json = JSON.stringify(object);
+
+            const response = await fetch('http://127.0.0.1:8000/user/password/change/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: json,
+            });
+            if (response.ok) {
+                let passOldInput = document.getElementById('password')
+                let passNewInput = document.getElementById('password1')
+                let passBtnInput = document.getElementById('enter')
+                passOldInput.style.display = 'none'
+                passBtnInput.style.display = 'none'
+                passNewInput.style.display = 'none'
+                let passPInput = document.getElementById('changeTrue')
+                passPInput.style.display = 'block'
+            } else {
+                const errors = await response.json();
+                alert('Ошибка валидации: ' + JSON.stringify(errors));
+            }
+
+        }
+
+	</script>
+{% endblock %}
