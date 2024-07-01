@@ -54,7 +54,7 @@
                         Для активации неактивного кода нажмите на переключатель.
                     </p>
                 </div>
-                <button class="create-collection-ml" data-toggle="modal" data-target="#confirmModal"
+                <button class="create-collection-ml" data-bs-toggle="modal" data-bs-target="#confirmModal"
                         id="create-coach-code"
                         type="button">
                     Сгенерировать новый код
@@ -113,8 +113,7 @@
                             <p class="token-code-ml">{{ token.code }}</p>
                             <div id="toggles" class="toggle">
                                 <input type="checkbox" name="checkbox" id="checkbox-{{ token.id }}"
-                                       class="ios-toggle"
-                                       checked/>
+                                       class="ios-toggle"/>
                                 <label for="checkbox-{{ token.id }}"
                                        class="checkbox-label" data-off="off"
                                        data-on="on"></label>
@@ -187,12 +186,12 @@
                         </div>
                     </div>
                     <script>
-                        let checkbox = document.getElementById('checkbox-{{ token.id }}');
-                        let stes = {{token.isActive | int}};
-                        if (stes) {
-                            checkbox.checked = true
+
+                        let {{ token.id }} = document.getElementById('checkbox-{{ token.id }}');
+                        if ({{token.isActive | int}}) {
+                            {{ token.id }}.checked = true
                         } else {
-                            checkbox.checked = false
+                            {{ token.id }}.checked = false
                         }
                     </script>
                 {% endfor %}

@@ -113,6 +113,15 @@ class ClubServices:
     async def change_club_data(self, data):
         pass
 
+    async def get_club_image(self, user_id: str) -> dict:
+        club_image_dict = {'image': None}
+        club = await self.db.get_doc(self.club_model_name, user_id)
+        club_dict = club.to_dict()
+        image_id = club_dict.get("image", None)
+        if image_id:
+            image = await self.bucket.get_blob(f"club/{image_id}")
+            club_image_dict.update({'image': image.public_url})
+        return club_image_dict
 
 #     def set_coach_to_club(self, data: dict, user_id: str) -> dict:
 #         data['club_id'] = user_id

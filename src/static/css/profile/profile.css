@@ -41,7 +41,7 @@ html, body {
     margin-top: auto;
     background-color: #4F4856;
     width: 742px;
-    height: 495px;
+    height: 550px;
     border-radius: 30px;
     padding: 30px;
     gap: 40px;
@@ -54,8 +54,9 @@ html, body {
 }
 
 .profile-data {
+    margin-top: 50px;
     display: grid;
-    height: 85%;
+    height: 400px;
     width: 100%;
 }
 
@@ -73,6 +74,7 @@ html, body {
 }
 
 .update-user-profile {
+    margin-top: -18px;
     margin-left: auto;
     border: none;
     color: #FFFFFF;
@@ -96,7 +98,7 @@ html, body {
 
 .change-passwoed-view {
     margin-left: auto;
-    margin-top: 39px;
+    /*margin-top: 39px;*/
     width: 511px;
     height: 329px;
     border-radius: 30px;
@@ -224,4 +226,9 @@ input[type="text"] {
     font-weight: 400;
     font-size: 17px;
     color: #FFFFFF;
+}
+
+#profileBirthDate {
+    outline: none;
+    border: none;
 }

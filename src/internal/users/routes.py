@@ -9,7 +9,7 @@ from internal.users.dependens import (
     delete_cookie,
     cheak_club_name_test,
 )
-from internal.users.schema.club import ClubInfo, UpdateClubSchema
+from internal.users.schema.club import ClubInfo, UpdateClubSchema, GetClubImage
 from internal.users.schema.profile import (
     GetUserProfile,
     UpdateUserProfileSchema,
@@ -156,6 +156,16 @@ async def change_club_info(
     data = await ClubServices().change_club_motto(data, user.uid)
     return data
 
+
+@router.get(
+    "/club/image/",
+    # response_model=GetClubImage,
+    status_code=status.HTTP_200_OK
+)
+async def get_club_image(user: User = Depends(get_current_user)):
+
+    data = await ClubServices().get_club_image(user.uid)
+    return data
 
 # @router.post("/club/coach/set/")
 # def set_coach(

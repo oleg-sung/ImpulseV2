@@ -34,13 +34,16 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=os.path.abspath("env/.test.env"))
 
 
-class DevelopmentConfig(Settings): ...
+class DevelopmentConfig(Settings):
+    ...
 
 
-class ProductionConfig(Settings): ...
+class ProductionConfig(Settings):
+    ...
 
 
-class TestingConfig(Settings): ...
+class TestingConfig(Settings):
+    ...
 
 
 settings = Settings()

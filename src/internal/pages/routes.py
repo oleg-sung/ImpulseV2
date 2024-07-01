@@ -16,7 +16,7 @@ from internal.collection.schema.card import CardType
 from internal.team.routes import get_teams, get_team
 from internal.token.routes import get_all_user_token, get_token_by_id
 from internal.token.schema import Token
-from internal.users.routes import get_user_profile, club_info, change_password
+from internal.users.routes import get_user_profile, club_info, change_password, get_club_image
 
 templates = Jinja2Templates(directory="src/templates")
 router = APIRouter(prefix="/pages", tags=["Pages"])
@@ -27,10 +27,11 @@ async def home_page(
     request: Request,
     data: dict = Depends(get_all_collections),
     tokens: list = Depends(get_all_user_token),
+    club_image: dict = Depends(get_club_image),
 ):
     return templates.TemplateResponse(
         "frontend/main/home.html",
-        {"request": request, "collections": data["collections"], "tokens": tokens},
+        {"request": request, "collections": data["collections"], "tokens": tokens, "club_image": club_image},
     )
 
 

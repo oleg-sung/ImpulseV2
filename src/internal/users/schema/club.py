@@ -28,3 +28,7 @@ class ClubInfo(BaseModel):
 
 class ClubImage(Image):
     id: str = Field(default_factory=lambda: uuid.uuid4().hex)
+
+
+class GetClubImage(BaseModel):
+    image: Optional[AnyHttpUrl] = None
