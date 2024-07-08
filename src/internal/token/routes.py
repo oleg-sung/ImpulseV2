@@ -74,4 +74,5 @@ async def get_coach(user: User = Depends(get_current_user)):
 )
 async def get_users_by_token(token: Token = Depends(get_token)):
     data = await TokenService().get_detail_info_for_token(token.id)
+    print(data)
     return data

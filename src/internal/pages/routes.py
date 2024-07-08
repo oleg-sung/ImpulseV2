@@ -27,11 +27,15 @@ async def home_page(
     request: Request,
     data: dict = Depends(get_all_collections),
     tokens: list = Depends(get_all_user_token),
-    club_image: dict = Depends(get_club_image),
+    teams: list = Depends(get_teams),
 ):
     return templates.TemplateResponse(
         "frontend/main/home.html",
-        {"request": request, "collections": data["collections"], "tokens": tokens, "club_image": club_image},
+        {
+            "request": request,
+            "collections": data["collections"],
+            "tokens": tokens,
+            "teams": teams},
     )
 
 

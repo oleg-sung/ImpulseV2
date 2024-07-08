@@ -13,6 +13,7 @@ router = APIRouter(prefix="/teams", tags=["Team"])
 @router.get("/", response_model=list[Team], status_code=status.HTTP_200_OK)
 async def get_teams(user: User = Depends(get_current_user)):
     data = await TeamService().get_teams_by_admin_id(user.uid)
+    print(data)
     return data
 
 

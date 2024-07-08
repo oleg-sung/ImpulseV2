@@ -200,23 +200,41 @@
         <div class="general-team">
             <h1 class="general-team-title">Команды</h1>
             <div class="team-list">
-                <div class="team-display">
-                    <div class="team-info">
-                        <div class="round-image-ml">
-                            <img src="/static/images/club/img.png" alt="Team image">
+                {% for team in teams  %}
+                    <div class="team-display">
+                        <div class="team-info">
+                            <div class="round-image-ml">
+                                <img src="/static/images/club/img.png" alt="Team image">
+                            </div>
+                            <p class="team-description">{{ team.title }}</p>
                         </div>
-                        <p class="team-description">Спартак</p>
-                    </div>
-                    <div class="coach-block">
-                        <p class="team-coach">Тренер:&nbsp;&nbsp; Василий В.В.</p>
-                        <div class="coack-avatar">
-                            <img src="/static/images/coach/img.png" alt="Coach image">
+                        <div class="coach-block">
+                            <p class="team-coach">Тренер:&nbsp;&nbsp; {{ team.coach.lastName }}</p>
+                            <div class="coack-avatar">
+                                <img src="/static/images/coach/img.png" alt="Coach image">
+                            </div>
                         </div>
+                        <button class="change-team-coach" type="button" data-bs-toggle="modal" data-bs-target="#changeCoachModal">
+                            Назначить нового тренера
+                        </button>
                     </div>
-                    <button class="change-team-coach" type="button">
-                        Назначить нового тренера
-                    </button>
-
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="changeCoachModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>

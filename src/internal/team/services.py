@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from google.cloud.firestore_v1 import FieldFilter
+from google.cloud.firestore_v1 import FieldFilter, AsyncDocumentReference
 
 from internal.database import db
 
@@ -22,7 +22,15 @@ class TeamService:
             .order_by("title")
             .get()
         )
-        teams_list = [team.to_dict() | {"id": team.id} for team in teams_list_ref]
+        teams_list = []
+        for team in teams_list_ref:
+            team_dict = team.to_dict() | {"id": team.id}
+            coach_link: AsyncDocumentReference = team.to_dict()['coach']
+            coach_ref = await coach_link.get()
+            coach_dict = coach_ref.to_dict()
+            teams_list.append(
+                team_dict | {'coach': coach_dict}
+            )
 
         return teams_list
 
