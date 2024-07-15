@@ -30,11 +30,11 @@ async def get_team(team_id: str, user: User = Depends(get_current_user)):
 
 @router.get(
     "/{team_id}/coach/list/",
-    response_model=list[GetUserProfile],
+    # response_model=list[GetUserProfile],
     status_code=status.HTTP_200_OK,
 )
-async def get_coachs(team_id: str, user: User = Depends(get_current_user)):
-    data = await TeamService().get_coaches(user.uid, team_id)
+async def get_coaches(team_id: str, user: User = Depends(get_current_user)):
+    data = await TeamService().get_coaches_list(user.uid, team_id)
     return data
 
 
@@ -42,5 +42,5 @@ async def get_coachs(team_id: str, user: User = Depends(get_current_user)):
 async def change_coache(
     team_id: str, data_: ChangeCoach, user: User = Depends(get_current_user)
 ):
-    data = await TeamService().chenge_coach_form_team(data_.coach_id, team_id)
+    data = await TeamService().change_coach_form_team(data_.coach_id, team_id)
     return data

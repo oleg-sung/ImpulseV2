@@ -49,7 +49,7 @@ class TeamService:
 
         return team_dict
 
-    async def get_coaches(self, admin_id: str, team_id: str) -> list:
+    async def get_coaches_list(self, admin_id: str, team_id: str) -> list:
         """
         Get coaches
         :param admin_id:
@@ -59,21 +59,21 @@ class TeamService:
         team_ref = await self.db.get_doc(self.model, team_id)
         team_dict = team_ref.to_dict()
         team_coach = team_dict["coach"]
-
-        user_profile_ref = await self.db.get_collection("user_profile")
+        user_profile_ref = await self.db.get_collection("userProfile")
         list_user_profile = (
             await user_profile_ref.where(filter=FieldFilter("clubID", "==", admin_id))
             .where(filter=FieldFilter("userType", "==", "coach"))
             .get()
         )
-        coaches_list = [
-            user.to_dict() | {"id": user.id}
-            for user in list_user_profile
-            if user.reference != team_coach
-        ]
+        coaches_list = []
+        for user in list_user_profile:
+            if user.reference != team_coach:
+                user_dict = user.to_dict() | {"id": user.id}
+                del user_dict['token']
+                coaches_list.append(user_dict)
         return coaches_list
 
-    async def chenge_coach_form_team(self, coach_id: str, team_id: str) -> dict:
+    async def change_coach_form_team(self, coach_id: str, team_id: str) -> dict:
         user_profile = await self.db.get_doc("user_profile", coach_id)
         if not user_profile.exists:
             raise HTTPException(status_code=404, detail="Coach not found")

@@ -200,7 +200,7 @@
         <div class="general-team">
             <h1 class="general-team-title">Команды</h1>
             <div class="team-list">
-                {% for team in teams  %}
+                {% for team in teams %}
                     <div class="team-display">
                         <div class="team-info">
                             <div class="round-image-ml">
@@ -209,12 +209,13 @@
                             <p class="team-description">{{ team.title }}</p>
                         </div>
                         <div class="coach-block">
-                            <p class="team-coach">Тренер:&nbsp;&nbsp; {{ team.coach.lastName }}</p>
+                            <p class="team-coach">Тренер:&nbsp;&nbsp;{{ team.coach.lastName }} </p>
                             <div class="coack-avatar">
                                 <img src="/static/images/coach/img.png" alt="Coach image">
                             </div>
                         </div>
-                        <button class="change-team-coach" type="button" data-bs-toggle="modal" data-bs-target="#changeCoachModal">
+                        <button class="change-team-coach" type="button" data-bs-toggle="modal" data-id="{{ team.id }}"
+                                data-bs-target="#changeCoachModal" onclick="fillCoachNModal(this)">
                             Назначить нового тренера
                         </button>
                     </div>
@@ -223,23 +224,38 @@
         </div>
     </div>
     <div class="modal fade" id="changeCoachModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+                <form id="changeCoachForm" action="#">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="main-content-change-coach">
+                            <p class="inter-font">Выберите нового тренера</p>
+                            <div class="coach-list-content">
+                                <ul id="listCoachView" class="list-group">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button  id="changeCoachSelect" type="button" class="change-coach-btn inter-font" onclick="changeCoachBtn(this)">
+                            Сохранить&nbsp;изменения
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
     <script>
+        $(document).ready(function () {
+            $('#changeCoachModal').on('hidden.bs.modal', function (e) {
+                $('#listCoachView').empty();
+            });
+        });
+
         $('#staticBackdrop').on('show.bs.modal', function (event) {
             let modal = $(this);
             let button = $(event.relatedTarget);
@@ -312,5 +328,61 @@
                     console.error('Ошибка загрузки данных:', error);
                 });
         });
+    </script>
+    <script>
+
+
+        function fillCoachNModal(button) {
+            let btn = $(button)
+            let id = btn.data('id');
+
+            fetch(`http://127.0.0.1:8000/teams/${id}/coach/list/`, {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    let coachListView = $('#listCoachView')
+                    data.forEach(item => {
+                        let someLyTeg = $('<li class="list-group-item"></li>')
+                        let generalCoachDiv = $('<div class="coach-view" onclick="selectRadio(this)"></div>')
+                        let imageDefaultDiv = $('<div class="coach-image-view"><img src="/static/images/club/img.png" alt="Team image"></div>')
+                        let nameViewDiv = $('<div><p class="inner-font" style="color: black; margin-top: 6px"></p></div>')
+                        nameViewDiv.find('.inner-font').text(`${item['lastName']}`)
+                        let coachID = `${item['id']}`
+                        let someInputTeg = $('<input class="form-check-input me-1" type="radio" name="options" value="' + coachID + '" checked>')
+                        generalCoachDiv.append(imageDefaultDiv)
+                        generalCoachDiv.append(nameViewDiv)
+                        generalCoachDiv.append(someInputTeg)
+                        someLyTeg.append(generalCoachDiv)
+                        coachListView.append(someLyTeg)
+                    });
+                })
+                .catch(error => {
+                    console.error('Ошибка загрузки данных:', error);
+                });
+            $('#changeCoachSelect').attr('data-team-id', id)
+        }
+
+        function selectRadio(parentDiv) {
+            var radio = parentDiv.querySelector('input[type=radio]');
+            if (radio) {
+                radio.checked = !radio.checked;
+            }
+        }
+
+        function changeCoachBtn(btn) {
+            event.preventDefault();
+            let teamId = $(btn).data('team-id')
+            let selectedOption = $("input[name='options']:checked").val();
+            console.log(teamId)
+            console.log(selectedOption)
+            //
+        }
     </script>
 {% endblock %}

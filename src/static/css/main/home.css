@@ -582,3 +582,68 @@
     box-shadow: none !important;
 }
 
+.main-content-change-coach {
+    display: grid;
+    justify-content:space-around;
+    justify-items: center;
+    height: 100%;
+    width: 100%;
+}
+.main-content-change-coach p {
+    color: black;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.inter-font {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+}
+
+.coach-list-content {
+    width: 420px;
+    height: 437px;
+    gap: 15px;
+    overflow-y: auto;
+    border: 1px solid black; /* Добавляем границу для наглядности */
+}
+.change-coach-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 400px;
+    height: 56px;
+    padding: 16px 147px;
+    border-radius: 10px;
+    background-color: red;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: 500;
+    color: white;
+}
+
+.coach-view {
+    display: flex;
+    margin-top: 10px;
+    border: 1px solid #0A0A0A33;
+    width: 100%;
+    height: 64px;
+    padding: 10px 14px;
+    gap: 10px;
+}
+
+.coach-image-view {
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: center;
+    align-content: center;
+    background-color: #353140;;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    text-align: center;
+}
