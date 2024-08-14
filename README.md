@@ -4,7 +4,7 @@
 1. Создать папку **env** c файлом **.test.env** в корне проекта
 2. Скачать из Firerbase credentials для базы данных
     ![img.png](img.png)
-3. Полученые credentials поместить по пути `src/pkg/firebase_tools/keys/` пердварительно создав папку **keys** и переименовать файл в **cred_test.json**
+3. Полученные credentials поместить по пути `src/pkg/firebase_tools/keys/` предварительно создав папку **keys** и переименовать файл в **cred_test.json**
 4. Заполнить файл **.test.env** как на шаблоне:
    ```
     PROJECT_NAME="<Название приложения>"
@@ -13,10 +13,11 @@
     MAIL_PORT=587
     MAIL_SERVER="smtp.gmail.com(можно использовать другой по желанию)"
     MAIL_USE_TLS=1
-   
+
     CRED_PATH=src/pkg/firebase_tools/keys/cred_test.json
 
-    FB_URL="<авторизационый домен Firebase(добавить https:\\)>"
+    FB_URL="<домен для авторизации Firebase(добавить https:\\)>"
+
     FB_BUCKET="<адрес хранилища Firebase>"
     FB_API_KEY="<Api ключ Firebase>"
     
