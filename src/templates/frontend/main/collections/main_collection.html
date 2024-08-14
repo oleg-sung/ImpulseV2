@@ -11,15 +11,15 @@
 {% block content %}
 	<div class="d-flex justify-content-center">
 		<div id="choiceCollection" class="div-with-border">
-			<div class="activ-collection justify-content-end align-items-center text-center">
-				<a href="{{ url_for("get_active_collection_page") }}"
+			<div id="activeCollectionLink" class="activ-collection justify-content-end align-items-center text-center">
+				<a id="activeTestLink" href="{{ url_for("get_active_collection_page") }}"
 				   class="no-descr activ-title ">
 					Активная коллекция
 				</a>
 			</div>
-			<div class="created-collection justify-content-end align-items-center text-center">
-				<a href="{{ url_for("created_collection_page").include_query_params(status="created") }}"
-				   class="no-descr activ-title ">
+			<div id="createCollectionLink" class="created-collection justify-content-end align-items-center text-center">
+				<a id="createTestLink" href="{{ url_for("created_collection_page").include_query_params(status="created") }}"
+				   class="no-descr activ-title">
 					Созданные коллекции
 				</a>
 			</div>

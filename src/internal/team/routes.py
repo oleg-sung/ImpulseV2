@@ -13,6 +13,7 @@ router = APIRouter(prefix="/teams", tags=["Team"])
 @router.get("/", response_model=list[Team], status_code=status.HTTP_200_OK)
 async def get_teams(user: User = Depends(get_current_user)):
     data = await TeamService().get_teams_by_admin_id(user.uid)
+    print(data)
     return data
 
 
@@ -29,17 +30,17 @@ async def get_team(team_id: str, user: User = Depends(get_current_user)):
 
 @router.get(
     "/{team_id}/coach/list/",
-    response_model=list[GetUserProfile],
+    # response_model=list[GetUserProfile],
     status_code=status.HTTP_200_OK,
 )
-async def get_coachs(team_id: str, user: User = Depends(get_current_user)):
-    data = await TeamService().get_coaches(user.uid, team_id)
+async def get_coaches(team_id: str, user: User = Depends(get_current_user)):
+    data = await TeamService().get_coaches_list(user.uid, team_id)
     return data
 
 
-@router.put("/{team_id}/coach/cahnge/", status_code=status.HTTP_201_CREATED)
+@router.put("/{team_id}/coach/change/", status_code=status.HTTP_201_CREATED)
 async def change_coache(
     team_id: str, data_: ChangeCoach, user: User = Depends(get_current_user)
 ):
-    data = await TeamService().chenge_coach_form_team(data_.coach_id, team_id)
+    data = await TeamService().change_coach_form_team(data_.coach_id, team_id)
     return data

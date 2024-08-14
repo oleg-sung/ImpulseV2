@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from google.cloud.firestore_v1 import FieldFilter
+from google.cloud.firestore_v1 import FieldFilter, AsyncDocumentReference
 
 from internal.database import db
 
@@ -22,7 +22,15 @@ class TeamService:
             .order_by("title")
             .get()
         )
-        teams_list = [team.to_dict() | {"id": team.id} for team in teams_list_ref]
+        teams_list = []
+        for team in teams_list_ref:
+            team_dict = team.to_dict() | {"id": team.id}
+            coach_link: AsyncDocumentReference = team.to_dict()['coach']
+            coach_ref = await coach_link.get()
+            coach_dict = coach_ref.to_dict()
+            teams_list.append(
+                team_dict | {'coach': coach_dict}
+            )
 
         return teams_list
 
@@ -41,7 +49,7 @@ class TeamService:
 
         return team_dict
 
-    async def get_coaches(self, admin_id: str, team_id: str) -> list:
+    async def get_coaches_list(self, admin_id: str, team_id: str) -> list:
         """
         Get coaches
         :param admin_id:
@@ -51,22 +59,22 @@ class TeamService:
         team_ref = await self.db.get_doc(self.model, team_id)
         team_dict = team_ref.to_dict()
         team_coach = team_dict["coach"]
-
-        user_profile_ref = await self.db.get_collection("user_profile")
+        user_profile_ref = await self.db.get_collection("userProfile")
         list_user_profile = (
             await user_profile_ref.where(filter=FieldFilter("clubID", "==", admin_id))
             .where(filter=FieldFilter("userType", "==", "coach"))
             .get()
         )
-        coaches_list = [
-            user.to_dict() | {"id": user.id}
-            for user in list_user_profile
-            if user.reference != team_coach
-        ]
+        coaches_list = []
+        for user in list_user_profile:
+            if user.reference != team_coach:
+                user_dict = user.to_dict() | {"id": user.id}
+                del user_dict['token']
+                coaches_list.append(user_dict)
         return coaches_list
 
-    async def chenge_coach_form_team(self, coach_id: str, team_id: str) -> dict:
-        user_profile = await self.db.get_doc("user_profile", coach_id)
+    async def change_coach_form_team(self, coach_id: str, team_id: str) -> dict:
+        user_profile = await self.db.get_doc("userProfile", coach_id)
         if not user_profile.exists:
             raise HTTPException(status_code=404, detail="Coach not found")
         # Дообавить проверку на тип тренера!!!!!!!!

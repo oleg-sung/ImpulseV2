@@ -95,6 +95,15 @@
                     div2.classList.add('active');
                 }
             });
+            let activeLink = document.getElementById('activeCollectionLink')
+            let createdLink = document.getElementById('createCollectionLink')
+            let aActiveLink = document.getElementById('activeTestLink')
+            let aCreateLink = document.getElementById('createTestLink')
+            if (aCreateLink.href === currentUrl) {
+                createdLink.style.borderBottom = '5px solid #27293E'
+            } else if (aActiveLink.href === currentUrl) {
+                activeLink.style.borderBottom = '5px solid #27293E'
+            }
         });
 	</script>
 </div>

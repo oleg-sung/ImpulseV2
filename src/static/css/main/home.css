@@ -312,7 +312,7 @@
 .team-display {
     margin-right: 80px;
     width: 328px;
-    height: 235px;
+    height: 255px;
     border-radius: 14px;
     padding: 18px 28px;
     gap: 12px;
@@ -335,8 +335,8 @@
 
 .team-description {
     position: relative;
-    left: 8%;
-    top: -2%;
+    left: 10%;
+    top: 8px;
     font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
     font-weight: 500;
@@ -347,7 +347,11 @@
 }
 
 .coach-block {
+    margin-top: 20px;
     display: flex;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
 }
 
 .team-coach {
@@ -364,10 +368,10 @@
 }
 
 .coack-avatar {
+    top: 13px;
+    display: flex;
     position: relative;
-    top: 22px;
-    left: 20px;
-    margin-right: auto;
+    margin-left: auto;
     justify-content: center;
     align-content: center;
     background-color: #353140;;
@@ -379,7 +383,6 @@
 }
 
 .coack-avatar img {
-    margin-top: 3px;
     height: 50px;
     width: 50px;
 }
@@ -579,3 +582,105 @@
     box-shadow: none !important;
 }
 
+.main-content-change-coach {
+    display: grid;
+    justify-content:space-around;
+    justify-items: center;
+    height: 100%;
+    width: 100%;
+}
+.main-content-change-coach p {
+    color: black;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.inter-font {
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-variation-settings: "slnt" 0;
+}
+
+.coach-list-content {
+    width: 420px;
+    height: 437px;
+    gap: 15px;
+    overflow-y: auto;
+    border: 1px solid black; /* Добавляем границу для наглядности */
+}
+.change-coach-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 400px;
+    height: 56px;
+    padding: 16px 147px;
+    border-radius: 10px;
+    background-color: red;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: 500;
+    color: white;
+}
+
+.coach-view {
+    display: flex;
+    margin-top: 10px;
+    border: 1px solid #0A0A0A33;
+    border-radius: 13px;
+    width: 100%;
+    height: 64px;
+    padding: 10px 14px;
+    gap: 10px;
+}
+
+.coach-image-view {
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: center;
+    align-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    text-align: center;
+}
+
+.circle-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #353140;
+
+}
+.circle-avatar img {
+    height: 60px;
+    width: 60px;
+
+}
+.round-image-coach {
+    left: 0;
+    width: 60px;
+    height: 60px;
+}
+
+.option {
+    padding: 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.option.selected {
+    background-color: #4F4856B2;
+}
+
+.form-check-input {
+    opacity: 0;
+    position: absolute;
+}

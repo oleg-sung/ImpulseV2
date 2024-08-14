@@ -13,7 +13,7 @@ class TokenService:
         self.db = db
 
     async def create_token(
-        self, user_id: str
+            self, user_id: str
     ) -> dict[str, bool | str | AsyncDocumentReference]:
         data = {"owner_id": user_id, "club_id": user_id}
         validate_data = CreateToken(**data).model_dump(by_alias=True)
@@ -74,17 +74,19 @@ class TokenService:
         user_profile = await self.db.get_collection("userProfile")
         user_profile_by_token = user_profile.where(
             filter=FieldFilter("token", "==", token_ref.reference)
+        ).where(
+            filter=FieldFilter('userType', '==', "coach")
         )
         result = []
         async for user in user_profile_by_token.stream():
-            user_profule = user.to_dict()
+            user_profile_dict = user.to_dict()
             result.append(
                 {
                     "id": user.id,
-                    "firstName": user_profule.get("firstName"),
-                    "middleName": user_profule.get("middleName", None),
-                    "lastName": user_profule.get("lastName"),
-                    "image": user_profule.get("image", None),
+                    "firstName": user_profile_dict.get("firstName"),
+                    "middleName": user_profile_dict.get("middleName", None),
+                    "lastName": user_profile_dict.get("lastName"),
+                    "image": user_profile_dict.get("image", None),
                 }
             )
         return result

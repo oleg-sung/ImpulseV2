@@ -223,7 +223,7 @@
 								</label>
 								<div class="collections-views">
 									<div class="change-view-collection">
-										<img id="frameCollectionView" src="" class="collection-view-display" width="580px" alt="text"
+										<img id="frameCollectionViewActive" src="" class="collection-view-display" width="580px" alt="text"
 										     height="279px">
 									</div>
 								</div>
@@ -360,13 +360,6 @@
         });
 	</script>
 	<script>
-        function previewCollectionView() {
-        let frame = document.getElementById('frameCollectionView');
-        frame.style.display = 'block'
-        frame.src = URL.createObjectURL(event.target.files[0]);
-        }
-	</script>
-	<script>
 		function fillCardDitails (button) {
             let imageUrl = $(button).data('image-url')
             let cardName = $(button).data('card-name')
@@ -403,16 +396,16 @@
 								<div class="create-view-collection">
 									<p class="view-title inner-font">Обложка коллекции:</p>
 									<div id="createViewDiv" class="create-view-div">
-										<img id="frame" src="" width="100%"
-										 height="100%">
-										<label class="form-control change-photo-button"
+{#										<img id="frameCollectionViewCreate" style="display: none" src="" width="100%"#}
+{#										 height="100%">#}
+										<label class="form-control change-photo-button" id="changeViewCollectionInput"
 											    style="text-align: center; justify-content: right; flex-direction: row-reverse"
 											    tabindex="0">Добавить обложку
 
 												<img class="change-photo-image" src="/static/images/collection/get_activ_collection/img.png"
 													 alt="Change Image">
 													<input type="file" name="cover" class="invisible change-photo-button" id="inputImageCollection"
-												    onchange="previewCollectionView()">
+												    onchange="previewCollectionViewCreate()">
 										</label>
 									</div>
 								</div>
@@ -555,6 +548,23 @@
                     }
                 );
         }
+        function previewCollectionView() {
+            let frame = document.getElementById('#frameCollectionViewActive');
+
+            frame.style.display = 'block'
+            frame.src = URL.createObjectURL(event.target.files[0]);
+        }
+        function previewCollectionViewCreate() {
+            let view = document.getElementById('createViewDiv');
+            view.style.backgroundImage = `url(${URL.createObjectURL(event.target.files[0])})`
+            let viewInput =  document.getElementById('changeViewCollectionInput');
+            if (view.style.backgroundImage) {
+                viewInput.style.display = 'none'
+            } else {
+                viewInput.style.display = 'block'
+            }
+        }
 	</script>
+
 
 {% endblock %}
