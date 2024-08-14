@@ -38,7 +38,7 @@ async def get_coaches(team_id: str, user: User = Depends(get_current_user)):
     return data
 
 
-@router.put("/{team_id}/coach/cahnge/", status_code=status.HTTP_201_CREATED)
+@router.put("/{team_id}/coach/change/", status_code=status.HTTP_201_CREATED)
 async def change_coache(
     team_id: str, data_: ChangeCoach, user: User = Depends(get_current_user)
 ):

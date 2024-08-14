@@ -312,7 +312,7 @@
 .team-display {
     margin-right: 80px;
     width: 328px;
-    height: 275px;
+    height: 255px;
     border-radius: 14px;
     padding: 18px 28px;
     gap: 12px;
@@ -628,6 +628,7 @@
     display: flex;
     margin-top: 10px;
     border: 1px solid #0A0A0A33;
+    border-radius: 13px;
     width: 100%;
     height: 64px;
     padding: 10px 14px;
@@ -640,10 +641,46 @@
     position: relative;
     justify-content: center;
     align-content: center;
-    background-color: #353140;;
     width: 50px;
     height: 50px;
     border-radius: 50%;
     overflow: hidden;
     text-align: center;
+}
+
+.circle-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #353140;
+
+}
+.circle-avatar img {
+    height: 60px;
+    width: 60px;
+
+}
+.round-image-coach {
+    left: 0;
+    width: 60px;
+    height: 60px;
+}
+
+.option {
+    padding: 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.option.selected {
+    background-color: #4F4856B2;
+}
+
+.form-check-input {
+    opacity: 0;
+    position: absolute;
 }

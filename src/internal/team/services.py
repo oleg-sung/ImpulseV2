@@ -74,7 +74,7 @@ class TeamService:
         return coaches_list
 
     async def change_coach_form_team(self, coach_id: str, team_id: str) -> dict:
-        user_profile = await self.db.get_doc("user_profile", coach_id)
+        user_profile = await self.db.get_doc("userProfile", coach_id)
         if not user_profile.exists:
             raise HTTPException(status_code=404, detail="Coach not found")
         # Дообавить проверку на тип тренера!!!!!!!!
