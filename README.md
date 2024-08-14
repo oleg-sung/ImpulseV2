@@ -13,7 +13,6 @@
     MAIL_PORT=587
     MAIL_SERVER="smtp.gmail.com(можно использовать другой по желанию)"
     MAIL_USE_TLS=1
-   
     CRED_PATH=src/pkg/firebase_tools/keys/cred_test.json
 
     FB_URL="<домен для авторизации Firebase(добавить https:\\)>"
