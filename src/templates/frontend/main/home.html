@@ -211,7 +211,8 @@
                         <div class="coach-block">
                             <p class="team-coach">Тренер:&nbsp;&nbsp;{{ team.coach.lastName }} </p>
                             <div class="coack-avatar">
-                                <img src="/static/images/coach/img.png" alt="Coach image">
+                                <img class="round-image-coach" src="/static/images/users/no_avatar.png" alt="Team image">
+{#                                <img src="/static/images/coach/img.png" alt="Coach image">#}
                             </div>
                         </div>
                         <button class="change-team-coach" type="button" data-bs-toggle="modal" data-id="{{ team.id }}"
@@ -241,7 +242,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button  id="changeCoachSelect" type="button" class="change-coach-btn inter-font" onclick="changeCoachBtn(this)">
+                        <button id="changeCoachSelect" type="button" class="change-coach-btn inter-font"
+                                onclick="changeCoachBtn(this)">
                             Сохранить&nbsp;изменения
                         </button>
                     </div>
@@ -350,8 +352,8 @@
                     let coachListView = $('#listCoachView')
                     data.forEach(item => {
                         let someLyTeg = $('<li class="list-group-item"></li>')
-                        let generalCoachDiv = $('<div class="coach-view" onclick="selectRadio(this)"></div>')
-                        let imageDefaultDiv = $('<div class="coach-image-view"><img src="/static/images/club/img.png" alt="Team image"></div>')
+                        let generalCoachDiv = $('<div class="option coach-view" onclick="selectRadio(this)"></div>')
+                        let imageDefaultDiv = $('<div class="coach-image-view"><img class="round-image-coach" src="/static/images/users/no_avatar.png" alt="Team image"></div>')
                         let nameViewDiv = $('<div><p class="inner-font" style="color: black; margin-top: 6px"></p></div>')
                         nameViewDiv.find('.inner-font').text(`${item['lastName']}`)
                         let coachID = `${item['id']}`
@@ -370,6 +372,10 @@
         }
 
         function selectRadio(parentDiv) {
+            document.querySelectorAll('.option.selected').forEach(function (el) {
+                el.classList.remove('selected');
+            });
+            parentDiv.classList.add('selected');
             var radio = parentDiv.querySelector('input[type=radio]');
             if (radio) {
                 radio.checked = !radio.checked;
@@ -379,10 +385,25 @@
         function changeCoachBtn(btn) {
             event.preventDefault();
             let teamId = $(btn).data('team-id')
-            let selectedOption = $("input[name='options']:checked").val();
-            console.log(teamId)
-            console.log(selectedOption)
-            //
+            let selectedCoachOption = $("input[name='options']:checked").val();
+            const data = {'coachID': selectedCoachOption}
+            fetch(`http://127.0.0.1:8000/teams/${teamId}/coach/change/`, {
+                method: 'PUT',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    const status = response.status
+                    if (status === 201) {
+                        location.reload();
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка загрузки данных:', error);
+                });
         }
     </script>
 {% endblock %}
