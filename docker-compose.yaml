@@ -2,25 +2,31 @@ services:
   web:
     build:
       context: .
-      dockerfile: 'docker/api/Dockerfile'
+      dockerfile: 'docker/Dockerfile'
     volumes:
       - .:/molniya
     ports:
       - 8000:8000
+    command: ["uvicorn", "src:create_app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
   celery:
     build:
       context: .
-      dockerfile: 'docker/celery/Dockerfile'
+      dockerfile: 'docker/Dockerfile'
+    command: ["celery", "--app=pkg.celery_tools.tools:celery_app", "worker", "--loglevel=INFO"]
     depends_on:
       - redis
+
   flower:
     build:
       context: .
-      dockerfile: 'docker/flower/Dockerfile'
+      dockerfile: 'docker/Dockerfile'
+    command: ["celery", "--app=pkg.celery_tools.tools:celery_app", "flower"]
     depends_on:
       - redis
     ports:
       - 5555:5555
+
   redis:
     image: redis
     ports:
