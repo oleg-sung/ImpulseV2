@@ -57,6 +57,13 @@ async function registerUser() {
                     document.getElementById("enter").innerText = 'Регистрация';
                     document.getElementById('errors-reg').textContent = msq
                     return document.getElementById('errors-reg').style.display = 'block';
+                } else if (message === 'Value error, Age must be at least 5 years') {
+                    const msq = 'Возраст менее 5 лет'
+                    document.getElementById('loading-reg').style.display = 'none';
+                    document.getElementById("enter").innerText = 'Регистрация';
+                    document.getElementById('errors-reg').textContent = msq
+                    return document.getElementById('errors-reg').style.display = 'block';
+
                 }
             })
             document.getElementById('loading-reg').style.display = 'none';

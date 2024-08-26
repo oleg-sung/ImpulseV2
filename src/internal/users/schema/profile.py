@@ -55,6 +55,21 @@ class UpdateUserProfileSchema(BaseModel):
     phone: Optional[str | None] = None
     info: Optional[str | None] = None
 
+    @field_validator("birthdate")
+    @classmethod
+    def age_must_be_at_least_five(cls, v):
+        if v is None:
+            return v
+
+        today = datetime.date.today()
+        age = today.year - v.year - ((today.month, today.day) < (v.month, v.day))
+
+        if age < 5:
+            raise ValueError("Age must be at least 5 years")
+
+        return v
+
+
     @field_validator("first_name", "last_name", "middle_name")
     @classmethod
     def validate_name(cls, v: str):
