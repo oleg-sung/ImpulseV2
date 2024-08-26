@@ -1,4 +1,5 @@
 import datetime
+import re
 from typing import Optional
 
 from google.cloud.firestore_v1 import AsyncDocumentReference
@@ -57,7 +58,24 @@ class UpdateUserProfileSchema(BaseModel):
     @field_validator("first_name", "last_name", "middle_name")
     @classmethod
     def validate_name(cls, v: str):
+        if not cls.contains_only_letters_and_spaces(v):
+            raise ValueError('Value has to be a string')
         return v.capitalize()
+
+    @field_validator("phone")
+    @classmethod
+    def validate_phone(cls, v):
+        result = re.match(
+            r'^[78]?\d{10}$', v
+        )
+        print(v)
+        if not bool(result):
+            raise ValueError('Incorrect phone format')
+        return v
+
+    @staticmethod
+    def contains_only_letters_and_spaces(string: str):
+        return all(char.isalpha() or char.isspace() for char in string)
 
     class Config:
         populate_by_name = True
