@@ -104,7 +104,7 @@
 							</div>
 
 						</div>
-						<button type="submit" id="submitBtn" onclick="chnageInfo()"
+						<button type="submit" id="submitBtn" onclick="changeClubInfo()"
 						        class="sub-change-profile inner-font">
 							Сохранить&nbsp;изменения
 						</button>
@@ -138,7 +138,7 @@
 
         }
 
-        function chnageInfo() {
+        function changeClubInfo() {
             event.preventDefault();
             const form = new FormData(document.querySelector("form[id='changeClubInfo']"));
             fetch(`http://127.0.0.1:8000/user/club/change/`, {
