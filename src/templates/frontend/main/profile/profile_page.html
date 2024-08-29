@@ -47,11 +47,11 @@
 						</div>
 					</div>
 					<div class="update-profile-link">
-						<a href="#" onclick="fillDataCard(this)" data-fname="{{ data.firstName }}"
+						<a href="#" onclick="fillDataProfile(this)" data-fname="{{ data.firstName }}"
 						   data-lname="{{ data.lastName }}" data-mname="{{ data.middleName }}"
 						   data-phone="{{ data.phone }}" data-bday="{{ data.birthdate }}"
 						   class="update-user-profile inner-font" data-bs-toggle="modal"
-						   data-bs-target="#exampleModal">Редакстировать профиль</a>
+						   data-bs-target="#exampleModal">Редактировать профиль</a>
 					</div>
 				</div>
 				<div class="change-passwoed-view">
@@ -97,12 +97,12 @@
 									<div class="profile-name-view" style="border-bottom: 1px solid black">
 										<label class="label-input-profile inner-font" style="color: black"
 										       for="profileFirstName">Имя:</label>
-										<input class="inner-font" id="profileFirstName" name="firstName" type="text">
+										<input class="inner-font" id="profileFirstName" name="firstName" type="text" required>
 									</div>
 									<div class="profile-name-view" style="border-bottom: 1px solid black">
 										<label class="label-input-profile inner-font" style="color: black"
 										       for="profileLastName">Фамилия:</label>
-										<input class="inner-font" id="profileLastName" name="lastName" type="text">
+										<input class="inner-font" id="profileLastName" name="lastName" type="text" required>
 									</div>
 									<div class="profile-name-view" style="border-bottom: 1px solid black">
 										<label class="label-input-profile inner-font" style="color: black"
@@ -121,11 +121,11 @@
 										       for="profileBirthDate">Дата&nbsp;рождения:</label>
 										<input class="inner-font" id="profileBirthDate" type="date" name="birthdate"
 
-										       value="1990-01-01">
+										       value="1990-01-01" required>
 									</div>
 
 								</div>
-								<button type="submit" id="submitBtn" onclick="chnageInfo()"
+								<button type="submit" id="submitBtn"
 								        class="sub-change-profile inner-font">
 									Сохранить&nbsp;изменения
 								</button>
@@ -139,7 +139,15 @@
 		</div>
 	</div>
 	<script>
-        function fillDataCard(btn) {
+		document.getElementById('changeProfile').addEventListener('submit', function (event) {
+            if (this.checkValidity()) {
+                changeInfo()
+            } else {
+                event.preventDefault()
+            }
+        });
+
+        function fillDataProfile(btn) {
             event.preventDefault()
             var dataFirstName = $(btn).data('fname');
             var dataLastName = $(btn).data('lname')
@@ -159,11 +167,10 @@
             if (dataPhone) {
                 $('#profilePhone').val(dataPhone)
             }
-
         }
 
-        async function chnageInfo() {
-            event.preventDefault();
+        function changeInfo() {
+        	event.preventDefault()
             const formData = new FormData(document.querySelector("form[id='changeProfile']"));
             const object = {};
             formData.forEach(function (value, key) {
@@ -171,23 +178,24 @@
             });
             const json = JSON.stringify(object);
 
-            const response = await fetch('http://127.0.0.1:8000/user/profile/change/', {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: json,
-            });
-            if (response.ok) {
-                return window.location.href = "http://127.0.0.1:8000/pages/profile/"
-            } else {
-                const errors = await response.json();
-                alert('Ошибка валидации: ' + JSON.stringify(errors));
-            }
+            fetch('http://127.0.0.1:8000/user/profile/change/', {
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: json,
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data['status'] === true) {
+					window.location.href = "http://127.0.0.1:8000/pages/profile/";
+				} else {
+					alert('Ошибка валидации: ' + JSON.stringify(data));
+				}
+			})
+		}
 
-        }
-
-        async function changePassword() {
+        function changePassword() {
             event.preventDefault();
             const formData = new FormData(document.querySelector("form[id='changePassword']"));
             const object = {};
@@ -196,7 +204,7 @@
             });
             const json = JSON.stringify(object);
 
-            const response = await fetch('http://127.0.0.1:8000/user/password/change/', {
+            const response = fetch('http://127.0.0.1:8000/user/password/change/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -213,11 +221,13 @@
                 let passPInput = document.getElementById('changeTrue')
                 passPInput.style.display = 'block'
             } else {
-                const errors = await response.json();
+                const errors = response.json();
                 alert('Ошибка валидации: ' + JSON.stringify(errors));
             }
 
         }
+
+
 
 	</script>
 {% endblock %}

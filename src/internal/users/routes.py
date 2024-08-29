@@ -159,7 +159,6 @@ async def change_club_info(
 
 @router.get(
     "/club/image/",
-    # response_model=GetClubImage,
     status_code=status.HTTP_200_OK
 )
 async def get_club_image(user: User = Depends(get_current_user)):
@@ -167,9 +166,3 @@ async def get_club_image(user: User = Depends(get_current_user)):
     data = await ClubServices().get_club_image(user.uid)
     return data
 
-# @router.post("/club/coach/set/")
-# def set_coach(
-#     coach_id: str = Depends(cheak_coach), user: User = Depends(get_current_user)
-# ):
-#     data = ClubServices().set_coach_to_club()
-#     return data

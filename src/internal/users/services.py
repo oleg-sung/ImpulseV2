@@ -86,7 +86,8 @@ class ClubServices:
         image_id = club_dict.get("image", None)
         if image_id:
             image = await self.bucket.get_blob(f"club/{image_id}")
-            club_dict["image"] = image.public_url
+            if image:
+                club_dict["image"] = image.public_url
         return club_dict
 
     async def change_club_image(self, file: UploadFile, user_id: str) -> dict:

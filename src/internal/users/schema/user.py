@@ -40,7 +40,27 @@ class UserCreate(BaseModel):
     @field_validator("first_name", "last_name")
     @classmethod
     def validate_name(cls, v: str):
+        if not cls.contains_only_letters_and_spaces(v):
+            raise ValueError('Value has to be a string')
         return v.capitalize()
+
+    @staticmethod
+    def contains_only_letters_and_spaces(string: str):
+        return all(char.isalpha() or char.isspace() for char in string)
+
+    @field_validator("birthdate")
+    @classmethod
+    def validate_birthdate(cls, v):
+        if v is None:
+            return v
+
+        today = datetime.date.today()
+        age = today.year - v.year - ((today.month, today.day) < (v.month, v.day))
+
+        if age < 5:
+            raise ValueError("Age must be at least 5 years")
+
+        return v
 
 
 class UserLogin(BaseModel):
