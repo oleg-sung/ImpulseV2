@@ -2,6 +2,15 @@
 
 {% block head %}
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/profile/profile.css') }}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/masked-input/1.4.2/include.all.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/masked-input/1.4.2/jquery.maskedinput.js"></script>
+	<style>
+		.phone-input {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+        }
+	</style>
 {% endblock %}
 
 
@@ -113,7 +122,7 @@
 									<div class="profile-name-view" style="border-bottom: 1px solid black">
 										<label class="label-input-profile inner-font" style="color: black"
 										       for="profilePhone">Телефон:</label>
-										<input class="inner-font" id="profilePhone" name="phone" type="text"
+										<input class="inner-font phone-input" id="profilePhone" name="phone" type="text"
 										       placeholder="Не указано">
 									</div>
 									<div class="profile-name-view" style="border-bottom: 1px solid black">
@@ -139,6 +148,34 @@
 		</div>
 	</div>
 	<script>
+        const phoneInput = document.getElementById('profilePhone');
+
+        function handlePhoneInput(event) {
+            let value = event.target.value;
+
+            value = value.replace(/\D/g, '');
+
+            value = value.slice(0, 11);
+
+            event.target.value = value;
+        }
+
+        phoneInput.addEventListener('input', handlePhoneInput);
+
+        phoneInput.addEventListener('focus', () => {
+            if (!phoneInput.value.length) {
+                phoneInput.value = '89999999999';
+            }
+        });
+
+        phoneInput.addEventListener('blur', () => {
+            if (!phoneInput.value.length) {
+                phoneInput.value = '';
+            }
+        });
+    </script>
+	<script>
+
 		document.getElementById('changeProfile').addEventListener('submit', function (event) {
             if (this.checkValidity()) {
                 changeInfo()
