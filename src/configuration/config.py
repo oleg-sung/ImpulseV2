@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     CELERY_BROKER_URL: str
     CELERY_RESULT_BACKEND: str
     CELERY_EAGER: bool
-    model_config = SettingsConfigDict(env_file=os.path.abspath("env/.prod.env"))
+    model_config = SettingsConfigDict(env_file=os.path.abspath("env/.test.env"))
 
 
 class DevelopmentConfig(Settings):
