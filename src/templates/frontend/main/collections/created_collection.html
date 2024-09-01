@@ -483,6 +483,7 @@
                     <button type="submit" id="selectChanges" onclick="postChangeCollectionInfo(this)"
                             class="btn-card-create inner-font" style="margin-top: 60px">Сохранить&nbsp;изменения
                     </button>
+                    <div id="loading-reg2" class="loading loading-collection-active"></div>
                     </form>
                 </div>
             </div>
@@ -641,7 +642,6 @@
                                                     button.disabled = false;
                                                     button.style.whiteSpace = 'pre-wrap';
                                                     button.innerHTML = 'Сохранить&nbsp;изменения';
-                                                    document.getElementById('loading-reg').style.display = 'none';
                                                     location.href = ''
                                                 }
                                             })
@@ -825,6 +825,11 @@
             function postChangeCollectionInfo(button) {
                 event.preventDefault();
                 var id = $(button).data('id')
+                button.innerText = ''
+                button.disabled = true;
+                let test =  document.getElementById('loading-reg2')
+                console.log(test.style.display)
+                document.getElementById('loading-reg2').style.display = 'block';
                 const form = new FormData(document.querySelector("form[id='updateCollection']"));
                 const object = {};
                 form.forEach(function (value, key) {
@@ -850,6 +855,10 @@
                                         if (data.status === 'SUCCESS' || data.status === 'FAILURE') {
                                             clearInterval(checkInterval);
                                             console.log(data);
+                                            button.disabled = false;
+                                            button.style.whiteSpace = 'pre-wrap';
+                                            button.innerHTML = 'Сохранить&nbsp;изменения';
+                                            document.getElementById('loading-reg1').style.display = 'none';
                                             location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created';
                                         }
                                     })
@@ -857,6 +866,12 @@
                             }
 
                             const checkInterval = setInterval(() => checkTaskStatus(taskId), 200);
+                        } else if (data.status) {
+                            document.getElementById('loading-reg2').style.display = 'none';
+                            button.disabled = false;
+                            button.style.whiteSpace = 'pre-wrap';
+                            button.innerHTML = 'Сохранить&nbsp;изменения';
+                            location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created';
                         } else {
                             location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created';
                         }

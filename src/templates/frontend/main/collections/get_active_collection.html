@@ -221,11 +221,11 @@
                                 <img class="change-photo-image" src="/static/images/collection/create_cards/img.png"
                                      alt="Change Image">
                                 <input type="file" name="file" class="invisible" id="inputImageCard"
-                                       onchange="previewCollectionView()">
+                                       onchange="previewCollectionViewUpdate()">
                             </label>
                             <div class="collections-views">
                                 <div class="change-view-collection">
-                                    <img id="frameCollectionViewActive" src="" class="collection-view-display"
+                                    <img id="frameCollectionViewActive" class="collection-view-display"
                                          width="580px" alt="text"
                                          height="279px">
                                 </div>
@@ -246,12 +246,13 @@
                                        class="form-label inner-font description-cards">Описание: </label>
                                 <textarea class="form-control inner-font" name="motto" id="collectionMotto"
                                           style="border: 1px solid #8C8C8C;"
-                                          placeholder="Введите текст" rows="6"></textarea>
+                                          placeholder="Введите текст" rows="6" required></textarea>
                             </div>
                         </div>
                         <button type="submit" id="selectChanges" onclick="postChangeCollectionInfo(this)"
                                 class="btn-card-create inner-font" style="margin-top: 60px">Сохранить&nbsp;изменения
                         </button>
+                        <div id="loading-reg2" class="loading loading-collection-active"></div>
 
                     </form>
                 </div>
@@ -304,6 +305,9 @@
 <script>
     function postChangeCollectionInfo(button) {
         event.preventDefault();
+        button.innerText = ''
+        button.disabled = true;
+        document.getElementById('loading-reg1').style.display = 'block';
         var id = $(button).data('id')
         const form = new FormData(document.querySelector("form[id='updateCollection']"));
         const object = {};
@@ -332,6 +336,10 @@
                                 if (data.status === 'SUCCESS' || data.status === 'FAILURE') {
                                     clearInterval(checkInterval);
                                     console.log(data);
+                                    button.disabled = false;
+                                    button.style.whiteSpace = 'pre-wrap';
+                                    button.innerHTML = 'Сохранить&nbsp;изменения';
+                                    document.getElementById('loading-reg1').style.display = 'none';
                                     location.href = 'http://127.0.0.1:8000/pages/collections/active/';
                                 }
                             })
@@ -339,6 +347,12 @@
                     }
 
                     const checkInterval = setInterval(() => checkTaskStatus(taskId), 200);
+                } else if (data.status) {
+                    button.disabled = false;
+                    button.style.whiteSpace = 'pre-wrap';
+                    button.innerHTML = 'Сохранить&nbsp;изменения';
+                    document.getElementById('loading-reg1').style.display = 'none';
+                    location.href = 'http://127.0.0.1:8000/pages/collections/active/';
                 }
             })
             .catch(error => {
@@ -356,9 +370,10 @@
             $('#collectionName').text($(this).data('name'))
             $('#collectionMotto').val($(this).data('motto'))
             $('#selectChanges').attr('data-id', dataId)
+            let coverItem = document.getElementById('frameCollectionViewActive')
             var cover = $(this).data('cover')
             if (cover) {
-                $('#frameCollectionView').attr('src', cover)
+                coverItem.src = cover
             }
         });
     });
@@ -588,7 +603,29 @@
                     }
                 );
         }
-        function previewCollectionViewCreate() {
+        function previewCollectionViewUpdate() {
+            let view = document.getElementById('frameCollectionViewActive');
+            let file = event.target.files[0];
+            let reader = new FileReader();
+
+
+            reader.onload = function(e) {
+                view.src = e.target.result;
+                view.style.display = 'block'
+                let parentDiv = view.parentElement;
+                let viewInput = document.getElementById('changeViewCollectionInput');
+                if (view.src !== '') {
+                    parentDiv.style.padding = '0';
+                    viewInput.style.display = 'none';
+                } else {
+                    viewInput.style.display = 'block';
+                    parentDiv.style.padding = '91px 150px 91px 150px';
+                }
+            };
+
+            reader.readAsDataURL(file);
+        }
+        function previewCollectionView() {
             let view = document.getElementById('frameCollectionViewCreate');
             let file = event.target.files[0];
             let reader = new FileReader();
@@ -610,6 +647,7 @@
 
             reader.readAsDataURL(file);
         }
+
     </script>
 
     {% endblock %}

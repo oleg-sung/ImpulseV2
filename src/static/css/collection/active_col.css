@@ -184,3 +184,8 @@ textarea.form-control {
     background-color: #353140;
     color: #E41730;
 }
+
+.loading-collection-active {
+    right: 49%;
+    top: 79.8%;
+}
