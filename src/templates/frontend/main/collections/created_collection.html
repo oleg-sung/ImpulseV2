@@ -39,7 +39,7 @@
                                              alt="Change Image">
                                         <input type="file" name="cover" class="invisible change-photo-button"
                                                id="inputImageCollection"
-                                               onchange="previewCollectionViewCreate()">
+                                               onchange="previewCollectionViewCreate()" required>
                                     </label>
                                 </div>
                             </div>
@@ -58,7 +58,7 @@
                             <p class="selecte-title inner-font">Колличество карточек:</p>
                             <div class="form-check radio-collection-size">
                                 <input type="radio" class="form-check-input btn-check" name="size" value="fortyCards"
-                                       id="option3" autocomplete="off">
+                                       id="option3" autocomplete="off" checked>
                                 <label style="color: black" class="form-check-label btn change-size-radio"
                                        for="option3">40</label>
                             </div>
@@ -76,8 +76,9 @@
                             </div>
                         </div>
                         <div class="btn-possition-modal">
-                            <button type="submit" class="btn-collection-create  inner-font">Сохранить&nbsp;изменения
+                            <button type="submit" id="createCollectionBtn" class="btn-collection-create  inner-font">Сохранить&nbsp;изменения
                             </button>
+                            <div id="loading-reg1" class="loading loading-collection"></div>
                         </div>
                     </form>
                 </div>
@@ -100,11 +101,28 @@
             inputImage.val = 'null'
         });
     });
+
     $(document).ready(function() {
         $('.btn-check').on('click', function() {
             $(this).next('.btn').toggleClass('active');
         });
     });
+
+    function clearForm() {
+
+        const formElements = document.querySelectorAll('.modal-body input, .modal-body textarea, .modal-body select');
+
+        formElements.forEach(element => {
+            element.value = '';
+            element.checked = false;
+        });
+
+        const fileInput = document.querySelector('.modal-body input[type="file"]');
+        if (fileInput) {
+            fileInput.value = '';
+        }
+    }
+
 </script>
 <script>
     function previewCollectionView() {
@@ -139,6 +157,10 @@
 
     document.getElementById('createCollection').addEventListener('submit',  function (event) {
         event.preventDefault();
+        let button = document.getElementById('createCollectionBtn');
+        button.innerText = ''
+        button.disabled = true;
+        document.getElementById('loading-reg1').style.display = 'block';
         const form = new FormData(document.querySelector("form[id='createCollection']"));
         const object = {};
         form.forEach(function (value, key) {
@@ -163,6 +185,10 @@
                                     if (data.status === 'SUCCESS' || data.status === 'FAILURE') {
                                         clearInterval(checkInterval);
                                         console.log(data);
+                                        button.disabled = false;
+                                        button.style.whiteSpace = 'pre-wrap';
+                                        button.innerHTML = 'Сохранить&nbsp;изменения';
+                                        document.getElementById('loading-reg1').style.display = 'none';
                                         location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created';
                                     }
                                 })
@@ -174,6 +200,10 @@
 
             })
             .catch(error => {
+                button.disabled = false;
+                button.style.whiteSpace = 'pre-wrap';
+                button.innerHTML = 'Сохранить&nbsp;изменения';
+                document.getElementById('loading-reg').style.display = 'none';
                 console.error('Ошибка загрузки данных:', error)
             });
     });
@@ -442,8 +472,7 @@
                                 <p class="inner-font label-name-input" for="cardsNameInput">Название:</p>
                                 <p class="inner-font collection-update-name" id="collectionName"></p>
                             </div>
-                            <div class="mb-3 description-cards-input-display"
-                            ">
+                            <div class="mb-3 description-cards-input-display">
                             <label for="collectionMotto"
                                    class="form-label inner-font description-cards">Описание: </label>
                             <textarea class="form-control inner-font"
@@ -502,8 +531,7 @@
                             <input class="inner-font" id="updateCardName" name="name" placeholder="Введите название"
                                    type="text" required>
                         </div>
-                        <div class="mb-3 description-cards-input-display"
-                        ">
+                        <div class="mb-3 description-cards-input-display">
                         <label for="updateCardInfoInput"
                                class="form-label inner-font description-cards">Описание: </label>
                         <textarea class="form-control inner-font"
@@ -514,6 +542,7 @@
                 <button type="submit" id="submitUpdateBtn" onclick="UpdateCard(this)"
                         class="btn-card-create inner-font">Сохранить&nbsp;изменения
                 </button>
+                <div id="loading-reg" class="loading loading-card-collection"></div>
                 </form>
             </div>
         </div>
@@ -572,52 +601,69 @@
                                 class="btn-card-create inner-font">
                             Сохранить&nbsp;изменения
                         </button>
+                        <div id="loading-reg" class="loading loading-card-collection"></div>
                     </form>
                 </div>
             </div>
             <div class="modal-footer">
             </div>
             <script>
-                function STestFunc(button) {
-                    event.preventDefault();
-                    button.style.display = "none";
-                    const form = new FormData(document.querySelector("form[id='createCads']"));
-                    const id = button.getAttribute('data-col-id')
-                    const type = button.getAttribute('data-type')
-                    const position = button.getAttribute('data-pos')
-                    form.append('type_', type)
-                    form.append('position', position)
-                    fetch(`http://127.0.0.1:8000/collection/${id}/card/create/`, {
-                        method: 'POST',
-                        credentials: 'include',
-                        body: form
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data)
-                            const taskId = data.task_id
-                            if (taskId) {
-                                function checkTaskStatus(taskId) {
-                                    fetch(`http://127.0.0.1:8000/tasks/${taskId}/`)
-                                        .then(response => response.json())
-                                        .then(data => {
-                                            console.log('Task status:', data.status);
-                                            if (data.status === 'SUCCESS' || data.status === 'FAILURE') {
-                                                clearInterval(checkInterval);
-                                                console.log(data);
-                                                location.href = ''
-                                            }
-                                        })
-                                        .catch(error => console.error('Error:', error));
+                function STestFunc(button, event) {
+                     let formCreateCard = document.getElementById('createCads')
+                     if (formCreateCard.checkValidity()) {
+                        button.innerText = ''
+                        button.disabled = true;
+                        document.getElementById('loading-reg').style.display = 'block';
+                        const form = new FormData(document.querySelector("form[id='createCads']"));
+                        const id = button.getAttribute('data-col-id')
+                        const type = button.getAttribute('data-type')
+                        const position = button.getAttribute('data-pos')
+                        form.append('type_', type)
+                        form.append('position', position)
+                        fetch(`http://127.0.0.1:8000/collection/${id}/card/create/`, {
+                            method: 'POST',
+                            credentials: 'include',
+                            body: form
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data)
+                                const taskId = data.task_id
+                                if (taskId) {
+                                    function checkTaskStatus(taskId) {
+                                        fetch(`http://127.0.0.1:8000/tasks/${taskId}/`)
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                console.log('Task status:', data.status);
+                                                if (data.status === 'SUCCESS' || data.status === 'FAILURE') {
+                                                    clearInterval(checkInterval);
+                                                    console.log(data);
+                                                    button.disabled = false;
+                                                    button.style.whiteSpace = 'pre-wrap';
+                                                    button.innerHTML = 'Сохранить&nbsp;изменения';
+                                                    document.getElementById('loading-reg').style.display = 'none';
+                                                    location.href = ''
+                                                }
+                                            })
+                                            .catch(error => console.error('Error:', error));
+                                    }
+
+                                    const checkInterval = setInterval(() => checkTaskStatus(taskId), 500);
                                 }
 
-                                const checkInterval = setInterval(() => checkTaskStatus(taskId), 500);
-                            }
 
-
-                        })
-                        .catch(error => console.error(error));
+                            })
+                            .catch(error => console.error(error));
+                     } else {
+                        event.preventDefault();
+                    }
                 };
+                $('#createCardModal').on('hidden.bs.modal', function () {
+                     let view = document.getElementById('frameCreate');
+                     view.style.display = 'none'
+                     view.src = ''
+                     clearForm()
+                })
             </script>
         </div>
 
@@ -711,45 +757,51 @@
             });
         </script>
         <script>
-            function UpdateCard(button) {
-                event.preventDefault();
-                button.style.display = "none";
-                const form = new FormData(document.querySelector("form[id='updateCads']"));
-                const card_id = button.getAttribute('data-id')
-                const col_id = button.getAttribute('data-col-id')
-                console.log(form)
-                fetch(`http://127.0.0.1:8000/collection/${col_id}/card/${card_id}/change/`, {
-                    method: 'PUT',
-                    credentials: 'include',
-                    body: form
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log(data)
-                        const taskId = data.task_id
-                        if (taskId) {
-                            function checkTaskStatus(taskId) {
-                                fetch(`http://127.0.0.1:8000/tasks/${taskId}/`)
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        console.log('Task status:', data.status);
-                                        if (data.status === 'SUCCESS' || data.status === 'FAILURE') {
-                                            clearInterval(checkInterval);
-                                            console.log(data);
-                                            location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created'
-                                        }
-                                    })
-                                    .catch(error => console.error('Error:', error));
+            function UpdateCard(button, event) {
+                let updateCardForm = document.getElementById('updateCads')
+                if (updateCardForm.checkValidity()) {
+                    button.innerText = ''
+                    button.disabled = true;
+                    document.getElementById('loading-reg').style.display = 'block';
+                    const form = new FormData(document.querySelector("form[id='updateCads']"));
+                    const card_id = button.getAttribute('data-id')
+                    const col_id = button.getAttribute('data-col-id')
+                    console.log(form)
+                    fetch(`http://127.0.0.1:8000/collection/${col_id}/card/${card_id}/change/`, {
+                        method: 'PUT',
+                        credentials: 'include',
+                        body: form
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data)
+                            const taskId = data.task_id
+                            if (taskId) {
+                                function checkTaskStatus(taskId) {
+                                    fetch(`http://127.0.0.1:8000/tasks/${taskId}/`)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            console.log('Task status:', data.status);
+                                            if (data.status === 'SUCCESS' || data.status === 'FAILURE') {
+                                                clearInterval(checkInterval);
+                                                console.log(data);
+                                                location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created'
+                                            }
+                                        })
+                                        .catch(error => console.error('Error:', error));
+                                }
+
+                                const checkInterval = setInterval(() => checkTaskStatus(taskId), 500);
+                            } else {
+                                location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created'
                             }
 
-                            const checkInterval = setInterval(() => checkTaskStatus(taskId), 500);
-                        } else {
-                            location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created'
-                        }
 
-
-                    })
-                    .catch(error => console.error(error));
+                        })
+                        .catch(error => console.error(error));
+                } else {
+                    event.preventDefault();
+                }
             }
 
             function fillDataCard(btn) {
@@ -831,6 +883,8 @@
                     location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created';
                 })
             }
-        </script>
 
+
+
+        </script>
         {% endblock %}

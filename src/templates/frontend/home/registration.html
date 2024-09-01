@@ -65,10 +65,8 @@
     <script>
         document.getElementById('registerForm').addEventListener('submit', function (event) {
             if (this.checkValidity()) {
-                // Форма валидна, вызываем функцию
                 registerUser();
             } else {
-                // Форма невалидна, предотвращаем отправку
                 event.preventDefault();
             }
         });

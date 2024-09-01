@@ -280,7 +280,6 @@
                                      height="216px">
                             </div>
                         </div>
-
                     </div>
                     <div class="get-card-name">
                         <p class="inner-font label-name-input">Название:</p>
@@ -415,7 +414,7 @@
                                              alt="Change Image">
                                         <input type="file" name="cover" class="invisible change-photo-button"
                                                id="inputImageCollection"
-                                               onchange="previewCollectionViewCreate()">
+                                               onchange="previewCollectionViewCreate()" required>
                                     </label>
                                 </div>
                             </div>
@@ -434,7 +433,7 @@
                             <p class="selecte-title inner-font">Колличество карточек:</p>
                             <div class="form-check radio-collection-size">
                                 <input type="radio" class="form-check-input btn-check" name="size" value="fortyCards"
-                                       id="option3" autocomplete="off">
+                                       id="option3" autocomplete="off" checked>
                                 <label style="color: black" class="form-check-label btn change-size-radio"
                                        for="option3">40</label>
                             </div>
@@ -452,8 +451,9 @@
                             </div>
                         </div>
                         <div class="btn-possition-modal">
-                            <button type="submit" class="btn-collection-create  inner-font">Сохранить&nbsp;изменения
+                            <button id="createCollectionBtn" type="submit" class="btn-collection-create  inner-font">Сохранить&nbsp;изменения
                             </button>
+                            <div id="loading-reg1" class="loading loading-collection"></div>
                         </div>
                     </form>
                 </div>
@@ -483,46 +483,56 @@
     });
 </script>
 <script>
-    document.getElementById('createCollection').addEventListener('submit',  function (event) {
-        event.preventDefault();
-        const form = new FormData(document.querySelector("form[id='createCollection']"));
-        const object = {};
-        form.forEach(function (value, key) {
-            object[key] = value;
-        });
+     document.getElementById('createCollection').addEventListener('submit',  function (event) {
+                event.preventDefault();
+                let button = document.getElementById('createCollectionBtn');
+                button.innerText = ''
+                button.disabled = true;
+                document.getElementById('loading-reg1').style.display = 'block';
+                const form = new FormData(document.querySelector("form[id='createCollection']"));
+                const object = {};
+                form.forEach(function (value, key) {
+                    object[key] = value;
+                });
 
-        fetch('http://127.0.0.1:8000/collection/create/', {
-            method: 'POST',
-            credentials: 'include',
-            body: form
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-                if (data.task_id){
-                    const taskId = data.task_id
-                    function checkTaskStatus(taskId) {
-                            fetch(`http://127.0.0.1:8000/tasks/${taskId}/`)
-                                .then(response => response.json())
-                                .then(data => {
-                                    console.log('Task status:', data.status);
-                                    if (data.status === 'SUCCESS' || data.status === 'FAILURE') {
-                                        clearInterval(checkInterval);
-                                        console.log(data);
-                                        location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created';
-                                    }
-                                })
-                                .catch(error => console.error('Error:', error));
+                fetch('http://127.0.0.1:8000/collection/create/', {
+                    method: 'POST',
+                    credentials: 'include',
+                    body: form
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data)
+                        if (data.task_id){
+                            const taskId = data.task_id
+                            function checkTaskStatus(taskId) {
+                                    fetch(`http://127.0.0.1:8000/tasks/${taskId}/`)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            console.log('Task status:', data.status);
+                                            if (data.status === 'SUCCESS' || data.status === 'FAILURE') {
+                                                clearInterval(checkInterval);
+                                                console.log(data);
+                                                button.disabled = false;
+                                                button.style.whiteSpace = 'pre-wrap';
+                                                button.innerHTML = 'Сохранить&nbsp;изменения';
+                                                document.getElementById('loading-reg1').style.display = 'none';
+                                                location.href = 'http://127.0.0.1:8000/pages/collections/created/?status=created';
+                                            }
+                                        })
+                                        .catch(error => console.error('Error:', error));
+                                }
+                             const checkInterval = setInterval(() => checkTaskStatus(taskId), 100);
                         }
-                     const checkInterval = setInterval(() => checkTaskStatus(taskId), 100);
-                }
-
-
-            })
-            .catch(error => {
-                console.error('Ошибка загрузки данных:', error)
+                    })
+                    .catch(error => {
+                        button.disabled = false;
+                        button.style.whiteSpace = 'pre-wrap';
+                        button.innerHTML = 'Сохранить&nbsp;изменения';
+                        document.getElementById('loading-reg').style.display = 'none';
+                        console.error('Ошибка загрузки данных:', error)
+                    });
             });
-    });
 </script>
 <div class="archive-collections" style="margin-left: 150px; margin-top: 100px">
     <h1 class="arch-collection-description inner-font">Закрытые коллекции</h1>
