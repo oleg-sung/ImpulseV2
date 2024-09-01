@@ -602,7 +602,7 @@
                                 class="btn-card-create inner-font">
                             Сохранить&nbsp;изменения
                         </button>
-                        <div id="loading-reg" class="loading loading-card-collection"></div>
+                        <div id="loading-reg3" class="loading loading-card-collection"></div>
                     </form>
                 </div>
             </div>
@@ -614,7 +614,7 @@
                      if (formCreateCard.checkValidity()) {
                         button.innerText = ''
                         button.disabled = true;
-                        document.getElementById('loading-reg').style.display = 'block';
+                        document.getElementById('loading-reg3').style.display = 'block';
                         const form = new FormData(document.querySelector("form[id='createCads']"));
                         const id = button.getAttribute('data-col-id')
                         const type = button.getAttribute('data-type')
@@ -639,6 +639,7 @@
                                                 if (data.status === 'SUCCESS' || data.status === 'FAILURE') {
                                                     clearInterval(checkInterval);
                                                     console.log(data);
+                                                    document.getElementById('loading-reg3').style.display = 'none';
                                                     button.disabled = false;
                                                     button.style.whiteSpace = 'pre-wrap';
                                                     button.innerHTML = 'Сохранить&nbsp;изменения';
