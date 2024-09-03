@@ -35,7 +35,7 @@ class TokenService:
         )
         token_sort = tokens_query.order_by(
             "isActive", direction=firestore.Query.DESCENDING
-        ).order_by("createdAt", direction=firestore.Query.DESCENDING)
+        ).order_by("date", direction=firestore.Query.DESCENDING)
 
         token_list = []
         async for token in token_sort.stream():

@@ -227,7 +227,7 @@ class CollectionService:
                 filter=FieldFilter("userCreatedID", "==", self.user_id)
             )
             .where(filter=FieldFilter("status", "==", status))
-            .order_by("createdAt", direction=firestore.Query.DESCENDING)
+            .order_by("date", direction=firestore.Query.DESCENDING)
         )
         result = []
         async for collection in query.stream():
@@ -251,7 +251,7 @@ class CollectionService:
                 filter=FieldFilter("userCreatedID", "==", self.user_id)
             )
             .where(filter=FieldFilter("status", "==", 'closed'))
-            .order_by("createdAt", direction=firestore.Query.DESCENDING)
+            .order_by("date", direction=firestore.Query.DESCENDING)
         )
         result = []
         async for collection in query.stream():
@@ -270,7 +270,7 @@ class CollectionService:
             collections.where(filter=FieldFilter("status", "!=", "closed"))
             .where(filter=FieldFilter("userCreatedID", "==", self.user_id))
             .order_by("status")
-            .order_by("createdAt", direction=firestore.Query.DESCENDING)
+            .order_by("date", direction=firestore.Query.DESCENDING)
         )
         async for collection in query_set.stream():
             collection_dict = collection.to_dict()
@@ -336,7 +336,7 @@ class CollectionService:
         name = f"Collection Views/{collection_dict["cover"]}"
         return name
 
-    async def change_collection_data(self, _id: str, cover: UploadFile = None, motto: str = None) -> dict:
+    async def change_collection_data(self, _id: str, cover: UploadFile = None, description: str = None) -> dict:
         update_dict = {}
         result_dict = {"status": True}
         if cover and cover.size:
@@ -356,9 +356,9 @@ class CollectionService:
             )
             delet_task = delete_file_task.delay(old_cover)
             result_dict['task_id'] = task.id
-            result_dict['delet_task_id'] = delet_task.id
-        if motto:
-            update_dict["motto"] = motto
+            result_dict['delete_task_id'] = delet_task.id
+        if description:
+            update_dict["description"] = description
         await self.db.update_doc(self.collection_model_name, _id, update_dict)
         return result_dict
 

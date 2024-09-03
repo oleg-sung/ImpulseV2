@@ -48,7 +48,7 @@
                                 <div class="mb-3 div-input-text-collection form-floating">
                                     <label for="cardInfoInput"
                                            class="form-label inner-font description-cards"></label>
-                                    <textarea class="form-control inner-font area-text-collection" name="motto"
+                                    <textarea class="form-control inner-font area-text-collection" name="description"
                                               id="cardInfoInput"
                                               placeholder="Введите текст" required></textarea>
                                 </div>
@@ -225,7 +225,7 @@
                     <img src="/static/images/collection/create_cards/img_1.png"></button>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item btn btn-primary open-modal" data-cover="{{ collection.cover }}"
-                           data-col-id="{{ collection.id }}" data-motto="{{ collection.motto }}"
+                           data-col-id="{{ collection.id }}" data-description="{{ collection.description }}"
                            data-name="{{ collection.name }}" id="openModalBtn" href="#" data-bs-toggle="modal"
                            data-bs-target="#changeCollectionData">Редактировать коллекцию</a></li>
                     <li>
@@ -255,8 +255,8 @@
                 {% endif %}
             </div>
             <div class="collection-description-display">
-                {% if collection.motto %}
-                <p class="inner-font">{{ collection.motto }}</p>
+                {% if collection.description %}
+                <p class="inner-font">{{ collection.description }}</p>
                 {% else %}
                     Описание коллекции отсутствует
                 {% endif %}
@@ -476,7 +476,7 @@
                             <label for="collectionMotto"
                                    class="form-label inner-font description-cards">Описание: </label>
                             <textarea class="form-control inner-font"
-                                      style="border: 1px solid #8C8C8C;!important;" name="motto"
+                                      style="border: 1px solid #8C8C8C;!important;" name="description"
                                       id="collectionMotto"
                                       placeholder="Введите текст" rows="6" required></textarea>
                     </div>
@@ -746,7 +746,7 @@
                     var modalId = $(this).data('bs-target');
                     var dataId = $(this).data('col-id');
                     $('#collectionName').text($(this).data('name'))
-                    $('#collectionMotto').val($(this).data('motto'))
+                    $('#collectionMotto').val($(this).data('description'))
                     $('#selectChanges').attr('data-id', dataId)
                     var cover = $(this).data('cover')
                     if (cover) {

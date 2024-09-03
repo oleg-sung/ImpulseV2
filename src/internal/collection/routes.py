@@ -91,14 +91,14 @@ async def create_collection(
     size: Annotated[CollectionSize, Form()],
     name: Optional[Annotated[str, Form(max_length=40)]] = Depends(cheak_club_name),
     cover: UploadFile = None,
-    motto: Annotated[str, Form()] = None,
+    description: Annotated[str, Form()] = None,
     user: User = Depends(get_current_user),
 ):
     """
     Create a new empty collection
     :return: JSON data
     """
-    data_dict = {"size": size, "name": name, "motto": motto}
+    data_dict = {"size": size, "name": name, "description": description}
     data = await CollectionService(user.uid).create_collection(data_dict, cover)
     return data
 
@@ -110,11 +110,11 @@ async def create_collection(
 async def change_collection_info(
     id_collection: str,
     file: UploadFile = None,
-    motto: Annotated[str, Form()] = None,
+    description: Annotated[str, Form()] = None,
     user: User = Depends(get_current_user),
 ):
     data = await CollectionService(user.uid).change_collection_data(
-        id_collection, cover=file, motto=motto
+        id_collection, cover=file, description=description
     )
     return data
 
