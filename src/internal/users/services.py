@@ -7,7 +7,7 @@ from starlette import status
 from pkg.celery_tools.tools import send_email_task, upload_file_task, delete_file_task
 from .schema.club import CreateClub, ClubImage, UpdateClubSchema
 from .schema.profile import UserProfile, UpdateUserProfileSchema
-from .schema.user import UserCreate, ChangePassword
+from .schema.user import UserCreate, ChangePassword, UserType
 from ..database import db, auth as fb_auth, storage
 from ..token.services import TokenService
 
@@ -147,7 +147,7 @@ class UserServices:
         user = self.auth.create_user_to_firebase(data.email, data.password)
         data = data.model_dump(exclude_none=True)
         await ClubServices().create_club(data, user.uid)
-        token_dict = await TokenService().create_token(user.uid)
+        token_dict = await TokenService().create_token(user.uid, UserType.ADMIN)
         token_ref = await token_dict["token_doc"].get()
         data["token"] = token_ref.reference
         await UserProfileService().create_user_profile(data, user.uid)

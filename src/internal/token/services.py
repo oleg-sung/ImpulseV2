@@ -4,6 +4,7 @@ from google.cloud.firestore_v1 import AsyncDocumentReference, FieldFilter
 
 from .schema import CreateToken, DisableToken, Token
 from ..database import db
+from ..users.schema.user import UserType
 
 
 class TokenService:
@@ -13,9 +14,9 @@ class TokenService:
         self.db = db
 
     async def create_token(
-            self, user_id: str
+            self, user_id: str, type_: UserType = UserType.COACH
     ) -> dict[str, bool | str | AsyncDocumentReference]:
-        data = {"owner_id": user_id, "club_id": user_id}
+        data = {"owner_id": user_id, "club_id": user_id, 'owner_type': type_}
         validate_data = CreateToken(**data).model_dump(by_alias=True)
         token_doc = await self.db.create_doc(self.token_model_name, validate_data)
         return {"status": True, "token_id": token_doc.id, "token_doc": token_doc}
@@ -29,7 +30,6 @@ class TokenService:
         return {"token_id": token.id}
 
     async def get_all_token_by_id(self, user_id: str) -> list:
-        """ """
         tokens_query = await self.db.search_doc(
             self.token_model_name, "userCreatedID", "==", user_id
         )
@@ -39,7 +39,8 @@ class TokenService:
 
         token_list = []
         async for token in token_sort.stream():
-            token_list.append(token.to_dict() | {"id": token.id})
+            if not token.to_dict()['userType'] == UserType.ADMIN:
+                token_list.append(token.to_dict() | {"id": token.id})
         return token_list
 
     async def delete_token_by_id(self, token: Token) -> dict:
@@ -55,7 +56,7 @@ class TokenService:
             filter=FieldFilter("userCreatedID", "==", user_id)
         )
         token_list = [token.reference async for token in tokens_query.stream()]
-        profiles_ref = await self.db.get_collection("user_profile")
+        profiles_ref = await self.db.get_collection("userProfile")
         query = profiles_ref.where(filter=FieldFilter("token", "in", token_list)).where(
             filter=FieldFilter("userType", "==", "coach")
         )

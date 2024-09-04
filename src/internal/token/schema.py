@@ -32,7 +32,7 @@ class BaseToken(BaseModel):
 class CreateToken(BaseToken):
     is_active: bool = Field(default=True, alias="isActive")
     auth_count: int = Field(default=0, alias="authCount")
-    owner_type: UserType = Field(default=UserType.ADMIN, alias="userType")
+    owner_type: UserType = Field(default=UserType.COACH, alias="userType")
     code: str = Field(default_factory=lambda: uuid.uuid4().hex)
     date: datetime.datetime = Field(
         default=firestore.SERVER_TIMESTAMP, alias="date"
