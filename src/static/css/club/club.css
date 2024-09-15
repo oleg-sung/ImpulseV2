@@ -180,3 +180,10 @@ input[type="text"] {
 .sub-change-profile:hover {
     color: black;
 }
+
+.loading-club {
+    position: absolute;
+    top: 80%;
+    right: 48.5%;
+
+}

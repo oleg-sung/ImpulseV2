@@ -4,6 +4,7 @@
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/club/club.css') }}">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/masked-input/1.4.2/include.all.min.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/masked-input/1.4.2/jquery.maskedinput.js"></script>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/loading.css') }}">
 	<style>
 		.phone-input {
 			width: 300px;
@@ -113,10 +114,11 @@
 							</div>
 
 						</div>
-						<button type="submit" id="submitBtn" onclick="changeClubInfo()"
-						        class="sub-change-profile inner-font">
+						<button type="submit" id="submitBtn" onclick="changeClubInfo(this)"
+								class="sub-change-profile inner-font">
 							Сохранить&nbsp;изменения
 						</button>
+						<div id="loading-reg" class="loading loading-club"></div>
 					</form>
 				</div>
 				<div class="modal-footer">
@@ -147,9 +149,12 @@
 
         }
 
-        function changeClubInfo() {
+        function changeClubInfo(button) {
             event.preventDefault();
             const form = new FormData(document.querySelector("form[id='changeClubInfo']"));
+            button.style.color = 'transparent';
+			button.disabled = true;
+			document.getElementById('loading-reg').style.display = 'block'
             fetch(`http://127.0.0.1:8000/user/club/change/`, {
                 method: 'PUT',
                 credentials: 'include',
@@ -168,6 +173,9 @@
                                     if (data.status === 'SUCCESS' || data.status === 'FAILURE') {
                                         clearInterval(checkInterval);
                                         console.log(data);
+                                        button.disabled = false;
+										button.style.color = 'white';
+										document.getElementById('loading-reg').style.display = 'none'
                                         location.href = 'http://127.0.0.1:8000/pages/club/'
                                     }
                                 })
@@ -176,7 +184,9 @@
 
                         const checkInterval = setInterval(() => checkTaskStatus(taskId), 500);
                     }
-
+					button.disabled = false;
+					button.style.color = 'white';
+					document.getElementById('loading-reg').style.display = 'none'
                     location.href = 'http://127.0.0.1:8000/pages/club/'
 
                 })

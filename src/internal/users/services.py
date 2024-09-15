@@ -69,13 +69,13 @@ class ClubServices:
         self.bucket = storage
 
     async def create_club(self, data: dict, user_id: str) -> None:
-        duplicate = await self.__cheak_club_name(data["club_name"])
+        duplicate = await self.__check_club_name(data["club_name"])
         if duplicate:
             raise HTTPException(400, "Club already exists")
         validate_data = CreateClub(**data).model_dump(by_alias=True)
         await self.db.create_doc(self.club_model_name, validate_data, user_id)
 
-    async def __cheak_club_name(self, club_name: str) -> bool:
+    async def __check_club_name(self, club_name: str) -> bool:
         clubs = await self.db.get_collection(self.club_model_name)
         result = await clubs.where("name", "==", club_name).get()
         return len(result) != 0
@@ -83,27 +83,19 @@ class ClubServices:
     async def get_club_dict(self, user_id) -> dict:
         club = await self.db.get_doc(self.club_model_name, user_id)
         club_dict = club.to_dict()
-        image_id = club_dict.get("image", None)
-        if image_id:
-            image = await self.bucket.get_blob(f"club/{image_id}")
-            if image:
-                club_dict["image"] = image.public_url
+        image = await self.bucket.get_blob(f"club/{user_id}")
+        if image:
+            club_dict["image"] = image.media_link
         return club_dict
 
     async def change_club_image(self, file: UploadFile, user_id: str) -> dict:
         image = ClubImage(
             file=await file.read(), content_type=file.content_type, size=file.size
         )
-        club_ref = await self.db.get_doc(self.club_model_name, user_id)
-        club_image = club_ref.to_dict().get("image", None)
-
-        blob_name = f"club/{image.id}"
-        if club_image:
-            delete_file_task.delay(f"club/{club_image}")
+        blob_name = f"club/{user_id}"
         task = upload_file_task.delay(
-            image.file, blob_name, image.content_type, {"id": image.id}
+            image.file, blob_name, image.content_type
         )
-        await self.db.update_doc(self.club_model_name, user_id, {"image": image.id})
         return {"task_id": task.id}
 
     async def change_club_motto(self, data: dict, user_id: str) -> dict:
@@ -117,21 +109,11 @@ class ClubServices:
     async def get_club_image(self, user_id: str) -> dict:
         club_image_dict = {'image': None}
         club = await self.db.get_doc(self.club_model_name, user_id)
-        club_dict = club.to_dict()
-        image_id = club_dict.get("image", None)
-        if image_id:
-            image = await self.bucket.get_blob(f"club/{image_id}")
-            club_image_dict.update({'image': image.public_url})
+        image = await self.bucket.get_blob(f"club/{user_id}")
+        if image:
+            club_image_dict.update({'image': image.media_link})
         return club_image_dict
-
-#     def set_coach_to_club(self, data: dict, user_id: str) -> dict:
-#         data['club_id'] = user_id
-#         validated_data = validate(data, SetClubCoachSchema)
-#         # update_doc_task.delay(self.club_model_name, user_id, validated_data)
-#         return validated_data
-#
-#
-
+    
 
 class UserServices:
 
