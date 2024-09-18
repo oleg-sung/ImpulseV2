@@ -21,7 +21,7 @@ class UserCreate(BaseModel):
     password: str
     first_name: str = Field(min_length=2, max_length=20, alias="firstName")
     last_name: str = Field(min_length=2, max_length=20, alias="lastName")
-    birthdate: datetime.date
+    birthday: datetime.date
     club_name: str = Field(min_length=2, max_length=20, alias="name")
 
     class Config:
@@ -48,9 +48,9 @@ class UserCreate(BaseModel):
     def contains_only_letters_and_spaces(string: str):
         return all(char.isalpha() or char.isspace() for char in string)
 
-    @field_validator("birthdate")
+    @field_validator("birthday")
     @classmethod
-    def validate_birthdate(cls, v):
+    def validate_birthday(cls, v):
         if v is None:
             return v
 

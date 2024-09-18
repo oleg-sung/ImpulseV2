@@ -52,13 +52,13 @@
 						</div>
 						<div class="profile-name-view">
 							<p class="profile-data_title inner-font">Дата рождения:</p>
-							<p class="profile-data_value inner-font">{{ data.birthdate }}</p>
+							<p class="profile-data_value inner-font">{{ data.birthday }}</p>
 						</div>
 					</div>
 					<div class="update-profile-link">
 						<a href="#" onclick="fillDataProfile(this)" data-fname="{{ data.firstName }}"
 						   data-lname="{{ data.lastName }}" data-mname="{{ data.middleName }}"
-						   data-phone="{{ data.phone }}" data-bday="{{ data.birthdate }}"
+						   data-phone="{{ data.phone }}" data-bday="{{ data.birthday }}"
 						   class="update-user-profile inner-font" data-bs-toggle="modal"
 						   data-bs-target="#exampleModal">Редактировать профиль</a>
 					</div>
@@ -128,7 +128,7 @@
 									<div class="profile-name-view" style="border-bottom: 1px solid black">
 										<label class="label-input-profile inner-font" style="color: black"
 										       for="profileBirthDate">Дата&nbsp;рождения:</label>
-										<input class="inner-font" id="profileBirthDate" type="date" name="birthdate"
+										<input class="inner-font" id="profileBirthDate" type="date" name="birthday"
 
 										       value="1990-01-01" required>
 									</div>

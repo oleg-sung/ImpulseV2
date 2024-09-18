@@ -33,8 +33,8 @@ class UserProfileService:
             },
             by_alias=True,
         )
-        # validate_data["birthdate"] = datetime.combine(
-        #     validate_data["birthdate"], time()
+        # validate_data["birthday"] = datetime.combine(
+        #     validate_data["birthday"], time()
         # )
         await self.db.create_doc(self.user_profile_model_name, validate_data, user_id)
 
@@ -43,16 +43,15 @@ class UserProfileService:
     ) -> dict:
         """ """
 
-        data = data_.dict(exclude_none=True, by_alias=True)
-        birthdate = data.get("birthdate", None)
-        if birthdate:
-            data["birthdate"] = datetime.combine(data["birthdate"], time())
+        data = data_.model_dump(exclude_none=True, by_alias=True)
+        birthday = data.get("birthday", None)
+        if birthday:
+            data["birthday"] = datetime.combine(data["birthday"], time())
         if not data:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
         await self.db.update_doc(self.user_profile_model_name, user_id, data)
         return {"status": True, "message": "User profile updated", "id": user_id}
 
-    #
     async def get_user_profile(self, user_id) -> dict:
         """ """
         profile_doc = await self.db.get_doc(self.user_profile_model_name, user_id)

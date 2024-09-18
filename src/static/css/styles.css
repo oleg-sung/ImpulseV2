@@ -2,7 +2,7 @@
     color: red;
 }
 
-.birthdate-label {
+.birthday-label {
     position: absolute;
     /*left: 0;*/
     /*top: 0;*/
@@ -10,9 +10,9 @@
     transition: 0.2s ease all;
 }
 
-input[type="date"]:focus + .birthdate-label,
-input[type="date"]:not(:placeholder-shown) + .birthdate-label,
-input[type="date"]:valid + .birthdate-label {
+input[type="date"]:focus + .birthday-label,
+input[type="date"]:not(:placeholder-shown) + .birthday-label,
+input[type="date"]:valid + .birthday-label {
     transform: translateY(-1.5em);
     font-size: 0.8em;
     color: #5a9;
