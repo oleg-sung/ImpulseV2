@@ -129,9 +129,8 @@ class UserServices:
         user = self.auth.create_user_to_firebase(data.email, data.password)
         data = data.model_dump(exclude_none=True)
         await ClubServices().create_club(data, user.uid)
-        token_dict = await TokenService().create_token(user.uid, UserType.ADMIN)
-        token_ref = await token_dict["token_doc"].get()
-        data["token"] = token_ref.reference
+        # token_dict = await TokenService().create_token(user.uid, UserType.ADMIN)
+        # token_ref = await token_dict["token_doc"].get()
         await UserProfileService().create_user_profile(data, user.uid)
         link = self.auth.email_verification_link(user.email)
         task = send_email_task.delay(user.email, "Email Confirmation", link)

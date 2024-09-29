@@ -19,7 +19,7 @@ class UserProfile(BaseModel):
     first_name: str = Field(max_items=12, min_length=2, alias="firstName")
     last_name: str = Field(max_length=20, min_length=2, alias="lastName")
     birthday: datetime.datetime = Field(alias="birthday")
-    token: AsyncDocumentReference
+    token: str = Field(default="")
     club_id: str = Field(alias="clubID")
 
     class Config:
