@@ -15,8 +15,8 @@ async def get_current_user(request: Request) -> User:
         raise HTTPException(status_code=403, detail="Not authenticated")
     try:
         user = auth.verify_session_cookie(token)
-        if not user.get("admin"):
-            raise HTTPException(status_code=403, detail="Permission denied")
+        # if not user.get("admin"):
+        #     raise HTTPException(status_code=403, detail="Permission denied")
         return User(**user)
     except ExpiredSessionCookieError:
         raise HTTPException(status_code=403, detail="Token expired")

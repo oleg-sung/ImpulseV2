@@ -118,6 +118,7 @@ class UserServices:
 
     def __init__(self):
         self.auth = fb_auth
+        self.db = db
 
     async def user_register(self, data: UserCreate) -> dict:
         """
@@ -139,14 +140,22 @@ class UserServices:
     async def login_user(self, email: str, password: str) -> bytes:
         """ """
         user = self.auth.get_user_by_email(email)
-        if not self.__check_email_verified(user):
-            raise HTTPException(400, "email has not been confirmed")
+        # if not self.__check_email_verified(user):
+        #     raise HTTPException(400, "email has not been confirmed")
+        if not await self.__check_user_type(user.uid):
+            raise HTTPException(403, "The user type must be an administrator")
         data = await self.auth.login_to_firebase(email, password)
         token = data.get("idToken", None)
         if not token:
             raise HTTPException(403, "invalid token")
         cookies = self.auth.create_cookies(token)
         return cookies
+
+    async def __check_user_type(self, _id: str) -> bool:
+        profile_ref = await self.db.get_doc('userProfile', _id)
+        profile_dict = profile_ref.to_dict()
+        return True if profile_dict.get('userType', None) == UserType.ADMIN.value else False
+
 
     @staticmethod
     def __check_email_verified(user: UserRecord) -> bool:
