@@ -86,7 +86,6 @@ class DataToCreateCollection(Collection):
     date: datetime.datetime = Field(
         default=firestore.SERVER_TIMESTAMP, alias="date"
     )
-    cover: Optional[str] = Field(None, alias="cover")
 
 
 class ResponseCreateCollection(BaseModel):

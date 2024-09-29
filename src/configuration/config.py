@@ -31,6 +31,10 @@ class Settings(BaseSettings):
     CELERY_BROKER_URL: str
     CELERY_RESULT_BACKEND: str
     CELERY_EAGER: bool
+
+    STORAGE_COLLECTIONS_IMAGE_FOLDER_NAME: str = 'collectionCovers'
+    STORAGE_COLLECTIONS_CARDS_FOLDER_NAME: str = 'allCollections'
+
     model_config = SettingsConfigDict(env_file=os.path.abspath("env/.test.env"))
 
 
