@@ -1,4 +1,5 @@
 import datetime
+import re
 from enum import Enum
 
 from pydantic import BaseModel, EmailStr, Field, model_validator, field_validator
@@ -31,9 +32,8 @@ class UserCreate(BaseModel):
 
     @model_validator(mode="after")
     def password_complexity(self):
-        # pattern = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%#?&])[A-Za-z\d@$!#%?&]+$"
-        result = len(self.password)
-        if 6 > result or result > 8:
+        password_regex = r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,8}$"
+        if not bool(re.match(password_regex, self.password)):
             raise ValueError("Password must be between 6 and 8 characters")
         return self
 
