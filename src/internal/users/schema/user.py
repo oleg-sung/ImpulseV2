@@ -1,4 +1,5 @@
 import datetime
+import re
 from enum import Enum
 
 from pydantic import BaseModel, EmailStr, Field, model_validator, field_validator
@@ -40,8 +41,11 @@ class UserCreate(BaseModel):
     @field_validator("first_name", "last_name")
     @classmethod
     def validate_name(cls, v: str):
+        pattern = r"^[а-яА-ЯёЁ\-]+$"
         if not cls.contains_only_letters_and_spaces(v):
             raise ValueError('Value has to be a string')
+        elif not re.match(pattern, v):
+            raise ValueError('Value has to consist of Cyrillic letters')
         return v.capitalize()
 
     @staticmethod
