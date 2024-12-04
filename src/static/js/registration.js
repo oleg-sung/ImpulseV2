@@ -74,7 +74,7 @@ async function registerUser() {
             document.getElementById('loading-reg').style.display = 'none';
             document.getElementById("enter").innerText = 'Регистрация';
             const em = object.email
-            const redirectUrl = "http://127.0.0.1:8000/pages/email/confirm?email=" + em
+            const redirectUrl = "http://127.0.0.1:8000/pages/login/"
             return window.location.href = redirectUrl
         }
     });
