@@ -56,9 +56,10 @@ class UserCreate(BaseModel):
 
         today = datetime.date.today()
         age = today.year - v.year - ((today.month, today.day) < (v.month, v.day))
-
         if age < 5:
-            raise ValueError("Age must be at least 5 years")
+            raise ValueError("Age must be at least 5 years old")
+        elif age > 80:
+            raise ValueError("Age must be no more than 5 years old")
 
         return v
 
