@@ -22,7 +22,7 @@ class UserCreate(BaseModel):
     password: str
     first_name: str = Field(min_length=2, max_length=20, alias="firstName")
     last_name: str = Field(min_length=2, max_length=20, alias="lastName")
-    birthday: datetime.date
+    birthdate: datetime.date
     club_name: str = Field(min_length=2, max_length=20, alias="name")
 
     class Config:
@@ -42,19 +42,13 @@ class UserCreate(BaseModel):
     @classmethod
     def validate_name(cls, v: str):
         pattern = r"^[а-яА-ЯёЁ\-]+$"
-        if not cls.contains_only_letters_and_spaces(v):
-            raise ValueError('Value has to be a string')
-        elif not re.match(pattern, v):
+        if not re.match(pattern, v):
             raise ValueError('Value has to consist of Cyrillic letters')
         return v.capitalize()
 
-    @staticmethod
-    def contains_only_letters_and_spaces(string: str):
-        return all(char.isalpha() or char.isspace() for char in string)
-
-    @field_validator("birthday")
+    @field_validator("birthdate")
     @classmethod
-    def validate_birthday(cls, v):
+    def validate_birthdate(cls, v):
         if v is None:
             return v
 

@@ -16,7 +16,7 @@ class UserProfile(BaseModel):
 
     user_type: UserType = Field(default=UserType.ADMIN, alias="userType")
     email: EmailStr
-    first_name: str = Field(max_items=12, min_length=2, alias="firstName")
+    first_name: str = Field(max_items=20, min_length=2, alias="firstName")
     last_name: str = Field(max_length=20, min_length=2, alias="lastName")
     birthday: datetime.datetime = Field(alias="birthday")
     token: str = Field(default="")
@@ -32,9 +32,9 @@ class GetUserProfile(BaseModel):
     id: str = Field(..., examples=["RsZnqWPUXYZnkNAEMT11"])
     user_type: UserType = Field(default=UserType.ADMIN, alias="userType")
     email: EmailStr
-    first_name: str = Field(max_items=12, min_length=2, alias="firstName")
+    first_name: str = Field(max_items=20, min_length=2, alias="firstName")
     middle_name: Optional[str] = Field(
-        default=None, max_length=12, min_length=2, alias="middleName"
+        default=None, max_length=20, min_length=2, alias="middleName"
     )
     last_name: str = Field(max_length=20, min_length=2, alias="lastName")
     birthday: datetime.date = Field(alias="birthday")

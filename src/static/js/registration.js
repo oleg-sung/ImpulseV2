@@ -50,6 +50,7 @@ async function registerUser() {
                 data: data
             })).then(res => {
                 const message = res.data.detail[0].msg
+                console.log(res.data.detail)
                 const pass_err = 'Value error, Password must be between 6 and 8 characters'
                 if (message === pass_err) {
                     const msq = 'Пароль должен быть от 6 до 8 символов'
@@ -59,6 +60,18 @@ async function registerUser() {
                     return document.getElementById('errors-reg').style.display = 'block';
                 } else if (message === 'Value error, Age must be at least 5 years') {
                     const msq = 'Возраст менее 5 лет'
+                    document.getElementById('loading-reg').style.display = 'none';
+                    document.getElementById("enter").innerText = 'Регистрация';
+                    document.getElementById('errors-reg').textContent = msq
+                    return document.getElementById('errors-reg').style.display = 'block';
+                } else if (message === 'String should have at most 20 characters') {
+                    const msq = 'Имя, фамилия и клуб должны сожержать не более 20 символов'
+                    document.getElementById('loading-reg').style.display = 'none';
+                    document.getElementById("enter").innerText = 'Регистрация';
+                    document.getElementById('errors-reg').textContent = msq
+                    return document.getElementById('errors-reg').style.display = 'block';
+                } else if (message === 'String should have at least 2 characters') {
+                    const msq = 'Имя, фамилия и клуб должны сожержать более 1 символа'
                     document.getElementById('loading-reg').style.display = 'none';
                     document.getElementById("enter").innerText = 'Регистрация';
                     document.getElementById('errors-reg').textContent = msq
