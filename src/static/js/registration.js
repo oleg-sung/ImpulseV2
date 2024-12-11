@@ -53,7 +53,7 @@ async function registerUser() {
                 console.log(res.data.detail)
                 const pass_err = 'Value error, Password must be between 6 and 8 characters'
                 if (message === pass_err) {
-                    const msq = 'Пароль должен быть от 6 до 8 символов'
+                    const msq = 'Пароль должен содержать от 6 до 8 символов, включая латинские буквы, цифры и спецсимволы.'
                     document.getElementById('loading-reg').style.display = 'none';
                     document.getElementById("enter").innerText = 'Регистрация';
                     document.getElementById('errors-reg').textContent = msq
