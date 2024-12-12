@@ -63,7 +63,7 @@ class GeneralCollection(Collection):
 class CreateNewCollection(BaseModel):
     size: CollectionSize = Field(default=CollectionSize.forty_cards)
     name: str = Field(min_length=2, max_length=60)
-    motto: Optional[str] = Field(None, alias="motto")
+    description: Optional[str] = Field(None, alias="description")
 
     class Config:
         populate_by_name = True
@@ -71,7 +71,7 @@ class CreateNewCollection(BaseModel):
 
 
 class UpdateCollection(BaseModel):
-    motto: Optional[str] = Field(None, alias="motto")
+    description: Optional[str] = Field(None, alias="description")
     cover: Optional[str] = Field(None, alias="cover")
 
     class Config:
@@ -80,13 +80,12 @@ class UpdateCollection(BaseModel):
 
 
 class DataToCreateCollection(Collection):
-    motto: Optional[str] = Field(None, alias="motto")
+    description: Optional[str] = Field(None, alias="description")
     status: CollectionStatus = Field(default=CollectionStatus.CREATED)
     cards: list = []
     date: datetime.datetime = Field(
-        default=firestore.SERVER_TIMESTAMP, alias="createdAt"
+        default=firestore.SERVER_TIMESTAMP, alias="date"
     )
-    cover: Optional[str] = Field(None, alias="cover")
 
 
 class ResponseCreateCollection(BaseModel):
@@ -104,8 +103,8 @@ class GetAllCollection(BaseModel):
 class GetCollection(Collection):
     id: str
     cards: list[str]
-    created_at: datetime.datetime = Field(alias="createdAt")
-    motto: Optional[str] = Field(default=None)
+    date: datetime.datetime = Field(alias="date")
+    description: Optional[str] = Field(default=None)
     amound_cards: CardsDict = Field(alias="amoundCards")
     cover: Optional[HttpUrl] = Field(None, alias="cover")
 
@@ -131,7 +130,7 @@ class CoverCreate(Image):
 
 class CollectionUpdate(BaseModel):
     cover: Optional[CoverCreate] = None
-    motto: Optional[str] = Field(None, alias="motto")
+    description: Optional[str] = Field(None, alias="description")
 
     class Config:
         use_enum_values = True

@@ -17,7 +17,7 @@
                 {% endif %}
                 <p class="text-white">Колличетво авторизаци по токену: {{ token.authCount }}</p>
                 <p class="text-white" type="date">Дата
-                    создания: {{ token.createdAt.strftime('%Y.%m.%d в %H:%M') }}</p>
+                    создания: {{ token.date.strftime('%Y.%m.%d в %H:%M') }}</p>
 
                 <button class="p-2 text-white ml-14 mt-6" id="copyBtn">Скопировать токен</button>
                 <p class="text-white" type="text" id="tokenInput">{{ token.code }}</p>

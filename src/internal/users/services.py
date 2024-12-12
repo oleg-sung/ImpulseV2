@@ -7,7 +7,7 @@ from starlette import status
 from pkg.celery_tools.tools import send_email_task, upload_file_task, delete_file_task
 from .schema.club import CreateClub, ClubImage, UpdateClubSchema
 from .schema.profile import UserProfile, UpdateUserProfileSchema
-from .schema.user import UserCreate, ChangePassword
+from .schema.user import UserCreate, ChangePassword, UserType
 from ..database import db, auth as fb_auth, storage
 from ..token.services import TokenService
 
@@ -33,8 +33,8 @@ class UserProfileService:
             },
             by_alias=True,
         )
-        # validate_data["birthdate"] = datetime.combine(
-        #     validate_data["birthdate"], time()
+        # validate_data["birthday"] = datetime.combine(
+        #     validate_data["birthday"], time()
         # )
         await self.db.create_doc(self.user_profile_model_name, validate_data, user_id)
 
@@ -43,16 +43,15 @@ class UserProfileService:
     ) -> dict:
         """ """
 
-        data = data_.dict(exclude_none=True, by_alias=True)
-        birthdate = data.get("birthdate", None)
-        if birthdate:
-            data["birthdate"] = datetime.combine(data["birthdate"], time())
+        data = data_.model_dump(exclude_none=True, by_alias=True)
+        birthday = data.get("birthday", None)
+        if birthday:
+            data["birthday"] = datetime.combine(data["birthday"], time())
         if not data:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
         await self.db.update_doc(self.user_profile_model_name, user_id, data)
         return {"status": True, "message": "User profile updated", "id": user_id}
 
-    #
     async def get_user_profile(self, user_id) -> dict:
         """ """
         profile_doc = await self.db.get_doc(self.user_profile_model_name, user_id)
@@ -69,13 +68,13 @@ class ClubServices:
         self.bucket = storage
 
     async def create_club(self, data: dict, user_id: str) -> None:
-        duplicate = await self.__cheak_club_name(data["club_name"])
+        duplicate = await self.__check_club_name(data["club_name"])
         if duplicate:
             raise HTTPException(400, "Club already exists")
         validate_data = CreateClub(**data).model_dump(by_alias=True)
         await self.db.create_doc(self.club_model_name, validate_data, user_id)
 
-    async def __cheak_club_name(self, club_name: str) -> bool:
+    async def __check_club_name(self, club_name: str) -> bool:
         clubs = await self.db.get_collection(self.club_model_name)
         result = await clubs.where("name", "==", club_name).get()
         return len(result) != 0
@@ -83,27 +82,19 @@ class ClubServices:
     async def get_club_dict(self, user_id) -> dict:
         club = await self.db.get_doc(self.club_model_name, user_id)
         club_dict = club.to_dict()
-        image_id = club_dict.get("image", None)
-        if image_id:
-            image = await self.bucket.get_blob(f"club/{image_id}")
-            if image:
-                club_dict["image"] = image.public_url
+        image = await self.bucket.get_blob(f"club/{user_id}")
+        if image:
+            club_dict["image"] = image.media_link
         return club_dict
 
     async def change_club_image(self, file: UploadFile, user_id: str) -> dict:
         image = ClubImage(
             file=await file.read(), content_type=file.content_type, size=file.size
         )
-        club_ref = await self.db.get_doc(self.club_model_name, user_id)
-        club_image = club_ref.to_dict().get("image", None)
-
-        blob_name = f"club/{image.id}"
-        if club_image:
-            delete_file_task.delay(f"club/{club_image}")
+        blob_name = f"club/{user_id}"
         task = upload_file_task.delay(
-            image.file, blob_name, image.content_type, {"id": image.id}
+            image.file, blob_name, image.content_type
         )
-        await self.db.update_doc(self.club_model_name, user_id, {"image": image.id})
         return {"task_id": task.id}
 
     async def change_club_motto(self, data: dict, user_id: str) -> dict:
@@ -117,26 +108,17 @@ class ClubServices:
     async def get_club_image(self, user_id: str) -> dict:
         club_image_dict = {'image': None}
         club = await self.db.get_doc(self.club_model_name, user_id)
-        club_dict = club.to_dict()
-        image_id = club_dict.get("image", None)
-        if image_id:
-            image = await self.bucket.get_blob(f"club/{image_id}")
-            club_image_dict.update({'image': image.public_url})
+        image = await self.bucket.get_blob(f"club/{user_id}")
+        if image:
+            club_image_dict.update({'image': image.media_link})
         return club_image_dict
-
-#     def set_coach_to_club(self, data: dict, user_id: str) -> dict:
-#         data['club_id'] = user_id
-#         validated_data = validate(data, SetClubCoachSchema)
-#         # update_doc_task.delay(self.club_model_name, user_id, validated_data)
-#         return validated_data
-#
-#
-
+    
 
 class UserServices:
 
     def __init__(self):
         self.auth = fb_auth
+        self.db = db
 
     async def user_register(self, data: UserCreate) -> dict:
         """
@@ -147,9 +129,8 @@ class UserServices:
         user = self.auth.create_user_to_firebase(data.email, data.password)
         data = data.model_dump(exclude_none=True)
         await ClubServices().create_club(data, user.uid)
-        token_dict = await TokenService().create_token(user.uid)
-        token_ref = await token_dict["token_doc"].get()
-        data["token"] = token_ref.reference
+        # token_dict = await TokenService().create_token(user.uid, UserType.ADMIN)
+        # token_ref = await token_dict["token_doc"].get()
         await UserProfileService().create_user_profile(data, user.uid)
         link = self.auth.email_verification_link(user.email)
         task = send_email_task.delay(user.email, "Email Confirmation", link)
@@ -158,14 +139,22 @@ class UserServices:
     async def login_user(self, email: str, password: str) -> bytes:
         """ """
         user = self.auth.get_user_by_email(email)
-        if not self.__check_email_verified(user):
-            raise HTTPException(400, "email has not been confirmed")
+        # if not self.__check_email_verified(user):
+        #     raise HTTPException(400, "email has not been confirmed")
+        if not await self.__check_user_type(user.uid):
+            raise HTTPException(403, "The user type must be an administrator")
         data = await self.auth.login_to_firebase(email, password)
         token = data.get("idToken", None)
         if not token:
             raise HTTPException(403, "invalid token")
         cookies = self.auth.create_cookies(token)
         return cookies
+
+    async def __check_user_type(self, _id: str) -> bool:
+        profile_ref = await self.db.get_doc('userProfile', _id)
+        profile_dict = profile_ref.to_dict()
+        return True if profile_dict.get('userType', None) == UserType.ADMIN.value else False
+
 
     @staticmethod
     def __check_email_verified(user: UserRecord) -> bool:

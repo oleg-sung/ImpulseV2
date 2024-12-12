@@ -7,7 +7,7 @@
 .div-with-border {
     position: relative;
     top: 10px;
-    border-bottom: 1px solid #4F4856B2 /* Задайте ширину и цвет границы */
+    border-bottom: 1px solid #4F4856B2
 }
 
 a:hover {
@@ -602,4 +602,16 @@ input[type="text"] {
 
 .btn-collection-create:hover {
     color: black;
+}
+
+.loading-card-collection {
+    position: relative;
+    margin-left: auto;
+    right: 48.6%;
+    top: 75%;
+}
+
+.loading-collection {
+    right: 51.6%;
+    top: 81.4%;
 }

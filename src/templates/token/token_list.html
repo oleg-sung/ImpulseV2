@@ -24,7 +24,7 @@
                 <p class="text-gray-500" style="color: #FFFFFF">Статус: {% if token.isActive %}Активный{% else %}
                     Неактивный{% endif %}</p>
                 <p class="text-gray-500" type="date" style="color: #FFFFFF">Дата
-                    создания: {{ token.createdAt.strftime('%Y-%m-%d в %H:%M') }}</p>
+                    создания: {{ token.date.strftime('%Y-%m-%d в %H:%M') }}</p>
             </div>
         {% endfor %}
     </div>

@@ -2,6 +2,16 @@
 
 {% block head %}
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/club/club.css') }}">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/masked-input/1.4.2/include.all.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/masked-input/1.4.2/jquery.maskedinput.js"></script>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/css/loading.css') }}">
+	<style>
+		.phone-input {
+			width: 300px;
+			padding: 10px;
+			font-size: 16px;
+		}
+	</style>
 {% endblock %}
 
 
@@ -93,7 +103,7 @@
 							<div class="profile-name-view" style="border-bottom: 1px solid black">
 								<label class="label-input-profile inner-font" style="color: black"
 								       for="clubPhone">Телефон:</label>
-								<input class="inner-font" id="clubPhone" name="phone" type="text"
+								<input class="inner-font phone-input" id="clubPhone" name="phone" type="text"
 								       placeholder="Не указано">
 							</div>
 							<div class="profile-name-view" style="border-bottom: 1px solid black">
@@ -104,10 +114,11 @@
 							</div>
 
 						</div>
-						<button type="submit" id="submitBtn" onclick="changeClubInfo()"
-						        class="sub-change-profile inner-font">
+						<button type="submit" id="submitBtn" onclick="changeClubInfo(this)"
+								class="sub-change-profile inner-font">
 							Сохранить&nbsp;изменения
 						</button>
+						<div id="loading-reg" class="loading loading-club"></div>
 					</form>
 				</div>
 				<div class="modal-footer">
@@ -138,9 +149,12 @@
 
         }
 
-        function changeClubInfo() {
+        function changeClubInfo(button) {
             event.preventDefault();
             const form = new FormData(document.querySelector("form[id='changeClubInfo']"));
+            button.style.color = 'transparent';
+			button.disabled = true;
+			document.getElementById('loading-reg').style.display = 'block'
             fetch(`http://127.0.0.1:8000/user/club/change/`, {
                 method: 'PUT',
                 credentials: 'include',
@@ -159,6 +173,9 @@
                                     if (data.status === 'SUCCESS' || data.status === 'FAILURE') {
                                         clearInterval(checkInterval);
                                         console.log(data);
+                                        button.disabled = false;
+										button.style.color = 'white';
+										document.getElementById('loading-reg').style.display = 'none'
                                         location.href = 'http://127.0.0.1:8000/pages/club/'
                                     }
                                 })
@@ -167,7 +184,9 @@
 
                         const checkInterval = setInterval(() => checkTaskStatus(taskId), 500);
                     }
-
+					button.disabled = false;
+					button.style.color = 'white';
+					document.getElementById('loading-reg').style.display = 'none'
                     location.href = 'http://127.0.0.1:8000/pages/club/'
 
                 })
@@ -180,6 +199,30 @@
             frame.src = URL.createObjectURL(event.target.files[0]);
         }
 
+		const phoneInput = document.getElementById('clubPhone');
 
+        function handlePhoneInput(event) {
+            let value = event.target.value;
+
+            value = value.replace(/\D/g, '');
+
+            value = value.slice(0, 11);
+
+            event.target.value = value;
+        }
+
+        phoneInput.addEventListener('input', handlePhoneInput);
+
+        phoneInput.addEventListener('focus', () => {
+            if (!phoneInput.value.length) {
+                phoneInput.value = '89999999999';
+            }
+        });
+
+        phoneInput.addEventListener('blur', () => {
+            if (!phoneInput.value.length) {
+                phoneInput.value = '';
+            }
+        });
 	</script>
 {% endblock %}

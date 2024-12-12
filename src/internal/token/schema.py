@@ -22,7 +22,7 @@ class BaseToken(BaseModel):
     is_active: bool = Field(alias="isActive")
     owner_id: str = Field(alias="userCreatedID")
     owner_type: UserType = Field(alias="userType")
-    created_at: datetime.datetime = Field(alias="createdAt")
+    date: datetime.datetime = Field(alias="date")
 
     class Config:
         populate_by_name = True
@@ -32,10 +32,10 @@ class BaseToken(BaseModel):
 class CreateToken(BaseToken):
     is_active: bool = Field(default=True, alias="isActive")
     auth_count: int = Field(default=0, alias="authCount")
-    owner_type: UserType = Field(default=UserType.ADMIN, alias="userType")
+    owner_type: UserType = Field(default=UserType.COACH, alias="userType")
     code: str = Field(default_factory=lambda: uuid.uuid4().hex)
-    created_at: datetime.datetime = Field(
-        default=firestore.SERVER_TIMESTAMP, alias="createdAt"
+    date: datetime.datetime = Field(
+        default=firestore.SERVER_TIMESTAMP, alias="date"
     )
 
 
@@ -48,7 +48,7 @@ class GetTokens(BaseModel):
     is_active: bool = Field(alias="isActive")
     code: str
     auth_count: int = Field(alias="authCount")
-    created_at: datetime.datetime = Field(alias="createdAt")
+    created_at: datetime.datetime = Field(alias="date")
 
     class Config:
         populate_by_name = True
